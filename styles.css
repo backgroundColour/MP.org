@@ -12,7 +12,28 @@ body {
     background-position: center center;
     background-attachment: fixed;
     background-repeat: no-repeat;
+    overflow-x: hidden;
 }
+
+/* 🚨 WICHTIG: Diese Regeln müssen NACH dem body stehen! */
+/* Chrome, Safari, Edge (WebKit-Browser) */
+::-webkit-scrollbar {
+    width: 12px; /* Breite der Scrollbar */
+}
+
+::-webkit-scrollbar-track {
+    background: #063c8c; /* Hintergrundfarbe der Scrollbar */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #fcc135; /* Farbe des Scrollbalkens */
+    border-radius: 6px; /* Abgerundete Ecken */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #ffd700; /* Farbe beim Hovern */
+}
+
 
 header {
     background-color: rgba(0, 56, 130, 0.7);
