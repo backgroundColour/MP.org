@@ -254,3 +254,68 @@ footer {
         transform: scale(0.5);
     }
 }
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+li {
+    background: #ffcc00;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s;
+}
+li:hover {
+    transform: scale(1.5);
+    background: #ffaa00;
+}
+
+
+.donation-form {
+    position: fixed;
+    background: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Soft shadow for better contrast */
+    width: 300px;
+    max-width: 90%;
+    transition: transform 0.3s ease-out;
+    will-change: transform;
+    backdrop-filter: blur(10px); /* Add blur transparency effect */
+    z-index: 2; /* Ensure it appears above other content */
+}
+
+
+.donation-form form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.donation-form input, 
+.donation-form button {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.donation-form button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.donate-button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
