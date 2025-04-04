@@ -30,34 +30,57 @@
         <div class="party-meeting">
             <h2>Unser nächstes Parteitreffen!</h2>
             <p id="next-meeting-date"></p>
-            <p id="parteiAdresse"></p>
-            <div id="map-container">
-                <div id="map"></div>
-            </div>
+            <!--  <p id="parteiAdresse"></p> -->
+            
+            
+            <div id="map" style="width: 100%; height: 500px;"></div>
+            
+            <!-- Leaflet CSS -->
+            <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+            <!-- Leaflet JS -->
+            <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+            
+            
             <script>
-                const address = document.getElementById("parteiAdresse").innerText;
-                
-                async function getCoordinates(address) {
-                    const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`);
-                    const data = await response.json();
-                    return data.length ? [parseFloat(data[0].lat), parseFloat(data[0].lon)] : null;
+                const majorCitiesGermany = [
+                    { name: "Berlin", lat: 52.52, lng: 13.405 },
+                    { name: "Hamburg", lat: 53.5511, lng: 9.9937 },
+                    { name: "Munich", lat: 48.1351, lng: 11.582 },
+                    { name: "Cologne", lat: 50.9375, lng: 6.9603 },
+                    { name: "Frankfurt", lat: 50.1109, lng: 8.6821 },
+                    { name: "Stuttgart", lat: 48.7758, lng: 9.1829 },
+                    { name: "Düsseldorf", lat: 51.2277, lng: 6.7735 },
+                    { name: "Dortmund", lat: 51.5136, lng: 7.4653 },
+                    { name: "Essen", lat: 51.4556, lng: 7.0116 },
+                    { name: "Leipzig", lat: 51.3397, lng: 12.3731 }
+                ];
+
+                function getRandomMajorCity() {
+                    const city = majorCitiesGermany[Math.floor(Math.random() * majorCitiesGermany.length)];
+                    return [city.lat, city.lng, city.name];
                 }
-        
+
+                async function getAddress(lat, lng) {
+                    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
+                    const data = await response.json();
+                    return data.display_name || 'Unknown Location';
+                }
+
                 async function initMap() {
-                    const coordinates = await getCoordinates(address);
-                    if (!coordinates) {
-                        alert("Adresse nicht gefunden");
-                        return;
-                    }
-        
-                    const map = L.map('map').setView(coordinates, 13);
+                    const [lat, lng, cityName] = getRandomMajorCity();
+                    const map = L.map('map').setView([lat, lng], 12);
+
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                         attribution: '&copy; OpenStreetMap contributors'
                     }).addTo(map);
-                    L.marker(coordinates).addTo(map).bindPopup(address).openPopup();
+
+                    const marker = L.marker([lat, lng]).addTo(map);
+
+                    const address = await getAddress(lat, lng);
+                    marker.bindPopup(`${cityName}: ${address}`).openPopup();
                 }
-        
-                initMap();
+
+                document.addEventListener('DOMContentLoaded', initMap);
             </script>
         </div>
     </div>
@@ -294,7 +317,6 @@
                     });
                 }
             });
-            initMap();
         });
 
 
