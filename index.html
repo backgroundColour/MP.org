@@ -103,7 +103,14 @@
             </div>
         </div>
     </div>
-    
+
+    <div class="countdown-container container content">
+        <div class="countdown-box">
+            <h2>Unser großartiger Sponsor!</h2>
+            <p><a href="https://schwanzkopf.de/">Schwanzkopf.de</a></p>
+        </div>
+    </div>
+
     <footer>
         <p>© 2025 Michi Partei | Kontakt: info@michipartei.de</p>
     </footer>
@@ -145,6 +152,7 @@
         }
         
         document.getElementById("parteiAdresse").innerText = generateRandomAddress();
+        document.getElementById("imprint").innerHTML = "<p>© 2025 Michi Partei | Kontakt: info@michipartei.de | " + generateRandomAddress() + "</p>";
 
         // Funktion zur Generierung eines zufälligen zukünftigen Datums
         function getRandomFutureDate() {
