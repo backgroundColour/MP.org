@@ -104,8 +104,8 @@
         </div>
     </div>
     
-    <footer>
-        <p>© 2025 Michi Partei | Kontakt: info@michipartei.de</p>
+    <footer id="imprint">
+        
     </footer>
 
     <div id="quote" class="quote"></div>
@@ -145,6 +145,7 @@
         }
         
         document.getElementById("parteiAdresse").innerText = generateRandomAddress();
+        document.getElementById("imprint").innerHTML = "<p>© 2025 Michi Partei | Kontakt: info@michipartei.de | " + generateRandomAddress() + "</p>";
 
         // Funktion zur Generierung eines zufälligen zukünftigen Datums
         function getRandomFutureDate() {
