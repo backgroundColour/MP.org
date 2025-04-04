@@ -28,8 +28,9 @@
     <!-- Neuer Bereich für das Parteitreffen -->
     <div class="container content">
         <div class="party-meeting">
-            <h2>Unser nächstes Partei treffen!</h2>
+            <h2>Unser nächstes Parteitreffen!</h2>
             <p id="next-meeting-date"></p>
+            <p id="parteiAdresse"></p>
         </div>
     </div>
     <div class="countdown-container container content">
@@ -105,6 +106,41 @@
     <div id="quote" class="quote"></div>
 
     <script>
+
+
+        const streetNames = [
+        "Hauptstraße", "Bahnhofstraße", "Kirchweg", "Dorfplatz", "Am Waldrand", 
+        "Goethestraße", "Schillerweg", "Lindenallee", "Bergstraße", "Mühlenweg",
+        "Sonnenallee", "Rosenweg", "Eichenweg", "Bachgasse", "Ahornstraße"
+        ];
+        
+        const cityNames = [
+        "Berlin", "München", "Hamburg", "Köln", "Frankfurt", 
+        "Stuttgart", "Düsseldorf", "Dortmund", "Essen", "Leipzig",
+        "Bremen", "Dresden", "Hannover", "Nürnberg", "Bonn"
+        ];
+
+        const postalCodes = [
+        "10115", "80331", "20095", "50667", "60311",
+        "70173", "40213", "44135", "45127", "04109",
+        "28195", "01067", "30159", "90402", "53111"
+        ];
+
+        function getRandomElement(array) {
+            return array[Math.floor(Math.random() * array.length)];
+        }
+
+        function generateRandomAddress() {
+            const street = getRandomElement(streetNames);
+            const houseNumber = Math.floor(Math.random() * 150) + 1; // Hausnummer zwischen 1 und 150
+            const city = getRandomElement(cityNames);
+            const postalCode = getRandomElement(postalCodes);
+
+            return `${street} ${houseNumber}, ${postalCode} ${city}`;
+        }
+        
+        document.getElementById("parteiAdresse").innerText = generateRandomAddress();
+
         // Funktion zur Generierung eines zufälligen zukünftigen Datums
         function getRandomFutureDate() {
             const today = new Date();
@@ -175,7 +211,7 @@
             'KFC', 'Cave Johnson', 'Lyndon Johnson', 'Dr. John Fitzgerald Kennedy Jr. Sr. ',
             'Dr. Alice Weidel', 'Elonia Musk', 'Donald Trumpina', 'RFK Jr.'
         ];
-        
+
         let quoteElement = document.getElementById('quote');
         
         function showQuote() {
