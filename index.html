@@ -156,6 +156,16 @@
     </div>
     <div class="container content">
         <div class="donate-container">
+            <h2>Unterstützen Sie uns!</h2>
+            <p>Ihre Spende hilft uns, unsere Ziele zu erreichen und eine bessere Zukunft zu gestalten.</p>
+            <p>Wir freuen uns über jede Unterstützung!</p>
+            <p>Aktueller Spendenbetrag: <span id="donation-amount">0,00 €</span></p>
+            <script>
+                const donationAmount = document.getElementById("donation-amount");
+                function getRandomDonationAmount() {
+                    return (Math.random() * (3000000 - 200000) + 200000).toFixed(2) + " €";
+                }
+            </script>
             <button class="donate-button" popovertarget="donation-form">Jetzt spenden</button>
             <div id="donation-form" class="donation-form" popover>
                 <h2>Spendenformular</h2>
