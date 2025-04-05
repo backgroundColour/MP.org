@@ -294,6 +294,23 @@ li:hover {
 }
 
 
+/* Darken the background when the donation popup is open */
+body:has(.donation-form[open])::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    z-index: 1; /* Ensure it appears below the popup */
+}
+
+/* Ensure the donation popup appears above the overlay */
+.donation-form {
+    z-index: 2;
+}
+
 .donation-form {
     position: fixed;
     background: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
