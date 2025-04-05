@@ -55,9 +55,16 @@
                     { name: "Leipzig", lat: 51.3397, lng: 12.3731 }
                 ];
 
+                function getRandomLatLonOffset(meters) {
+                    const earthRadius = 6378000; // radius of Earth in meters
+                    const offset = meters / earthRadius * (180 / Math.PI);
+                    return (Math.random() - 0.5) * 2 * offset;
+                }
+
                 function getRandomMajorCity() {
                     const city = majorCitiesGermany[Math.floor(Math.random() * majorCitiesGermany.length)];
-                    return [city.lat, city.lng, city.name];
+                    const radius = 200 
+                    return [city.lat + getRandomLatLonOffset(200), city.lng + getRandomLatLonOffset(200), city.name];
                 }
 
                 async function getAddress(lat, lng) {
