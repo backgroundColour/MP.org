@@ -69,8 +69,8 @@
 
                 function getRandomMajorCity() {
                     const city = majorCitiesGermany[Math.floor(Math.random() * majorCitiesGermany.length)];
-                    const radius = 1500 
-                    return [city.lat + getRandomLatLonOffset(200), city.lng + getRandomLatLonOffset(200), city.name];
+                    const radius = 1500;
+                    return [city.lat + getRandomLatLonOffset(radius), city.lng + getRandomLatLonOffset(radius), city.name];
                 }
 
                 async function getAddress(lat, lng) {
