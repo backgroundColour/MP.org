@@ -6,6 +6,12 @@
     <title>Michi Partei (MP) - Zukunft Gestalten</title>
     <link rel="stylesheet" href="styles.css">
     
+
+    <!-- Add FlipDown.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flipdown/dist/flipdown.min.css">
+    <!-- Add FlipDown.js Script -->
+    <script src="https://cdn.jsdelivr.net/npm/flipdown/dist/flipdown.min.js"></script>
+
 </head>
 <body>
     <header>
@@ -94,7 +100,7 @@
     <div class="countdown-container container content">
         <div class="countdown-box">
             <h2>Nächster Kaffeetag Countdown</h2>
-            <p id="countdown"></p>
+            <div id="flipdown" class="flipdown"></div>
         </div>
     </div>
     <div class="themes">
@@ -326,33 +332,6 @@
             });
         });
 
-
-        function getNextKaffeetag() {
-            let now = new Date();
-            let nextKaffeetag = new Date();
-            nextKaffeetag.setDate(now.getDate() + ((3 - now.getDay() + 7) % 7));
-            nextKaffeetag.setHours(9, 40, 0, 0);
-            if (nextKaffeetag <= now) {
-                nextKaffeetag.setDate(nextKaffeetag.getDate() + 7);
-            }
-            return nextKaffeetag;
-        }
-
-        function updateCountdown() {
-            let now = new Date();
-            let target = getNextKaffeetag();
-            let diff = target - now;
-            
-            let hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-            let minutes = Math.floor((diff / (1000 * 60)) % 60);
-            let seconds = Math.floor((diff / 1000) % 60);
-            
-            document.getElementById("countdown").textContent = `${hours} Stunden, ${minutes} Minuten, ${seconds} Sekunden`;
-        }
-
-        setInterval(updateCountdown, 1000);
-        updateCountdown();
-
         function getRandomDonationAmount() {
             return (Math.random() * 100000).toFixed(2) + " €";
         }
@@ -419,6 +398,29 @@
         
         // Start the update cycle after initial delay
         setTimeout(updateDonationAmount, Math.floor(Math.random() * 4000) + 1000);
+    </script>
+    <script>
+        function getNextKaffeetagTimestamp() {
+            const now = new Date();
+            const nextKaffeetag = new Date();
+            nextKaffeetag.setDate(now.getDate() + ((3 - now.getDay() + 7) % 7)); // Next Wednesday
+            nextKaffeetag.setHours(9, 40, 0, 0); // 9:40 AM
+            if (nextKaffeetag <= now) {
+                nextKaffeetag.setDate(nextKaffeetag.getDate() + 7);
+            }
+            return Math.floor(nextKaffeetag.getTime() / 1000); // Convert to UNIX timestamp
+        }
+    
+        document.addEventListener('DOMContentLoaded', () => {
+            const nextKaffeetagTimestamp = getNextKaffeetagTimestamp();
+    
+            // Initialize FlipDown
+            new FlipDown(nextKaffeetagTimestamp)
+                .start()
+                .ifEnded(() => {
+                    console.log('Kaffeetag has started!');
+                });
+        });
     </script>
 </body>
 </html>
