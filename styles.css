@@ -305,7 +305,9 @@ body:has(.donation-form[open])::before {
     background: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
     z-index: 1; /* Ensure it appears below the popup */
 }
-
+body:not(:has(.donation-form[open]))::before {
+    content: none; /* Remove the dark overlay when the popup is closed */
+}
 /* Ensure the donation popup appears above the overlay */
 .donation-form {
     z-index: 2;
