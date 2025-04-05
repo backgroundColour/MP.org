@@ -345,7 +345,16 @@
         }
 
         function getRandomTotalDonationAmount() {
-            return (Math.random() * (3000000 - 200000) + 200000).toFixed(2) + " €";
+            const mean = 1600000; // Average donation amount
+            const stdDev = 400000; // Standard deviation
+            const randomGaussian = () => {
+                let u = 0, v = 0;
+                while (u === 0) u = Math.random(); // Avoid 0
+                while (v === 0) v = Math.random(); // Avoid 0
+                return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+            };
+            const donation = mean + stdDev * randomGaussian();
+            return Math.max(200000, Math.min(3000000, donation)).toFixed(2) + " €";
         }
 
         function getRandomDonationAmount() {
