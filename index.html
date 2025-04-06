@@ -361,6 +361,11 @@
             return (Math.random() * 100000).toFixed(2) + " €";
         }
 
+        function updateTotalDonationAmount(amount) {
+            const totalDonationElement = document.getElementById("total-donation-amount");
+            totalDonationElement.innerText = (parseFloat(totalDonationElement.innerText.replace(" €", "").replace(",", ".")) + amount).toFixed(2).replace(".", ",") + " €";
+        }
+
         function animateDonationChange() {
             const donationElement = document.getElementById("donation-amount");
             const namenElement= document.getElementById("SpenderName");
@@ -374,7 +379,9 @@
             
             setTimeout(() => {
                 // Change the amount while invisible
-                donationElement.textContent = getRandomDonationAmount();
+                randomDonationAmount = getRandomDonationAmount();
+                updateTotalDonationAmount(parseFloat(randomDonationAmount.replace(" €", "").replace(",", ".")));
+                donationElement.textContent = randomDonationAmount;
                 namenElement.textContent = randomName;
                 
                 // Fade in animation with pulse effect
