@@ -34,6 +34,27 @@ body {
     background: #ffd700; /* Farbe beim Hovern */
 }
 
+input[type="number"] {
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #063c8c;
+    border-radius: 5px;
+    background-color: #063c8c;
+    color: #ffd700;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="number"]:focus {
+    border-color: #ffd700;
+    box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+}
+
+input[type="number"]::placeholder {
+    color: #ffd700;
+    font-style: italic;
+}
+
 
 header {
     background-color: rgba(0, 56, 130, 0.7);
