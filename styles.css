@@ -371,3 +371,68 @@ li:hover {
     50% { transform: scale(1.1); }
     100% { transform: scale(1); }
 }
+
+.spin-container {
+    perspective: 1000px;
+    transform-style: preserve-3d;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: containerSpin 5s ease-in-out forwards;
+  }
+  
+  .spin-object {
+    width: 100px;
+    height: 50px;
+    transform-origin: center;
+    animation: licensePlateSpin 5s ease-in-out forwards;
+  }
+  
+  /* Object only does Z rotation for turning onto corner */
+  @keyframes licensePlateSpin {
+    0% {
+      transform: rotateZ(0deg);
+    }
+  
+    10% {
+      transform: rotateZ(45deg);
+    }
+  
+    100% {
+      transform: rotateZ(0deg);
+    }
+  }
+  
+  /* Container does global movements: Y spin and X tilt for drops */
+  @keyframes containerSpin {
+    0% {
+      transform: rotateY(0deg) rotateX(0deg) translateY(0);
+    }
+  
+    /* Corner position, no global movement yet */
+    10% {
+      transform: rotateY(0deg) rotateX(0deg) translateY(0);
+    }
+  
+    /* Spin around global Y-axis */
+    40% {
+      transform: rotateY(1800deg) rotateX(0deg) translateY(0);
+    }
+  
+    /* Drop onto edge — global X rotation */
+    60% {
+      transform: rotateY(1800deg) rotateX(90deg) translateY(50px);
+    }
+  
+    /* Drop flat — global X rotation and translate */
+    80% {
+      transform: rotateY(1800deg) rotateX(90deg) translateY(80px);
+    }
+  
+    /* Stand up slowly */
+    100% {
+      transform: rotateY(1800deg) rotateX(0deg) translateY(0);
+    }
+  }
