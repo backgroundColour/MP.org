@@ -372,19 +372,20 @@ li:hover {
     100% { transform: scale(1); }
 }
 
-.spin-container {
+.spin-container:hover {
     perspective: 1000px;
     transform-style: preserve-3d;
     display: flex;
     justify-content: center;
     align-items: center;
     animation: containerSpin 5s ease-in-out forwards;
-  }
-  
-  .spin-object {
+    .spin-object {
     transform-origin: center;
     animation: licensePlateSpin 5s ease-in-out forwards;
+    }
   }
+  
+  
   
   /* Object only does Z rotation for turning onto corner */
   @keyframes licensePlateSpin {
