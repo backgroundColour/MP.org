@@ -81,7 +81,7 @@
 
                 async function initMap() {
                     const [lat, lng, cityName] = getRandomMajorCity();
-                    const map = L.map('map').setView([lat, lng], 12);
+                    const map = L.map('map', { maxBoundsViscosity: 1.0 }).setView([lat, lng], 12);
 
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                         attribution: '&copy; OpenStreetMap contributors'
@@ -91,6 +91,9 @@
 
                     const address = await getAddress(lat, lng);
                     marker.bindPopup(`${cityName}: ${address}`).openPopup();
+
+                    // Set map container width to 100%
+                    document.getElementById('map').style.width = '100%';
                 }
 
                 document.addEventListener('DOMContentLoaded', initMap);
