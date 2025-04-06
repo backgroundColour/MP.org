@@ -382,8 +382,6 @@ li:hover {
   }
   
   .spin-object {
-    width: 100px;
-    height: 50px;
     transform-origin: center;
     animation: licensePlateSpin 5s ease-in-out forwards;
   }
