@@ -165,13 +165,13 @@
                 const fromPeriod = parseInt(document.getElementById('from-period').value);
                 const toPeriod = parseInt(document.getElementById('to-period').value);
 
-                if (fromPeriod >= 1 && fromPeriod <= 6) {
+                if (fromPeriod >= 1 && fromPeriod <= 8) {
                     document.getElementById('time-from-period').textContent = `Zeit seit Stunde: ${calculateTimeFromPeriod(fromPeriod)}`;
                 } else {
                     document.getElementById('time-from-period').textContent = 'Zeit seit Stunde: --:--';
                 }
 
-                if (toPeriod >= 1 && toPeriod <= 6) {
+                if (toPeriod >= 1 && toPeriod <= 8) {
                     document.getElementById('time-to-period').textContent = `Zeit bis Stunde: ${calculateTimeFromPeriod(toPeriod)}`;
                 } else {
                     document.getElementById('time-to-period').textContent = 'Zeit bis Stunde: --:--';
