@@ -136,6 +136,52 @@
             <li>Entwicklung von Lösungen zur Verbesserung der Cybersicherheit in Unternehmen</li>
         </ul>
     </div>
+    <div class="container content">
+        <h2>Zeitenrechner</h2>
+        <div>
+            <label for="from-period">Von Stunde:</label>
+            <input type="number" id="from-period" min="1" max="8" placeholder="1">
+            <p id="time-from-period">Zeit seit Stunde: --:--</p>
+        </div>
+        <div>
+            <label for="to-period">Bis Stunde:</label>
+            <input type="number" id="to-period" min="1" max="8" placeholder="6">
+            <p id="time-to-period">Zeit bis Stunde: --:--</p>
+        </div>
+        <script>
+            const periodStartTime = new Date();
+            periodStartTime.setHours(7, 55, 0, 0); // Start time of the first period
+
+            function calculateTimeFromPeriod(period) {
+                const periodTime = new Date(periodStartTime.getTime() + (period - 1) * 45 * 60 * 1000 + Math.floor((period - 1) / 2) * 20 * 60 * 1000);
+                const now = new Date();
+                const diff = Math.abs(now - periodTime);
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                return `${hours}h ${minutes}m`;
+            }
+
+            function updateTimes() {
+                const fromPeriod = parseInt(document.getElementById('from-period').value);
+                const toPeriod = parseInt(document.getElementById('to-period').value);
+
+                if (fromPeriod >= 1 && fromPeriod <= 6) {
+                    document.getElementById('time-from-period').textContent = `Zeit seit Stunde: ${calculateTimeFromPeriod(fromPeriod)}`;
+                } else {
+                    document.getElementById('time-from-period').textContent = 'Zeit seit Stunde: --:--';
+                }
+
+                if (toPeriod >= 1 && toPeriod <= 6) {
+                    document.getElementById('time-to-period').textContent = `Zeit bis Stunde: ${calculateTimeFromPeriod(toPeriod)}`;
+                } else {
+                    document.getElementById('time-to-period').textContent = 'Zeit bis Stunde: --:--';
+                }
+            }
+
+            document.getElementById('from-period').addEventListener('input', updateTimes);
+            document.getElementById('to-period').addEventListener('input', updateTimes);
+        </script>
+    </div>
     <div class="countdown-container container content">
         <div class="countdown-box">
             <h2>Nächster Kaffeetag Countdown</h2>
