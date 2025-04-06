@@ -48,7 +48,6 @@ header {
 }
 
 .container {
-    display: flex;
     justify-content: center;
     align-items: center;
     gap: 20px;
@@ -439,4 +438,11 @@ li:hover {
       transform: rotateY(1800deg) rotateX(0deg) translateY(0);
       padding: 0%;
     }
+  }
+  .countdown-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
   }
