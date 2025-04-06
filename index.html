@@ -370,12 +370,14 @@
             const donationElement = document.getElementById("donation-amount");
             const namenElement= document.getElementById("SpenderName");
             const randomName = namen[Math.floor(Math.random() * namen.length)];
+            const totalDonationElement = document.getElementById("total-donation-amount");
             namenElement.textContent = randomName;
             namenElement.style.display = 'block';
             
             // Fade out animation
             donationElement.classList.add('fade-out');
             namenElement.classList.add('fade-out');
+            totalDonationElement.classList.add('fade-out');
             
             setTimeout(() => {
                 // Change the amount while invisible
@@ -384,6 +386,9 @@
                 donationElement.textContent = randomDonationAmount;
                 namenElement.textContent = randomName;
                 
+                totalDonationElement.classList.remove('fade-out');
+                totalDonationElement.classList.add('fade-in', 'pulse');
+
                 // Fade in animation with pulse effect
                 donationElement.classList.remove('fade-out');
                 donationElement.classList.add('fade-in', 'pulse');
@@ -412,6 +417,7 @@
                 setTimeout(() => {
                     donationElement.classList.remove('fade-in', 'pulse');
                     namenElement.classList.remove('fade-in', 'pulse');
+                    totalDonationElement.classList.remove('fade-in', 'pulse');
                 }, 500);
                 
             }, 300); // Match this with the CSS transition time
