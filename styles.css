@@ -51,10 +51,28 @@ input[type="number"]:focus {
 }
 
 input[type="number"]::placeholder {
-    color: #ffd700;
+    color: #a08800;
     font-style: italic;
 }
 
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+    background-color: #063c8c;
+    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+    border: 1px solid #ffd700;
+    cursor: pointer;
+}
+
+input[type="number"]::-webkit-inner-spin-button:hover,
+input[type="number"]::-webkit-outer-spin-button:hover {
+    background-color: #ffd700;
+    border-color: #063c8c;
+}
 
 header {
     background-color: rgba(0, 56, 130, 0.7);
