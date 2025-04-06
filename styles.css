@@ -375,8 +375,6 @@ li:hover {
 .spin-container {
     perspective: 1000px;
     transform-style: preserve-3d;
-    width: 200px;
-    height: 200px;
     display: flex;
     justify-content: center;
     align-items: center;
