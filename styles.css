@@ -379,7 +379,9 @@ li:hover {
     justify-content: center;
     align-items: center;
     animation: containerSpin 5s ease-in-out forwards;
+    
     .spin-object {
+    margin-bottom: 50%;
     transform-origin: center;
     animation: licensePlateSpin 5s ease-in-out forwards;
     }
