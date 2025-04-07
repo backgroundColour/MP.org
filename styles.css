@@ -491,6 +491,10 @@ li:hover {
     max-width: 40%;
   }
 iframe{
+    min-width: 90%;
     resize: both;
     overflow: auto;
+}
+.time-calculator{
+    min-width: 40%;
 }
