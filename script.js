@@ -93,7 +93,7 @@ const namen = [
         'Massim','Macsim','Flaufs','Flo ',
         'Nadine "ChatGPT" Kabisch','ChatGPT','KI','Sehrgay',
         'Cergéy', 'Mottenkugel', 'Lindenkugel', 'C.BOOM', 'Air Compressor',
-        'KFC', 'Cave Johnson', 'Lyndon Johnson', 'Dr. John Fitzgerald Kennedy Jr. Sr. ',
+        'KFC', 'Cave Johnson', 'Lyndon Johnson', 'Dr. John Fitzgerald Kennedy Jr. Sr.',
         'Dr. Alice Weidel', 'Elonia Musk', 'Donald Trumpina', 'RFK Jr.', 'Sabine Hoffmann', 'HOF',
         'Jens', 'Jens Vermaeten', 'F.I.T.', 'CSV Converter', 'Jirco Mabs', 'Nick Todesblick',
         'Z. Immerling', 'Happy Fitzner', 'Schwanzkopf.de', 'Herr der Netzwerkprotokolle', 
