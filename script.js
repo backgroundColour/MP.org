@@ -194,7 +194,7 @@ const namen = [
         
         setTimeout(() => {
             // Change the amount while invisible
-            randomDonationAmount = getRandomDonationAmount();
+            let randomDonationAmount = getRandomDonationAmount();
             updateTotalDonationAmount(parseFloat(randomDonationAmount.replace(" €", "").replace(",", ".")));
             donationElement.textContent = randomDonationAmount;
             namenElement.textContent = randomName;
