@@ -76,14 +76,6 @@ const quotes = [
         '"Ich muss da jetzt kein gamer maschienchen hinstellen"',
         '"Jani, du musst doch noch präsentieren."',
         '"Achso"',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-
     ];
 
 const namen = [
