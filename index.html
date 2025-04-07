@@ -187,9 +187,6 @@
             
             <div id="new-member-popover" class="new-member-container" popover>
                 <script>
-                    document.getElementById('make-new-member').addEventListener('click', function(event) {
-                        event.preventDefault(); // Prevent form submission
-                    });
                     document.addEventListener('DOMContentLoaded', function() {
                         const newMemberName = document.getElementById('email').value;
                         const newMemberQuote = document.getElementById('zitat').value;
