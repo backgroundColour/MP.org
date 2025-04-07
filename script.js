@@ -76,6 +76,15 @@ const quotes = [
         '"Ich muss da jetzt kein gamer maschienchen hinstellen"',
         '"Jani, du musst doch noch präsentieren."',
         '"Achso"',
+        '"Ruhig Brauner"',
+        '"Nimmst du jeztzt die Maus weg? Sergej, dich wird der Blitz treffen. Weißt du warum die Räume hier so aussehen, weil leute wie du hier rum verkabeln. Du bist garnicht autorisiert dazu!"',
+        '"Der richtig heiße Scheiß ist Dynamisches VLAN"',
+        '"Der nimmt den kürzesten Pfad, wobei dieser nicht immer der kürzeste Pfad sein muss."',
+        '"Habt ihr irgendwelche Fragen, wenn ja meldet euch einfach"',
+        '"Ahhhhhhhhhh ... Help"',
+        '"Snaiffer"',
+        '"Habt hier? [Klasse schweitg] Meine Güte..."',
+        '"Die Slowenischen Mädchen sind sehr hübsch und die Jungs sind noch hübscher."',
     ];
 
 const namen = [
