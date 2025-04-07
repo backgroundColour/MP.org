@@ -182,8 +182,25 @@
                 <input type="password" id="zitat" name="zitat" placeholder="Zitat der Woche eingeben" required>
                 <label for="headcircumfrence">Ihr Kopfumfang in Lichtnanosekunden:</label>
                 <input type="number" step="0.01" id="headcircumfrence" name="Kopfumfang" placeholder="Ihr Kopfumfang in Lichtnanosekunden" title="Jedes Mitglied erhält einen obligatorischen zeremoniellen Michipartei-Hut" required>
-                <button type="submit">Beitreten</button>
+                <button popovertarget="donation-form">Beitreten</button>
             </form>
+            
+            <div id="new-member-popover" class="new-member-container" popover>
+                <script>
+                    const newMemberName = document.getElementById('email').value;
+                    const newMemberQuote = document.getElementById('zitat').value;
+                    const newMemberHeadCircumference = document.getElementById('headcircumfrence').value;
+
+                    document.getElementById('new-member-name').innerText = newMemberName;
+                    document.getElementById('new-member-quote').innerText = newMemberQuote;
+                    document.getElementById('new-member-head-circumference').innerText = newMemberHeadCircumference + ' Lichtnanosekunden';
+                </script>
+                <h2>Willkommen, <span id="new-member-name"></span>!</h2>
+                <p>Sie sind jetzt Mitglied der Michi Partei!</p>
+                <p>Ihr Zitat der Woche: <span id="new-member-quote"></span></p>
+                <p>Ihr Hut in Größe <span id="new-member-head-circumference"></span> Lichtnanosekunden wird bestellt.</p>
+                <p>Wir freuen uns, Sie in unserer Gemeinschaft willkommen zu heißen!</p>
+            </div>
         </div>
     </div>
     <div class="donation-card container content">
