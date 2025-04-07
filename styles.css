@@ -332,11 +332,11 @@ li:hover {
     background: #ffaa00;
 }
 
-.donation-form::backdrop  {
+.popover::backdrop  {
     background: rgba(0, 0, 0, 0.5); /* Dark semi-transparent background for the modal */
 }
 
-.donation-form {
+.popover {
     position: fixed;
     background: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
     padding: 20px;

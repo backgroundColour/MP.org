@@ -186,7 +186,7 @@
                 <button popovertarget="new-member-popover" id="make-new-member">Beitreten</button>
             </div>
             
-            <div id="new-member-popover" class="new-member-container" popover>
+            <div id="new-member-popover" class="popover" popover>
                 <script>
                     document.addEventListener('DOMContentLoaded', function() {
                         const newMemberName = document.getElementById('email').value;
@@ -198,7 +198,7 @@
                         document.getElementById('new-member-head-circumference').innerText = newMemberHeadCircumference + ' Lichtnanosekunden';
                     });
                 </script>
-                <h2>Willkommen, <span id="new-member-name"></span>!</h2>
+                <h2>Willkommen!</h2>
                 <p>Sie sind jetzt Mitglied der Michi Partei!</p>
                 <p>Ihr Zitat der Woche: <span id="new-member-quote"></span></p>
                 <p>Ihr Hut in Größe <span id="new-member-head-circumference"></span> Lichtnanosekunden wird bestellt.</p>
@@ -222,7 +222,7 @@
             <p>Wir freuen uns über jede Unterstützung!</p>
             <p>Aktueller Spendenbetrag: <span id="total-donation-amount">0,00 €</span></p>
             <button class="donate-button" popovertarget="donation-form">Jetzt spenden</button>
-            <div id="donation-form" class="donation-form" popover>
+            <div id="donation-form" class="popover" popover>
                 <h2>Spendenformular</h2>
                 <form action="./spenden" method="post">
                     <label for="name">Name:</label>
