@@ -34,7 +34,7 @@ body {
     background: #ffd700; /* Farbe beim Hovern */
 }
 
-input[type="number"] {
+.color_number input[type="number"] {
     padding: 10px;
     font-size: 16px;
     border: 2px solid #063c8c;
@@ -45,18 +45,18 @@ input[type="number"] {
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-input[type="number"]:focus {
+.color_number input[type="number"]:focus {
     border-color: #ffd700;
     box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
 }
 
-input[type="number"]::placeholder {
+.color_number input[type="number"]::placeholder {
     color: #a08800;
     font-style: italic;
 }
 
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
+.color_number input[type="number"]::-webkit-inner-spin-button,
+.color_number input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     appearance: none;
     margin: 0;
@@ -68,8 +68,8 @@ input[type="number"]::-webkit-outer-spin-button {
     cursor: pointer;
 }
 
-input[type="number"]::-webkit-inner-spin-button:hover,
-input[type="number"]::-webkit-outer-spin-button:hover {
+.color_number input[type="number"]::-webkit-inner-spin-button:hover,
+.color_number input[type="number"]::-webkit-outer-spin-button:hover {
     background-color: #ffd700;
     border-color: #063c8c;
 }
