@@ -3,79 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MP Merch Shop - Michi Partei</title>
-    <link rel="stylesheet" href="shopstyle.css">
+    <title>Michi Partei (MP) - Zukunft Gestalten</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        <div class="logo">
-            <h1>Michi Partei</h1>
-            <p>Gemeinsam für eine bessere Zukunft!</p>
-        </div>
-        <nav>
-            <ul>
-                <li><a href="#">Startseite</a></li>
-                <li><a href="#">Über uns</a></li>
-                <li><a href="#" class="active">Merch Shop</a></li>
-                <li><a href="#">Kontakt</a></li>
-            </ul>
-        </nav>
+        <h1>Willkommen bei der Michi Partei (MP)</h1>
+        <p>Gemeinsam für eine bessere Zukunft!</p>
     </header>
-
-    <main>
-        <section class="intro">
-            <h2>MP Merchandise Shop</h2>
-            <p>Zeige deine Unterstützung für die Michi Partei mit unseren offiziellen Produkten!</p>
-        </section>
-
-        <section class="products">
-            <div class="product-card">
-                <img src="OgShirt.png" alt="MP T-Shirt">
-                <h3>MP T-Shirt Classic</h3>
-                <p class="price">€24.99</p>
-                <button>In den Warenkorb</button>
-            </div>
-
-            <div class="product-card">
-                <img src="CapybaraHoodie.png" alt="MP Kaffeetasse">
-                <h3>MP Capybara Hoodie</h3>
-                <p class="price">€12.99</p>
-                <button>In den Warenkorb</button>
-            </div>
-
-            <div class="product-card">
-                <img src="NewShirt.png" alt="MP Cap">
-                <h3>MP T-Shirt V2</h3>
-                <p class="price">€19.99</p>
-                <button>In den Warenkorb</button>
-            </div>
-
-            <div class="product-card">
-                <img src="MPTasse.png" alt="MP Sticker Pack">
-                <h3>MP Kaffetach Tasse</h3>
-                <p class="price">€5.99</p>
-                <button>In den Warenkorb</button>
-            </div>
-        </section>
-
-        <section class="values">
-            <h2>Unsere Werte</h2>
+    <div class="container">
+        <div class="content">
+            <img src="assets/img/SSW.png" alt="MP Logo">
+            <p>Die Michi Partei setzt sich für eine moderne, gerechte und nachhaltige Gesellschaft ein.</p>
+            <h2>Unsere Werte:</h2>
             <ul>
                 <li>Gerechtigkeit für alle</li>
                 <li>Nachhaltigkeit in Wirtschaft und Umwelt</li>
                 <li>Technologischer Fortschritt mit sozialer Verantwortung</li>
                 <li>Bürgernähe und transparente Politik</li>
             </ul>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2023 Michi Partei (MP). Alle Rechte vorbehalten.</p>
-        <div class="social-links">
-            <a href="#">Facebook</a>
-            <a href="#">Twitter</a>
-            <a href="#">Instagram</a>
+            <h2>Unsere Vision:</h2>
+            <p>Wir möchten eine Gesellschaft schaffen, in der Innovation und soziale Gerechtigkeit Hand in Hand gehen.</p>
         </div>
+    </div>
+    <div class="themes">
+        <div class="theme">
+            <div class="theme-image" style="background-image: url('assets/img/Fritz.jpg');"></div>
+            <h3>Thema 1: Nachhaltigkeit</h3>
+            <p>Wir setzen uns für den Schutz unserer Umwelt und nachhaltige Entwicklung in allen Bereichen der Gesellschaft ein.</p>
+        </div>
+        <div class="theme">
+            <div class="theme-image" style="background-image: url('assets/img/Micha2.png');"></div>
+            <h3>Thema 2: Bildung für alle</h3>
+            <p>Jeder Mensch sollte Zugang zu hochwertiger Bildung haben, um sich bestmöglich zu entfalten und die Zukunft zu gestalten.</p>
+        </div>
+        <div class="theme">
+            <div class="theme-image" style="background-image: url('assets/img/Laschet.png');"></div>
+            <h3>Thema 3: Innovation und Technologie</h3>
+            <p>Technologische Innovationen sind der Schlüssel zu einer besseren Zukunft – wir fördern Forschung und Entwicklung.</p>
+        </div>
+    </div>
+    <div class="login-section">
+        <div class="login-left">
+            <img src="assets/img/Michaa.png" alt="Beispielbild" class="login-image">
+        </div>
+        <div class="login-right">
+            <h2>Jetzt anmelden</h2>
+            <form class="login-form">
+                <label for="email">E-Mail-Adresse:</label>
+                <input type="email" id="email" name="email" placeholder="E-Mail eingeben" required>
+                <label for="password">Passwort:</label>
+                <input type="password" id="password" name="password" placeholder="Passwort eingeben" required>
+                <button type="submit">Anmelden</button>
+            </form>
+        </div>
+    </div>
+    <footer>
+        <p>© 2025 Michi Partei | Kontakt: info@michipartei.de</p>
     </footer>
+    
+    <!-- Zitat -->
+    <div id="quote" class="quote"></div>
+
+    <script>
+   const quotes = [
+    '"Mein früherer Ausbilder hat gesagt du handelst mit Zitronen wenn du sowas machst" - M. Fitzner',
+    '"Sergej ich schmeiß dich gleich raus."',
+    '"Warum seit ihr eigentlich so viel am Klicken, wenn ihr mit der Packet Tracer Übung fertig seid?"',
+    'Hat jemand von euch schon mal Windows 11 installiert?',
+    '"Das ist die Maschiene, der bekommt die Arbeit direkt, 100%. Mr. packet Tracer" ',
+    '"Hello again!"',
+    '"Danilo!!"',
+    '"Die sind für meine flüchtlinge!" ',
+    '"NEIIIIIIIIIN!!!!!!!!!!!!!"',
+    '"ja Fitzner hier guten tag" ',
+    '"Alles tip toppi.. wow"',
+    '"Ich würde es mit ihm klären oder halt einfach gehen."',
+    '"Danae! zu den Löwen mit dir!"',
+    '"Fangen wir mit einem Protokoll aus der Mottenkiste an"',
+    '"Bei den slowenen geht es meist, die aus estland haben nie bock"',
+    '"Es ist ein guter tag schwul zu sein"',
+    '"Jogging buchse"',
+    '"Habt ihr das theaterstück zu hitler gesehen?"',
+    '"Deswegen hats nicht mit der Nachprüfung geklappt."',
+    '"Schau zu das du einen dolmetscher hast wenn es hart auf hart kommt"',
+    '"Moin Vanille"',
+    '"So machne wa erstma Päuschen"',
+    '"Alles tipi topi"',
+    '"Sergej kennt sich aus mit partnern und dating apps"',
+    '"Aber wenn der Sergej heiß ist, wie Frittenfett..."',
+    '"Ja natürlichhh" x2 ',
+    '"Klopf klopf moin!"',
+    '"Danylo musst du in den latz knallen weil er immer russich oder englisch sprechen möchte"',
+    '"Ich geh mal klären wo ihr gleich unterricht habt." - M. Fitzner\n"Mathe" - Dominik',
+    '"Ja ich habe Albträume von euch"',
+    '"Mit dieser Rechenmethode rechnet man nicht mit Kommazahlen. Also, ich gucke niemanden an, aber... (schaut Leevan intensiv an)"',
+    '"Wir sind ja jetzt seriös geworden, wir haben hier neben an eine Kaffeemaschiene, ihr könnt euch da gerne Kaffe kochen, da sollten auch noch 4 Tassen sein."'
+];
+
+let quoteElement = document.getElementById('quote');
+
+function showQuote() {
+    const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+    quoteElement.textContent = randomQuote + " - M. Fitzner";
+    quoteElement.style.display = 'block';
+    
+    // Pop-in Animation
+    quoteElement.style.animation = 'popIn 0.5s ease-out forwards';
+    
+    // Nach 5 Sekunden Pop-out-Animation starten
+    setTimeout(() => {
+        quoteElement.style.animation = 'popOut 0.5s ease-in forwards';
+        
+        // Warte, bis die Pop-out-Animation abgeschlossen ist, bevor das Zitat ausgeblendet wird
+        setTimeout(() => {
+            quoteElement.style.display = 'none';
+        }, 500); // Warte 0.5s (die Dauer der Pop-out-Animation)
+    }, 5000); // Zitat nach 5 Sekunden ausblenden
+    
+    // Alle 10 Sekunden ein neues Zitat anzeigen
+    setTimeout(showQuote, 10000); // Nächste Zitat in 10 Sekunden anzeigen
+}
+
+// Zitat beim Laden der Seite anzeigen
+window.onload = function() {
+    showQuote();
+};
+
+    </script>
 </body>
 </html>
