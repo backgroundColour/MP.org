@@ -16,38 +16,6 @@ const streetNames = [
     "28195", "01067", "30159", "90402", "53111"
     ];
 
-    function getRandomElement(array) {
-        return array[Math.floor(Math.random() * array.length)];
-    }
-
-    function generateRandomAddress() {
-        const street = getRandomElement(streetNames);
-        const houseNumber = Math.floor(Math.random() * 150) + 1; // Hausnummer zwischen 1 und 150
-        const city = getRandomElement(cityNames);
-        const postalCode = getRandomElement(postalCodes);
-
-        return `${street} ${houseNumber}, ${postalCode} ${city}`;
-    }
-    
-    //document.getElementById("parteiAdresse").innerText = generateRandomAddress();
-    document.getElementById("imprint").innerHTML = "<p>© 2025 Michi Partei | Kontakt: info@michipartei.de | " + generateRandomAddress() + "</p>";    
-
-    // Funktion zur Generierung eines zufälligen zukünftigen Datums
-    function getRandomFutureDate() {
-        const today = new Date();
-        // Zufällige Anzahl von Tagen in der Zukunft (zwischen 7 und 60 Tagen)
-        const randomDays = Math.floor(Math.random() * 53) + 7;
-        const futureDate = new Date(today);
-        futureDate.setDate(today.getDate() + randomDays);
-        
-        // Formatierung des Datums im deutschen Format
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        return futureDate.toLocaleDateString('de-DE', options);
-    }
-
-    // Zufälliges Datum anzeigen
-    document.getElementById('next-meeting-date').textContent = getRandomFutureDate();
-
     const quotes = [
         '"Mein früherer Ausbilder hat gesagt du handelst mit Zitronen wenn du sowas machst" - M. Fitzner',
         '"Sergej ich schmeiß dich gleich raus."',
@@ -102,6 +70,38 @@ const streetNames = [
         'KFC', 'Cave Johnson', 'Lyndon Johnson', 'Dr. John Fitzgerald Kennedy Jr. Sr. ',
         'Dr. Alice Weidel', 'Elonia Musk', 'Donald Trumpina', 'RFK Jr.'
     ];
+
+    function getRandomElement(array) {
+        return array[Math.floor(Math.random() * array.length)];
+    }
+
+    function generateRandomAddress() {
+        const street = getRandomElement(streetNames);
+        const houseNumber = Math.floor(Math.random() * 150) + 1; // Hausnummer zwischen 1 und 150
+        const city = getRandomElement(cityNames);
+        const postalCode = getRandomElement(postalCodes);
+
+        return `${street} ${houseNumber}, ${postalCode} ${city}`;
+    }
+    
+    //document.getElementById("parteiAdresse").innerText = generateRandomAddress();
+    document.getElementById("imprint").innerHTML = "<p>© 2025 Michi Partei | Kontakt: info@michipartei.de | " + generateRandomAddress() + "</p>";    
+
+    // Funktion zur Generierung eines zufälligen zukünftigen Datums
+    function getRandomFutureDate() {
+        const today = new Date();
+        // Zufällige Anzahl von Tagen in der Zukunft (zwischen 7 und 60 Tagen)
+        const randomDays = Math.floor(Math.random() * 53) + 7;
+        const futureDate = new Date(today);
+        futureDate.setDate(today.getDate() + randomDays);
+        
+        // Formatierung des Datums im deutschen Format
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        return futureDate.toLocaleDateString('de-DE', options);
+    }
+
+    // Zufälliges Datum anzeigen
+    document.getElementById('next-meeting-date').textContent = getRandomFutureDate();
 
     let quoteElement = document.getElementById('quote');
     
