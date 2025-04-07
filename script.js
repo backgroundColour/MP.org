@@ -1,4 +1,3 @@
-// main.js
 const streetNames = [
     "Hauptstraße", "Bahnhofstraße", "Kirchweg", "Dorfplatz", "Am Waldrand", 
     "Goethestraße", "Schillerweg", "Lindenallee", "Bergstraße", "Mühlenweg",
