@@ -156,7 +156,6 @@
                 const periodTime = new Date(periodStartTime.getTime() + (period - 1) * 45 * 60 * 1000 + Math.floor((period - 1) / 2) * 20 * 60 * 1000);
                 const now = new Date();
                 const diff = Math.abs(now - periodTime);
-                if (diff > (8 * 45 * 60 * 1000 + 4 * 20 * 60 * 1000)) return "Bereits vorbei";
                 const hours = Math.floor(diff / (1000 * 60 * 60));
                 const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
                 return `${hours}h ${minutes}m`;
@@ -166,7 +165,6 @@
                 const periodTime = new Date(periodStartTime.getTime() + (period - 1) * 45 * 60 * 1000 + Math.floor((period - 1) / 2) * 20 * 60 * 1000);
                 const now = new Date();
                 const diff = periodTime - now;
-                if (diff < 0) return "Bereits vorbei";
                 const hours = Math.floor(diff / (1000 * 60 * 60));
                 const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
                 return `${hours}h ${minutes}m`;
