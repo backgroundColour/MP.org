@@ -30,7 +30,7 @@ const streetNames = [
     }
     
     //document.getElementById("parteiAdresse").innerText = generateRandomAddress();
-    document.getElementById("imprint").innerHTML = "<p>© 2025 Michi Partei | Kontakt: info@michipartei.de | " + generateRandomAddress() + "</p>";    
+    //document.getElementById("imprint").innerHTML = "<p>© 2025 Michi Partei | Kontakt: info@michipartei.de | " + generateRandomAddress() + "</p>";    
 
     // Funktion zur Generierung eines zufälligen zukünftigen Datums
     function getRandomFutureDate() {
