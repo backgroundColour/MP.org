@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flipdown/dist/flipdown.min.css">
     <!-- Add FlipDown.js Script -->
     <script src="https://cdn.jsdelivr.net/npm/flipdown/dist/flipdown.min.js"></script>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
     <header>
@@ -115,7 +116,7 @@
         <p>
             Bewerben Sie sich jetzt für eine Stelle im M.I.C.H.I. und werden Sie Teil unseres Teams!
             <br>Wir suchen kreative Köpfe, die bereit sind, die digitale Zukunft mitzugestalten.
-            <br>Besuchen Sie unsere <a href="/careers">Karriereseite</a> für weitere Informationen.
+            <br>Besuchen Sie unsere <a href="./careers">Karriereseite</a> für weitere Informationen.
         </p>
         <h2>Projekte des M.I.C.H.I.</h2>
         <ul>
@@ -173,7 +174,7 @@
         </div>
         <div class="login-right">
             <h2>Jetzt Midglied werden</h2>
-            <form class="login-form">
+            <div class="login-form">
                 <label for="email">E-Mail-Adresse:</label>
                 <input type="email" id="email" name="email" placeholder="E-Mail eingeben" required>
                 <label for="password">Passwort:</label>
@@ -182,14 +183,11 @@
                 <input type="password" id="zitat" name="zitat" placeholder="Zitat der Woche eingeben" required>
                 <label for="headcircumfrence">Ihr Kopfumfang in Lichtnanosekunden:</label>
                 <input type="number" step="0.01" id="headcircumfrence" name="Kopfumfang" placeholder="Ihr Kopfumfang in Lichtnanosekunden" title="Jedes Mitglied erhält einen obligatorischen zeremoniellen Michipartei-Hut" required>
-                <button popovertarget="donation-form" id="make-new-member">Beitreten</button>
-            </form>
+                <button popovertarget="new-member-popover" id="make-new-member">Beitreten</button>
+            </div>
             
             <div id="new-member-popover" class="new-member-container" popover>
                 <script>
-                    document.getElementById('make-new-member').addEventListener('click', function(event) {
-                        event.preventDefault(); // Prevent form submission
-                    });
                     document.addEventListener('DOMContentLoaded', function() {
                         const newMemberName = document.getElementById('email').value;
                         const newMemberQuote = document.getElementById('zitat').value;
@@ -226,7 +224,7 @@
             <button class="donate-button" popovertarget="donation-form">Jetzt spenden</button>
             <div id="donation-form" class="donation-form" popover>
                 <h2>Spendenformular</h2>
-                <form action="/spenden" method="post">
+                <form action="./spenden" method="post">
                     <label for="name">Name:</label>
                     <input type="text" id="name" name="name" placeholder="Ihr Name" required>
                     <label for="amount">Spendenbetrag (€):</label>
