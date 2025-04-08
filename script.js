@@ -112,6 +112,10 @@ const namen = [
         'Freaky Michi', 'Aperture Science Emergency Intelligence Incinerator'
 ];
 
+    async function sleep(msec) {
+        return new Promise(resolve => setTimeout(resolve, msec));
+    }
+
     function getRandomElement(array) {
         return array[Math.floor(Math.random() * array.length)];
     }
@@ -173,7 +177,7 @@ const namen = [
             }; 
     };
 
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', async function () {
         const popoverTriggers = document.querySelectorAll('[popovertarget]');
         popoverTriggers.forEach(trigger => {
             const targetId = trigger.getAttribute('popovertarget');
@@ -194,7 +198,7 @@ const namen = [
         }
         // Zufälliges Datum anzeigen
         
-        Thread().sleep(1000);
+        await sleep(1000);
         document.getElementById("imprint").innerHTML = "<p>© 2025 Michi Partei | Kontakt: info@michipartei.de | " + generateRandomAddress() + "</p>";
     });
 
