@@ -317,10 +317,6 @@ nav a.active {
     }
 }
 
-ul {
-    list-style-type: none;
-    padding: 0;
-}
 .liClass {
     background: #ffcc00;
     margin: 10px 0;
