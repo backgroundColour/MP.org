@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="Michi Partei, MP, Moin, Moin Löppt, Fitzner, Micheal Fitzner, BBK, Netzwerk, Sicherheit, Cisco Packet Tracer, Michi, Michi Partei Deutschland, Michi Partei Webseite, Michi Partei Homepage, Michi Partei Online, Michi Partei Politik, Michi Partei Mitglieder, Michi Partei Spenden, Michi Partei Projekte, Michi Partei Innovation, Michi Partei Technologie">
+    <meta name="author" content="Michi Partei Team">
+    <meta name="description" content="Die Michi Partei (MP) setzt sich für eine moderne, gerechte und nachhaltige Gesellschaft ein. Erfahren Sie mehr über unsere Werte und Projekte.">
     <title>Michi Partei (MP) - Zukunft Gestalten</title>
     <link rel="stylesheet" href="styles.css">
     
@@ -17,6 +20,15 @@
     <header>
         <h1>Willkommen bei der Michi Partei (MP)</h1>
         <p>Gemeinsam für eine bessere Zukunft!</p>
+        <br>
+        <nav>
+            <ul>
+                <li><a href="index.html" class="active">Startseite</a></li>
+                <li><a href="#">Unser Kabinett</a></li>
+                <li><a href="MPShop.html">Merch Shop</a></li>
+                <li><a href="#">Kontakt</a></li>
+            </ul>
+        </nav>
     </header>
     <div class="container">
         <div class="content">
@@ -24,10 +36,10 @@
             <p>Die Michi Partei setzt sich für eine moderne, gerechte und nachhaltige Gesellschaft ein.</p>
             <h2>Unsere Werte:</h2>
             <ul>
-                <li onclick="alert('Gerechtigkeit für alle!')">Gerechtigkeit für alle</li>
-                <li onclick="alert('Nachhaltigkeit in Wirtschaft und Umwelt!')">Nachhaltigkeit in Wirtschaft und Umwelt</li>
-                <li onclick="alert('Technologischer Fortschritt mit sozialer Verantwortung!')">Technologischer Fortschritt mit sozialer Verantwortung</li>
-                <li onclick="alert('Bürgernähe und transparente Politik!')">Bürgernähe und transparente Politik</li>
+                <li class="liClass" onclick="alert('Gerechtigkeit für alle!')">Gerechtigkeit für alle</li>
+                <li class="liClass" onclick="alert('Nachhaltigkeit in Wirtschaft und Umwelt!')">Nachhaltigkeit in Wirtschaft und Umwelt</li>
+                <li class="liClass" onclick="alert('Technologischer Fortschritt mit sozialer Verantwortung!')">Technologischer Fortschritt mit sozialer Verantwortung</li>
+                <li class="liClass" onclick="alert('Bürgernähe und transparente Politik!')">Bürgernähe und transparente Politik</li>
             </ul>
         </div>
     </div>
@@ -120,20 +132,20 @@
         </p>
         <h2>Projekte des M.I.C.H.I.</h2>
         <ul>
-            <li>Entwicklung einer sicheren digitalen Identität für alle Bürger</li>
-            <li>Aufbau eines nationalen Cybersecurity-Zentrums</li>
-            <li>Förderung von Startups im Bereich Künstliche Intelligenz</li>
-            <li>Implementierung von Smart City Lösungen in deutschen Städten</li>
-            <li>Forschung und Entwicklung im Bereich Quantencomputing</li>
-            <li>Schaffung eines digitalen Bildungsangebots für alle Altersgruppen</li>
-            <li>Entwicklung von Lösungen zur Bekämpfung von Fake News und Desinformation</li>
-            <li>Aufbau eines nationalen Rechenzentrums für Forschung und Entwicklung</li>
-            <li>Förderung von Open Source Projekten und Initiativen</li>
-            <li>Entwicklung von Lösungen zur Verbesserung der digitalen Infrastruktur in ländlichen Gebieten</li>
-            <li>Schaffung eines digitalen Marktplatzes für innovative Produkte und Dienstleistungen</li>
-            <li>Entwicklung von Lösungen zur Verbesserung der digitalen Teilhabe für Menschen mit Behinderungen</li>
-            <li>Förderung von digitalen Kompetenzen in Schulen und Bildungseinrichtungen</li>
-            <li>Entwicklung von Lösungen zur Verbesserung der Cybersicherheit in Unternehmen</li>
+            <li class="liClass">Entwicklung einer sicheren digitalen Identität für alle Bürger</li>
+            <li class="liClass">Aufbau eines nationalen Cybersecurity-Zentrums</li>
+            <li class="liClass">Förderung von Startups im Bereich Künstliche Intelligenz</li>
+            <li class="liClass">Implementierung von Smart City Lösungen in deutschen Städten</li>
+            <li class="liClass">Forschung und Entwicklung im Bereich Quantencomputing</li>
+            <li class="liClass">Schaffung eines digitalen Bildungsangebots für alle Altersgruppen</li>
+            <li class="liClass">Entwicklung von Lösungen zur Bekämpfung von Fake News und Desinformation</li>
+            <li class="liClass">Aufbau eines nationalen Rechenzentrums für Forschung und Entwicklung</li>
+            <li class="liClass">Förderung von Open Source Projekten und Initiativen</li>
+            <li class="liClass">Entwicklung von Lösungen zur Verbesserung der digitalen Infrastruktur in ländlichen Gebieten</li>
+            <li class="liClass">Schaffung eines digitalen Marktplatzes für innovative Produkte und Dienstleistungen</li>
+            <li class="liClass">Entwicklung von Lösungen zur Verbesserung der digitalen Teilhabe für Menschen mit Behinderungen</li>
+            <li class="liClass">Förderung von digitalen Kompetenzen in Schulen und Bildungseinrichtungen</li>
+            <li class="liClass">Entwicklung von Lösungen zur Verbesserung der Cybersicherheit in Unternehmen</li>
         </ul>
     </div>
     <div class="container content color_number time-calculator">
@@ -224,7 +236,7 @@
             <button class="donate-button" popovertarget="donation-form">Jetzt spenden</button>
             <div id="donation-form" class="popover" popover>
                 <h2>Spendenformular</h2>
-                <form action="./spenden" method="post">
+                <form action="spenden/index.html" method="post">
                     <label for="name">Name:</label>
                     <input type="text" id="name" name="name" placeholder="Ihr Name" required>
                     <label for="amount">Spendenbetrag (€):</label>
@@ -244,9 +256,6 @@
             </div> 
         </div>
     </div>
-
-    <a href="MPShop.html">Visit MPShop.com!</a>
-
 
     <footer>
         <p id="imprint">© 2025 Michi Partei | Kontakt: info@michipartei.de</p>

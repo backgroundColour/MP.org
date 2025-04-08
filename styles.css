@@ -15,6 +15,28 @@ body {
     overflow-x: hidden;
 }
 
+nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0 0;
+}
+
+nav li {
+    margin: 0 1rem;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav a.active {
+    text-decoration: underline;
+}
+
 /* 🚨 WICHTIG: Diese Regeln müssen NACH dem body stehen! */
 /* Chrome, Safari, Edge (WebKit-Browser) */
 ::-webkit-scrollbar {
@@ -119,7 +141,7 @@ ul {
     padding: 0;
 }
 
-li {
+.liClass {
     background: #ffcc00;
     margin: 10px 0;
     padding: 10px;
@@ -289,6 +311,10 @@ footer {
     animation: popIn 0.5s ease-out forwards;
 }
 
+nav a.active {
+    text-decoration: underline;
+}
+
 /* Pop-in Animation */
 @keyframes popIn {
     0% {
@@ -313,11 +339,7 @@ footer {
     }
 }
 
-ul {
-    list-style-type: none;
-    padding: 0;
-}
-li {
+.liClass {
     background: #ffcc00;
     margin: 10px 0;
     padding: 15px;
@@ -327,7 +349,7 @@ li {
     cursor: pointer;
     transition: transform 0.3s ease, background-color 0.3s;
 }
-li:hover {
+.liClass:hover {
     transform: scale(1.5);
     background: #ffaa00;
 }
