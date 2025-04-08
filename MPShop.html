@@ -123,10 +123,10 @@
     
                 if (isDiscount) {
                     basePrice *= (1 - percentage); // Rabatt
-                    card.querySelector(".price").innerText = `Rabatt €${percentage.toFixed(2)}: €${basePrice.toFixed(2)}`;
+                    card.querySelector(".price").innerText = `Rabatt ${100 - percentage.toFixed(2)}: €${basePrice.toFixed(2)}`;
                 } else {
                     basePrice *= (1 + percentage); // Tarifaufschlag
-                    card.querySelector(".price").innerText = `Tarrif €${percentage.toFixed(2)}: €${basePrice.toFixed(2)}`;
+                    card.querySelector(".price").innerText = `Tarrif ${100 - percentage.toFixed(2)}: €${basePrice.toFixed(2)}`;
                 }
             } else {
                 card.querySelector(".price").innerText = `€${basePrice.toFixed(2)}`;
