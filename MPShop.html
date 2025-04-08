@@ -115,10 +115,12 @@
     
         productCards.forEach(card => {
             let basePrice = Math.random() * 100; // Preis zwischen 0 und 100 €
-            const originalPrice = basePrice;
             const priceElement = card.querySelector(".price");
     
-            // 10 % Chance auf Rabatt oder Tarrif
+            // Reset Style
+            priceElement.style.color = "";
+    
+            // 10 % Chance auf Rabatt oder Tarriff
             if (Math.random() < 0.1) {
                 const isDiscount = Math.random() < 0.5;
                 const percentage = Math.random(); // 0.00 – 1.00
@@ -127,16 +129,18 @@
                 if (isDiscount) {
                     basePrice *= (1 - percentage); // Rabatt abziehen
                     priceElement.innerText = `Rabatt ${percentDisplay}%: €${basePrice.toFixed(2)}`;
+                    priceElement.style.color = "green";
                 } else {
                     basePrice *= (1 + percentage); // Tarriff draufrechnen
                     priceElement.innerText = `Tarriff +${percentDisplay}%: €${basePrice.toFixed(2)}`;
+                    priceElement.style.color = "red";
                 }
             } else {
                 priceElement.innerText = `€${basePrice.toFixed(2)}`;
             }
         });
     });
-    </script>
+    </script>    
        
 
 </html>
