@@ -302,6 +302,8 @@ const namen = [
 
     try {
         setTimeout(updateDonationAmount, Math.floor(Math.random() * 4000) + 1000);
+    } catch (error) { }
+    
     function getNextKaffeetagTimestamp() {
         const now = new Date();
         const nextKaffeetag = new Date();
@@ -312,8 +314,6 @@ const namen = [
         }
         return Math.floor(nextKaffeetag.getTime() / 1000); // Convert to UNIX timestamp
     }
-    } catch (error) { }
-    
 
     document.addEventListener('DOMContentLoaded', () => {
         const nextKaffeetagTimestamp = getNextKaffeetagTimestamp();
