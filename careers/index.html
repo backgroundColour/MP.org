@@ -6,6 +6,21 @@
     <title>Michi Partei (MP) - Zukunft Gestalten</title>
     <link rel="stylesheet" href="../styles.css">
 
+    <style>
+        .btn{
+            padding: 10px;
+            background-color: #0055aa;
+            border-radius: 50px;
+            width: 80%;
+            color: white;
+        }
+        .content{
+            display: none;
+            margin-left: 15%;
+            margin-right: 15%;
+        }
+    </style>
+
 </head>
 <body>
 <header>
@@ -18,27 +33,90 @@
         <div class="theme-image" style="background-image: url('../assets/img/Michaa.png');"></div>
         <h3>Politiker</h3>
         <p>Gehe für uns in den Bundestag und unterstütze Michi bei unserer Mission.</p>
+        <div class="btn" id="politiker_btn">Mehr erfahren</div>
     </div>
     <div class="theme">
         <div class="theme-image" style="background-image: url('../assets/img/Influencer.png');"></div>
         <h3>Influencer</h3>
         <p>Arbeite an der Internet Präsens von der MP und mache uns Deutschlandweit bekannt.</p>
+        <div class="btn" id="influencer_btn">Mehr erfahren</div>
     </div>
     <div class="theme">
         <div class="theme-image" style="background-image: url('https://www.oedp.de/fileadmin/_processed_/1/0/csm_Haende_8fcf861239.jpg');"></div>
         <h3>Lobbyisten</h3>
         <p>Auch kleine Parteien benötigen eine Lobby.</p>
+        <div class="btn" id="lobbyisten_btn">Mehr erfahren</div>
     </div>
     <div class="theme">
         <div class="theme-image" style="background-image: url('../assets/img/Waehler.png');"></div>
         <h3>Wähler</h3>
         <p>Ohne unsere wähler wären wir nichts, danke an jeden.</p>
+        <div class="btn" id="waehler_btn">Mehr erfahren</div>
     </div>
 </div>
 
+<br>
+
+<div id="politiker_content" class="content">
+    <h2>Politiker</h2>
+    <p>
+        Werde Teil der Veränderung: Gehe für uns in den Bundestag und unterstütze Michi bei unserer Mission für
+        Gerechtigkeit, Fortschritt und Zusammenhalt. Gemeinsam gestalten wir die Politik von morgen!
+    </p>
+</div>
+<div id="influencer_content" class="content">
+    <h2>Influencer</h2>
+    <p>
+        Du bist online zu Hause und weißt, wie man Reichweite aufbaut? Dann werde Teil unseres Teams und stärke die
+        Internetpräsenz der MP. Teile unsere Vision, erreiche neue Zielgruppen und mache unsere Bewegung deutschlandweit bekannt.
+        Ob auf TikTok, Instagram oder YouTube – deine Stimme zählt. Gemeinsam bringen wir frischen Wind in die Politik!
+    </p>
+</div>
+<div id="lobbyisten_content" class="content">
+    <h2>Lobbyisten</h2>
+    <p>
+        Auch kleine Parteien brauchen eine starke Lobby. Nutze dein Netzwerk, deine Kommunikationsstärke und deinen strategischen
+        Blick, um unsere Anliegen auf allen Ebenen voranzubringen. Ob in Gesprächen mit Verbänden, Unternehmen oder Institutionen –
+        du bist unsere Stimme hinter den Kulissen. Gemeinsam schaffen wir Gehör für die, die sonst überhört werden.
+    </p>
+</div>
+<div id="waehler_content" class="content">
+    <h2>Wähler</h2>
+    <p>
+        Ohne euch wären wir nichts – eure Stimme macht den Unterschied. Als Wähler unterstützt du nicht nur eine Partei, sondern eine
+        Bewegung für eine gerechtere Zukunft. Jeder einzelne von euch bringt uns näher an unser Ziel. Danke für dein Vertrauen,
+        dein Engagement und deine Stimme. Gemeinsam zeigen wir, dass Veränderung möglich ist!
+    </p>
+</div>
+
+
 <footer>
-    <p>© 2025 Michi Partei | Kontakt: info@michipartei.de</p>
+    <p>© <span id="date"></span> Michi Partei | Kontakt: info@michipartei.de</p>
 </footer>
+
+<script>
+    document.getElementById('politiker_btn').addEventListener('click', function() {
+        const content = document.getElementById('politiker_content');
+        content.style.display = (content.style.display === 'none' || content.style.display === '') ? 'block' : 'none';
+    });
+
+    document.getElementById('influencer_btn').addEventListener('click', function() {
+        const content = document.getElementById('influencer_content');
+        content.style.display = (content.style.display === 'none' || content.style.display === '') ? 'block' : 'none';
+    });
+
+    document.getElementById('lobbyisten_btn').addEventListener('click', function() {
+        const content = document.getElementById('lobbyisten_content');
+        content.style.display = (content.style.display === 'none' || content.style.display === '') ? 'block' : 'none';
+    });
+
+    document.getElementById('waehler_btn').addEventListener('click', function() {
+        const content = document.getElementById('waehler_content');
+        content.style.display = (content.style.display === 'none' || content.style.display === '') ? 'block' : 'none';
+    });
+
+    document.getElementById("date").innerText = new Date().getFullYear();
+</script>
 
 </body>
 </html>
