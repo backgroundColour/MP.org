@@ -284,18 +284,21 @@ const namen = [
     }
 
     function updateDonationAmount() {
-        animateDonationChange();
+        try {
+            animateDonationChange();
+            // Set random refresh time between 1 to 5 seconds
+            const randomRefreshTime = Math.floor(Math.random() * 1000) + 9000;
+            setTimeout(updateDonationAmount, randomRefreshTime);
+        } catch (error) {
+            
+        }
         
-        // Set random refresh time between 1 to 5 seconds
-        const randomRefreshTime = Math.floor(Math.random() * 1000) + 9000;
-        setTimeout(updateDonationAmount, randomRefreshTime);
+        
+        
     }
 
-    // Initialize with first value
-    
-    
-    // Start the update cycle after initial delay
-    setTimeout(updateDonationAmount, Math.floor(Math.random() * 4000) + 1000);
+    try {
+        setTimeout(updateDonationAmount, Math.floor(Math.random() * 4000) + 1000);
     function getNextKaffeetagTimestamp() {
         const now = new Date();
         const nextKaffeetag = new Date();
@@ -306,6 +309,8 @@ const namen = [
         }
         return Math.floor(nextKaffeetag.getTime() / 1000); // Convert to UNIX timestamp
     }
+    } catch (error) { }
+    
 
     document.addEventListener('DOMContentLoaded', () => {
         const nextKaffeetagTimestamp = getNextKaffeetagTimestamp();
