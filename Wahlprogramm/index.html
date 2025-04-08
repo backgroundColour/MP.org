@@ -12,11 +12,23 @@
             border-radius: 50px;
             width: 80%;
             color: white;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            margin: 10px auto;
         }
         .content {
-            display: none;
-            margin-left: 15%;
-            margin-right: 15%;
+            margin: 1em 15%;
+        }
+        .theme {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .theme-image {
+            width: 100%;
+            height: 200px;
+            background-size: cover;
+            background-position: center;
         }
     </style>
 </head>
@@ -25,62 +37,59 @@
     <h1>Unser Wahlprogramm</h1>
     <p>Klare Ziele. Neue Wege. Für eine starke Zukunft.</p>
 </header>
-<!-- TODO: Bilder-->
+
 <div class="themes">
     <div class="theme">
-        <div class="theme-image" style="background-image: url('../assets/img/Bildung.png');"></div>
+        <div class="theme-image" style="background-image: url('../assets/img/Bildungs_Michi.png');"></div>
         <h3>Bildung</h3>
         <p>Moderne Schulen, digitale Ausstattung, faire Chancen.</p>
-        <div class="btn" id="bildung_btn">Mehr erfahren</div>
+        <a class="btn" href="#bildung_content">Mehr erfahren</a>
     </div>
     <div class="theme">
-        <div class="theme-image" style="background-image: url('../assets/img/Klima.png');"></div>
+        <div class="theme-image" style="background-image: url('../assets/img/Klima_Michi.png');"></div>
         <h3>Klima</h3>
         <p>Pragmatischer Klimaschutz mit Innovation statt Verboten.</p>
-        <div class="btn" id="klima_btn">Mehr erfahren</div>
+        <a class="btn" href="#klima_content">Mehr erfahren</a>
     </div>
     <div class="theme">
         <div class="theme-image" style="background-image: url('../assets/img/Digital.png');"></div>
         <h3>Digitalisierung</h3>
         <p>Verwaltung digitalisieren, Internet ausbauen, KI fördern.</p>
-        <div class="btn" id="digital_btn">Mehr erfahren</div>
+        <a class="btn" href="#digital_content">Mehr erfahren</a>
     </div>
     <div class="theme">
         <div class="theme-image" style="background-image: url('../assets/img/Zusammenhalt.png');"></div>
         <h3>Zusammenhalt</h3>
         <p>Gegen Spaltung. Für Respekt, Vielfalt und Gerechtigkeit.</p>
-        <div class="btn" id="zusammenhalt_btn">Mehr erfahren</div>
+        <a class="btn" href="#zusammenhalt_content">Mehr erfahren</a>
     </div>
 </div>
-
-<br>
 
 <div id="bildung_content" class="content">
     <h2>Bildung</h2>
     <p>
-        Wir setzen auf chancengerechte Bildung für alle. Mit modern ausgestatteten Schulen, digitalem Unterricht und fairer Lehrer:innen-Vergütung.
-        Bildung soll neugierig machen, nicht stressen. Wir fördern Talente – unabhängig vom Geldbeutel.
+        Unser Bildungssystem braucht ein umfassendes Update. Wir setzen uns für moderne, zukunftsfähige Schulen ein, die nicht nur baulich auf dem neuesten Stand sind, sondern auch pädagogisch. Dazu gehören digitale Endgeräte für alle, flächendeckendes WLAN und kompetente Lehrkräfte, die fair bezahlt und kontinuierlich weitergebildet werden. Wir fördern individuelle Talente, unabhängig vom sozialen oder finanziellen Hintergrund. Ganztagsschulen, kostenlose Lernmaterialien und frühkindliche Bildung sind für uns ebenso zentral wie praxisnahe Ausbildungen und ein durchlässiges Bildungssystem, das auch zweite und dritte Chancen ermöglicht.
     </p>
 </div>
+
 <div id="klima_content" class="content">
     <h2>Klima</h2>
     <p>
-        Der Klimawandel ist real, unser Handeln auch. Wir wollen Fortschritt durch Technik: saubere Energie, moderne Mobilität und nachhaltige Landwirtschaft.
-        Keine Verbotspartei – wir setzen auf Eigenverantwortung und smarte Lösungen.
+        Der Klimawandel betrifft uns alle – und er verlangt pragmatische, technologische Antworten. Wir setzen auf Innovationen statt Ideologien: emissionsfreie Mobilität, smarte Energienetze, moderne Gebäudesanierung und Investitionen in Forschung für grüne Technologien. Statt Verbote setzen wir auf Anreize und Eigenverantwortung. Die Energiewende muss sozial verträglich sein und niemanden zurücklassen. Unsere Landwirtschaft unterstützen wir beim Umbau zu nachhaltigen Methoden, ohne die wirtschaftliche Existenz der Betriebe zu gefährden.
     </p>
 </div>
+
 <div id="digital_content" class="content">
     <h2>Digitalisierung</h2>
     <p>
-        Die Zukunft ist digital. Wir bringen Deutschland ins 21. Jahrhundert: mit Glasfaser bis zur letzten Milchkanne, KI-Initiativen und einer digitalen Verwaltung,
-        die einfach funktioniert. Kein Papierkrieg mehr!
+        Deutschland muss digitaler werden – endlich. Wir fordern flächendeckenden Glasfaserausbau, überall. Egal ob Großstadt oder ländlicher Raum: schnelles Internet ist Daseinsvorsorge. In der Verwaltung ersetzen wir Papier durch digitale Lösungen, die Bürger:innen Zeit und Nerven sparen. Dazu kommen klare Datenschutzrichtlinien und Investitionen in Künstliche Intelligenz sowie digitale Bildung. Schulen, Behörden und Unternehmen sollen durch moderne IT sicher, effizient und zukunftsfähig arbeiten können.
     </p>
 </div>
+
 <div id="zusammenhalt_content" class="content">
     <h2>Gesellschaftlicher Zusammenhalt</h2>
     <p>
-        In einer Zeit der Spaltung sagen wir: Miteinander statt Gegeneinander. Wir stärken soziale Gerechtigkeit, fördern Ehrenamt und setzen uns für mehr Respekt
-        und Vielfalt ein. Jeder Mensch zählt – unabhängig von Herkunft, Glaube oder Meinung.
+        Unsere Gesellschaft steht unter Druck: Polarisierung, Hass im Netz, soziale Ungleichheit. Wir stellen uns dem entgegen. Wir stehen für eine offene, solidarische Gesellschaft, in der Vielfalt als Stärke gilt. Unser Ziel: Respekt, Teilhabe und gleiche Chancen für alle. Dazu gehören faire Löhne, soziale Sicherheit, bezahlbares Wohnen, eine starke Zivilgesellschaft und der Schutz vor Diskriminierung. Wir fördern Ehrenamt, binden Bürger:innen aktiv ein und stärken die demokratische Kultur – online wie offline.
     </p>
 </div>
 
@@ -89,26 +98,6 @@
 </footer>
 
 <script>
-    document.getElementById('bildung_btn').addEventListener('click', function() {
-        const content = document.getElementById('bildung_content');
-        content.style.display = (content.style.display === 'none' || content.style.display === '') ? 'block' : 'none';
-    });
-
-    document.getElementById('klima_btn').addEventListener('click', function() {
-        const content = document.getElementById('klima_content');
-        content.style.display = (content.style.display === 'none' || content.style.display === '') ? 'block' : 'none';
-    });
-
-    document.getElementById('digital_btn').addEventListener('click', function() {
-        const content = document.getElementById('digital_content');
-        content.style.display = (content.style.display === 'none' || content.style.display === '') ? 'block' : 'none';
-    });
-
-    document.getElementById('zusammenhalt_btn').addEventListener('click', function() {
-        const content = document.getElementById('zusammenhalt_content');
-        content.style.display = (content.style.display === 'none' || content.style.display === '') ? 'block' : 'none';
-    });
-
     document.getElementById("date").innerText = new Date().getFullYear();
 </script>
 </body>
