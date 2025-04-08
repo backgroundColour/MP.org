@@ -289,6 +289,10 @@ footer {
     animation: popIn 0.5s ease-out forwards;
 }
 
+nav a.active {
+    text-decoration: underline;
+}
+
 /* Pop-in Animation */
 @keyframes popIn {
     0% {
