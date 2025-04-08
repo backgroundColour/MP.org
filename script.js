@@ -142,34 +142,35 @@ const namen = [
     }
 
     
-
-    let quoteElement = document.getElementById('quote');
-    
-    function showQuote() {
-        const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-        quoteElement.textContent = randomQuote + " - M. Fitzner";
-        quoteElement.style.display = 'block';
+    function makeQuote() {
+        let quoteElement = document.getElementById('quote');
         
-        // Pop-in Animation    
-        quoteElement.style.animation = 'popIn 0.5s ease-out forwards';
-        
-        // Nach 5 Sekunden Pop-out-Animation starten
-        setTimeout(() => {
-            quoteElement.style.animation = 'popOut 0.5s ease-in forwards';
+        function showQuote() {
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            quoteElement.textContent = randomQuote + " - M. Fitzner";
+            quoteElement.style.display = 'block';
             
-            // Warte, bis die Pop-out-Animation abgeschlossen ist, bevor das Zitat ausgeblendet wird
+            // Pop-in Animation    
+            quoteElement.style.animation = 'popIn 0.5s ease-out forwards';
+            
+            // Nach 5 Sekunden Pop-out-Animation starten
             setTimeout(() => {
-                quoteElement.style.display = 'none';
-            }, 500); // Warte 0.5s (die Dauer der Pop-out-Animation)
-        }, 5000); // Zitat nach 5 Sekunden ausblenden
+                quoteElement.style.animation = 'popOut 0.5s ease-in forwards';
+                
+                // Warte, bis die Pop-out-Animation abgeschlossen ist, bevor das Zitat ausgeblendet wird
+                setTimeout(() => {
+                    quoteElement.style.display = 'none';
+                }, 500); // Warte 0.5s (die Dauer der Pop-out-Animation)
+            }, 5000); // Zitat nach 5 Sekunden ausblenden
+            
+            // Alle 10 Sekunden ein neues Zitat anzeigen
+            setTimeout(showQuote, 10000); // Nächste Zitat in 10 Sekunden anzeigen
+        }
         
-        // Alle 10 Sekunden ein neues Zitat anzeigen
-        setTimeout(showQuote, 10000); // Nächste Zitat in 10 Sekunden anzeigen
-    }
-    
-    // Zitat beim Laden der Seite anzeigen
-    window.onload = function() {
-        showQuote();
+        // Zitat beim Laden der Seite anzeigen
+        window.onload = function() {
+            showQuote();
+            }; 
     };
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -183,7 +184,14 @@ const namen = [
                 });
             }
         });
+        try{
         setTotalDonationAmount();
+        document.getElementById("donation-amount").textContent = getRandomDonationAmount();
+        makeQuote();}
+        catch (error) {
+            console.log("Ned gefunden");
+        }
+
 
         document.getElementById("imprint").innerHTML = "<p>© 2025 Michi Partei | Kontakt: info@michipartei.de | " + generateRandomAddress() + "</p>";
         console.info("Impressum generiert: " + document.getElementById("imprint").innerHTML);
@@ -284,7 +292,7 @@ const namen = [
     }
 
     // Initialize with first value
-    document.getElementById("donation-amount").textContent = getRandomDonationAmount();
+    
     
     // Start the update cycle after initial delay
     setTimeout(updateDonationAmount, Math.floor(Math.random() * 4000) + 1000);
