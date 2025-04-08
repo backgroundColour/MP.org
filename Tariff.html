@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weltweite Zollsätze</title>
+    <title>Weltweite Tariffs</title>
     <link rel="stylesheet" href="shopstyle.css">
     <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
     <style>
@@ -55,7 +55,7 @@
     </header>
 
     <main>
-        <h2>Weltweite Zollsätze</h2>
+        <h2>Weltweite Tariffs</h2>
         <ul class="country-list" id="country-list"></ul>
     </main>
 
@@ -130,12 +130,12 @@
 
                 const img = document.createElement("img");
                 img.src = country.flag;
-                img.alt = `Flagge von ${country.name}`;
+                img.alt = `Flag of ${country.name}`;
                 img.className = "country-flag";
 
                 const name = document.createElement("span");
                 const tax = Math.floor(Math.random() * 101); // 0–100 %
-                name.innerHTML = `<strong>${country.name}</strong> – Zollsatz: ${tax}%`;
+                name.innerHTML = `<strong>${country.name}</strong> – <span style="color:red">Tariff: ${tax}%</span>`;
 
                 li.appendChild(img);
                 li.appendChild(name);
