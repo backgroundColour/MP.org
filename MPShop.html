@@ -114,11 +114,8 @@
         const productCards = document.querySelectorAll(".product-card");
     
         productCards.forEach(card => {
-            let basePrice = Math.random() * 100; // Preis zwischen 0 und 100 €
+            let basePrice = Math.random() * 100; // Originalpreis
             const priceElement = card.querySelector(".price");
-    
-            // Reset Style
-            priceElement.style.color = "";
     
             // 10 % Chance auf Rabatt oder Tarriff
             if (Math.random() < 0.1) {
@@ -126,21 +123,23 @@
                 const percentage = Math.random(); // 0.00 – 1.00
                 const percentDisplay = Math.round(percentage * 100); // 0 – 100 %
     
-                if (isDiscount) {
-                    basePrice *= (1 - percentage); // Rabatt abziehen
-                    priceElement.innerText = `Rabatt ${percentDisplay}%: €${basePrice.toFixed(2)}`;
-                    priceElement.style.color = "green";
-                } else {
-                    basePrice *= (1 + percentage); // Tarriff draufrechnen
-                    priceElement.innerText = `Tarriff +${percentDisplay}%: €${basePrice.toFixed(2)}`;
-                    priceElement.style.color = "red";
-                }
+                const modifiedPrice = isDiscount
+                    ? basePrice * (1 - percentage)
+                    : basePrice * (1 + percentage);
+    
+                const originalStr = `<span style="text-decoration: line-through; color: gray;">€${basePrice.toFixed(2)}</span>`;
+                const finalStr = `<span style="color: ${isDiscount ? 'green' : 'red'};">
+                    ${isDiscount ? `Rabatt ${percentDisplay}%:` : `Tarriff +${percentDisplay}%:`} €${modifiedPrice.toFixed(2)}
+                </span>`;
+    
+                priceElement.innerHTML = `${originalStr}<br>${finalStr}`;
             } else {
                 priceElement.innerText = `€${basePrice.toFixed(2)}`;
             }
         });
     });
-    </script>    
+    </script>
+       
        
 
 </html>
