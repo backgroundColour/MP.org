@@ -108,4 +108,31 @@
         </div>
     </footer>
 </body>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const productCards = document.querySelectorAll(".product-card");
+    
+        productCards.forEach(card => {
+            let basePrice = Math.random() * 100; // Preis zwischen 0 und 100 €
+    
+            // 10 % Chance auf Rabatt oder Tarif
+            if (Math.random() < 0.1) {
+                const isDiscount = Math.random() < 0.5;
+                const percentage = Math.random(); // 0 bis 1 (entspricht 0–100 %)
+    
+                if (isDiscount) {
+                    basePrice *= (1 - percentage); // Rabatt
+                    card.querySelector(".price").innerText = `Rabatt: €${basePrice.toFixed(2)}`;
+                } else {
+                    basePrice *= (1 + percentage); // Tarifaufschlag
+                    card.querySelector(".price").innerText = `Tarif: €${basePrice.toFixed(2)}`;
+                }
+            } else {
+                card.querySelector(".price").innerText = `€${basePrice.toFixed(2)}`;
+            }
+        });
+    });
+    </script>    
+
 </html>
