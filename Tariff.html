@@ -211,42 +211,45 @@
             const secondHalf = countries.slice(half);
 
             function createCountryItem(country) {
-            const li = document.createElement("li");
-            li.className = "country-item";
+                const li = document.createElement("li");
+                li.className = "country-item";
 
-            const img = document.createElement("img");
-            img.src = country.flag;
-            img.alt = `Flag of ${country.name}`;
-            img.className = "country-flag";
+                const img = document.createElement("img");
+                img.src = country.flag;
+                img.alt = `Flag of ${country.name}`;
+                img.className = "country-flag";
 
-            const nameSpan = document.createElement("span");
-            nameSpan.className = "country-name";
-            nameSpan.textContent = country.name;
+                const nameSpan = document.createElement("span");
+                nameSpan.className = "country-name";
+                nameSpan.textContent = country.name;
 
-            // Wähle zufällig eine Produktkategorie und dann ein Produkt aus dieser Kategorie
-            const randomCategory = productCategories[Math.floor(Math.random() * productCategories.length)];
-            const randomProduct = randomCategory.products[Math.floor(Math.random() * randomCategory.products.length)];
+                // Wähle zufällig eine Produktkategorie und dann ein Produkt aus dieser Kategorie
+                const randomCategory = productCategories[Math.floor(Math.random() * productCategories.length)];
+                const randomProduct = randomCategory.products[Math.floor(Math.random() * randomCategory.products.length)];
 
-            const productSpan = document.createElement("span");
-            productSpan.className = "country-tariff";
-            productSpan.textContent = `Produkt: ${randomProduct}`;
+                // Zufälliger Prozentsatz (0 bis 100)
+                const tariff = Math.floor(Math.random() * 101);
 
-            li.appendChild(img);
-            li.appendChild(nameSpan);
-            li.appendChild(productSpan);
+                const productSpan = document.createElement("span");
+                productSpan.className = "country-tariff";
+                productSpan.textContent = `Produkt: ${randomProduct} | Tarif: ${tariff}%`;
 
-            return li;
-        }
+                li.appendChild(img);
+                li.appendChild(nameSpan);
+                li.appendChild(productSpan);
 
-        // Add countries to first column
-        firstHalf.forEach(country => {
-            listElementA.appendChild(createCountryItem(country));
-        });
+                return li;
+            }
 
-        // Add countries to second column
-        secondHalf.forEach(country => {
-            listElementB.appendChild(createCountryItem(country));
-        });
+            // Add countries to first column
+            firstHalf.forEach(country => {
+                listElementA.appendChild(createCountryItem(country));
+            });
+
+            // Add countries to second column
+            secondHalf.forEach(country => {
+                listElementB.appendChild(createCountryItem(country));
+            });
         });
     </script>
 </body>
