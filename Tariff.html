@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weltweite Tarife</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 2rem;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            text-align: center;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        li {
+            background: white;
+            margin: 0.5rem 0;
+            padding: 1rem;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+        }
+        img {
+            width: 50px;
+            height: auto;
+            margin-right: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>Weltweite Tarife</h1>
+    <ul id="country-list"></ul>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const countries = [
+                { name: "Deutschland", flag: "https://upload.wikimedia.org/wikipedia/commons/b/ba/Flag_of_Germany.svg" },
+                { name: "Frankreich", flag: "https://upload.wikimedia.org/wikipedia/commons/c/c3/Flag_of_France.svg" },
+                { name: "Italien", flag: "https://upload.wikimedia.org/wikipedia/commons/0/03/Flag_of_Italy.svg" },
+                { name: "Spanien", flag: "https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Spain.svg" },
+                { name: "Vereinigtes Königreich", flag: "https://upload.wikimedia.org/wikipedia/commons/a/ae/Flag_of_the_United_Kingdom.svg" },
+                { name: "Vereinigte Staaten", flag: "https://upload.wikimedia.org/wikipedia/commons/a/a4/Flag_of_the_United_States.svg" },
+                { name: "Kanada", flag: "https://upload.wikimedia.org/wikipedia/commons/c/cf/Flag_of_Canada.svg" },
+                { name: "Australien", flag: "https://upload.wikimedia.org/wikipedia/commons/b/b9/Flag_of_Australia.svg" },
+                { name: "Japan", flag: "https://upload.wikimedia.org/wikipedia/commons/9/9e/Flag_of_Japan.svg" },
+                { name: "China", flag: "https://upload.wikimedia.org/wikipedia/commons/2/2e/Flag_of_China.svg" }
+            ];
+
+            const countryList = document.getElementById("country-list");
+
+            countries.forEach(country => {
+                const tariff = Math.floor(Math.random() * 101); // Random tariff between 0 and 100
+                const listItem = document.createElement("li");
+                listItem.innerHTML = `<img src="${country.flag}" alt="Flagge von ${country.name}"><span>${country.name}: ${tariff}%</span>`;
+                countryList.appendChild(listItem);
+            });
+        });
+    </script>
+</body>
+</html>
