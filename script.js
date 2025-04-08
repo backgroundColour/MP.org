@@ -186,6 +186,7 @@ const namen = [
         setTotalDonationAmount();
 
         document.getElementById("imprint").innerHTML = "<p>© 2025 Michi Partei | Kontakt: info@michipartei.de | " + generateRandomAddress() + "</p>";
+        console.info("Impressum generiert: " + document.getElementById("imprint").innerHTML);
         // Zufälliges Datum anzeigen
         document.getElementById('next-meeting-date').textContent = getRandomFutureDate();
     });
