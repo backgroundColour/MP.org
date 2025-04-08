@@ -311,9 +311,13 @@ const namen = [
         const nextKaffeetagTimestamp = getNextKaffeetagTimestamp();
 
         // Initialize FlipDown
-        new FlipDown(nextKaffeetagTimestamp)
+        try {
+            new FlipDown(nextKaffeetagTimestamp)
             .start()
             .ifEnded(() => {
                 console.log('Kaffeetag has started!');
             });
+        } catch (error) {
+            
+        }
     });
