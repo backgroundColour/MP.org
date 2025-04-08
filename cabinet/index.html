@@ -9,21 +9,10 @@
     <title>Michi Partei (MP) - Zukunft Gestalten</title>
     <link rel="stylesheet" href="../styles.css">
     <link rel="icon" type="image/x-icon" href="../assets/img/favicon.ico">
+    <script src="../script.js"></script>
 </head>
 <body>
-    <header>
-        <h1>Willkommen bei der Michi Partei (MP)</h1>
-        <p>Gemeinsam für eine bessere Zukunft!</p>
-        <br>
-        <nav>
-            <ul>
-                <li><a href="index.html" class="active">Startseite</a></li>
-                <li><a href="#">Unser Kabinett</a></li>
-                <li><a href="MPShop.html">Merch Shop</a></li>
-                <li><a href="#">Kontakt</a></li>
-            </ul>
-        </nav>
-    </header>
+    <iframe src="../assets/html/header.html" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
     <main>
         <section class="container content">
             <h2>Unser Kabinett</h2>
@@ -46,5 +35,6 @@
             </div>
         </section>
     </main>
+    <iframe src="../assets/html/footer.html" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
 </body>
 </html>

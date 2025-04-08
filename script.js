@@ -126,7 +126,7 @@ const namen = [
     }
     
     //document.getElementById("parteiAdresse").innerText = generateRandomAddress();
-    document.getElementById("imprint").innerHTML = "<p>© 2025 Michi Partei | Kontakt: info@michipartei.de | " + generateRandomAddress() + "</p>";    
+    //document.getElementById("imprint").innerHTML = "<p>© 2025 Michi Partei | Kontakt: info@michipartei.de | " + generateRandomAddress() + "</p>";    
 
     // Funktion zur Generierung eines zufälligen zukünftigen Datums
     function getRandomFutureDate() {
@@ -141,8 +141,7 @@ const namen = [
         return futureDate.toLocaleDateString('de-DE', options);
     }
 
-    // Zufälliges Datum anzeigen
-    document.getElementById('next-meeting-date').textContent = getRandomFutureDate();
+    
 
     let quoteElement = document.getElementById('quote');
     
@@ -185,6 +184,10 @@ const namen = [
             }
         });
         setTotalDonationAmount();
+
+        document.getElementById("imprint").innerHTML = "<p>© 2025 Michi Partei | Kontakt: info@michipartei.de | " + generateRandomAddress() + "</p>";
+        // Zufälliges Datum anzeigen
+        document.getElementById('next-meeting-date').textContent = getRandomFutureDate();
     });
 
     function setTotalDonationAmount() {
