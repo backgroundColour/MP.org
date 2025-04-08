@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MP Wahlprogramm</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .btn {
+            padding: 10px;
+            background-color: #0055aa;
+            border-radius: 50px;
+            width: 80%;
+            color: white;
+        }
+        .content {
+            display: none;
+            margin-left: 15%;
+            margin-right: 15%;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Unser Wahlprogramm</h1>
+    <p>Klare Ziele. Neue Wege. Für eine starke Zukunft.</p>
+</header>
+<!-- TODO: Bilder-->
+<div class="themes">
+    <div class="theme">
+        <div class="theme-image" style="background-image: url('../assets/img/Bildung.png');"></div>
+        <h3>Bildung</h3>
+        <p>Moderne Schulen, digitale Ausstattung, faire Chancen.</p>
+        <div class="btn" id="bildung_btn">Mehr erfahren</div>
+    </div>
+    <div class="theme">
+        <div class="theme-image" style="background-image: url('../assets/img/Klima.png');"></div>
+        <h3>Klima</h3>
+        <p>Pragmatischer Klimaschutz mit Innovation statt Verboten.</p>
+        <div class="btn" id="klima_btn">Mehr erfahren</div>
+    </div>
+    <div class="theme">
+        <div class="theme-image" style="background-image: url('../assets/img/Digital.png');"></div>
+        <h3>Digitalisierung</h3>
+        <p>Verwaltung digitalisieren, Internet ausbauen, KI fördern.</p>
+        <div class="btn" id="digital_btn">Mehr erfahren</div>
+    </div>
+    <div class="theme">
+        <div class="theme-image" style="background-image: url('../assets/img/Zusammenhalt.png');"></div>
+        <h3>Zusammenhalt</h3>
+        <p>Gegen Spaltung. Für Respekt, Vielfalt und Gerechtigkeit.</p>
+        <div class="btn" id="zusammenhalt_btn">Mehr erfahren</div>
+    </div>
+</div>
+
+<br>
+
+<div id="bildung_content" class="content">
+    <h2>Bildung</h2>
+    <p>
+        Wir setzen auf chancengerechte Bildung für alle. Mit modern ausgestatteten Schulen, digitalem Unterricht und fairer Lehrer:innen-Vergütung.
+        Bildung soll neugierig machen, nicht stressen. Wir fördern Talente – unabhängig vom Geldbeutel.
+    </p>
+</div>
+<div id="klima_content" class="content">
+    <h2>Klima</h2>
+    <p>
+        Der Klimawandel ist real, unser Handeln auch. Wir wollen Fortschritt durch Technik: saubere Energie, moderne Mobilität und nachhaltige Landwirtschaft.
+        Keine Verbotspartei – wir setzen auf Eigenverantwortung und smarte Lösungen.
+    </p>
+</div>
+<div id="digital_content" class="content">
+    <h2>Digitalisierung</h2>
+    <p>
+        Die Zukunft ist digital. Wir bringen Deutschland ins 21. Jahrhundert: mit Glasfaser bis zur letzten Milchkanne, KI-Initiativen und einer digitalen Verwaltung,
+        die einfach funktioniert. Kein Papierkrieg mehr!
+    </p>
+</div>
+<div id="zusammenhalt_content" class="content">
+    <h2>Gesellschaftlicher Zusammenhalt</h2>
+    <p>
+        In einer Zeit der Spaltung sagen wir: Miteinander statt Gegeneinander. Wir stärken soziale Gerechtigkeit, fördern Ehrenamt und setzen uns für mehr Respekt
+        und Vielfalt ein. Jeder Mensch zählt – unabhängig von Herkunft, Glaube oder Meinung.
+    </p>
+</div>
+
+<footer>
+    <p>© <span id="date"></span> Michi Partei | Kontakt: info@michipartei.de</p>
+</footer>
+
+<script>
+    document.getElementById('bildung_btn').addEventListener('click', function() {
+        const content = document.getElementById('bildung_content');
+        content.style.display = (content.style.display === 'none' || content.style.display === '') ? 'block' : 'none';
+    });
+
+    document.getElementById('klima_btn').addEventListener('click', function() {
+        const content = document.getElementById('klima_content');
+        content.style.display = (content.style.display === 'none' || content.style.display === '') ? 'block' : 'none';
+    });
+
+    document.getElementById('digital_btn').addEventListener('click', function() {
+        const content = document.getElementById('digital_content');
+        content.style.display = (content.style.display === 'none' || content.style.display === '') ? 'block' : 'none';
+    });
+
+    document.getElementById('zusammenhalt_btn').addEventListener('click', function() {
+        const content = document.getElementById('zusammenhalt_content');
+        content.style.display = (content.style.display === 'none' || content.style.display === '') ? 'block' : 'none';
+    });
+
+    document.getElementById("date").innerText = new Date().getFullYear();
+</script>
+</body>
+</html>
