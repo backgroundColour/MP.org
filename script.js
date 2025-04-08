@@ -187,12 +187,13 @@ const namen = [
         try{
         setTotalDonationAmount();
         document.getElementById("donation-amount").textContent = getRandomDonationAmount();
+        document.getElementById('next-meeting-date').textContent = getRandomFutureDate();
         makeQuote();}
         catch (error) {
             console.log("Ned gefunden");
         }
         // Zufälliges Datum anzeigen
-        document.getElementById('next-meeting-date').textContent = getRandomFutureDate();
+        
         Thread().sleep(1000);
         document.getElementById("imprint").innerHTML = "<p>© 2025 Michi Partei | Kontakt: info@michipartei.de | " + generateRandomAddress() + "</p>";
     });
