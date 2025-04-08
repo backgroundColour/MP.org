@@ -15,6 +15,28 @@ body {
     overflow-x: hidden;
 }
 
+nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0 0;
+}
+
+nav li {
+    margin: 0 1rem;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav a.active {
+    text-decoration: underline;
+}
+
 /* 🚨 WICHTIG: Diese Regeln müssen NACH dem body stehen! */
 /* Chrome, Safari, Edge (WebKit-Browser) */
 ::-webkit-scrollbar {
