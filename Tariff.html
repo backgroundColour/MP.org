@@ -17,24 +17,57 @@
         h2 {
             text-align: center;
         }
+        .tariff-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .tariff-column {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .tariff-header {
+            background-color: #f2f2f2;
+            padding: 12px 15px;
+            font-weight: bold;
+            border-bottom: 1px solid #ddd;
+        }
         .country-list {
             list-style: none;
             padding: 0;
-            max-width: 800px;
-            margin: 0 auto;
+            margin: 0;
         }
         .country-item {
-            background: white;
-            margin: 0.5rem 0;
-            padding: 1rem;
-            border-radius: 5px;
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
             display: flex;
             align-items: center;
         }
+        .country-item:last-child {
+            border-bottom: none;
+        }
+        .country-item:hover {
+            background-color: #f9f9f9;
+        }
         .country-flag {
-            width: 50px;
-            height: auto;
-            margin-right: 1rem;
+            width: 30px;
+            height: 20px;
+            margin-right: 10px;
+            object-fit: cover;
+        }
+        .country-name {
+            flex-grow: 1;
+        }
+        .country-tariff {
+            color: red;
+            font-weight: bold;
+            margin-left: 10px;
         }
     </style>
 </head>
@@ -56,7 +89,16 @@
 
     <main>
         <h2>Weltweite Tariffs</h2>
-        <ul class="country-list" id="country-list"></ul>
+        <div class="tariff-container">
+            <div class="tariff-column">
+                <div class="tariff-header">Region A</div>
+                <ul class="country-list" id="country-list-a"></ul>
+            </div>
+            <div class="tariff-column">
+                <div class="tariff-header">Region B</div>
+                <ul class="country-list" id="country-list-b"></ul>
+            </div>
+        </div>
     </main>
 
     <footer>
@@ -147,9 +189,15 @@
                 { name: "Dominikanische Republik", flag: "https://upload.wikimedia.org/wikipedia/commons/9/9f/Flag_of_the_Dominican_Republic.svg" }
             ];
 
-            const listElement = document.getElementById("country-list");
+            const listElementA = document.getElementById("country-list-a");
+            const listElementB = document.getElementById("country-list-b");
 
-            countries.forEach(country => {
+            // Split countries into two roughly equal groups
+            const half = Math.ceil(countries.length / 2);
+            const firstHalf = countries.slice(0, half);
+            const secondHalf = countries.slice(half);
+
+            function createCountryItem(country) {
                 const li = document.createElement("li");
                 li.className = "country-item";
 
@@ -158,13 +206,30 @@
                 img.alt = `Flag of ${country.name}`;
                 img.className = "country-flag";
 
-                const name = document.createElement("span");
+                const nameSpan = document.createElement("span");
+                nameSpan.className = "country-name";
+                nameSpan.textContent = country.name;
+
+                const taxSpan = document.createElement("span");
+                taxSpan.className = "country-tariff";
                 const tax = Math.floor(Math.random() * 101); // 0–100 %
-                name.innerHTML = `<strong>${country.name}</strong> – <span style="color:red">Tariff: ${tax}%</span>`;
+                taxSpan.textContent = `${tax}%`;
 
                 li.appendChild(img);
-                li.appendChild(name);
-                listElement.appendChild(li);
+                li.appendChild(nameSpan);
+                li.appendChild(taxSpan);
+
+                return li;
+            }
+
+            // Add countries to first column
+            firstHalf.forEach(country => {
+                listElementA.appendChild(createCountryItem(country));
+            });
+
+            // Add countries to second column
+            secondHalf.forEach(country => {
+                listElementB.appendChild(createCountryItem(country));
             });
         });
     </script>
