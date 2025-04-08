@@ -129,7 +129,6 @@
             let basePrice = Math.random() * 100; // Originalpreis
             const priceElement = card.querySelector(".price");
     
-            // 10 % Chance auf Rabatt oder Tarriff
             if (Math.random() < 0.2) {
                 const isDiscount = Math.random() < 0.5;
                 const percentage = Math.random(); // 0.00 – 1.00
@@ -141,7 +140,7 @@
     
                 const originalStr = `<span style="text-decoration: line-through; color: gray;">€${basePrice.toFixed(2)}</span>`;
                 const finalStr = `<span style="color: ${isDiscount ? 'green' : 'red'};">
-                    ${isDiscount ? `Rabatt ${percentDisplay}%:` : `Tarriff +${percentDisplay}%:`} €${modifiedPrice.toFixed(2)}
+                    ${isDiscount ? `Rabatt ${percentDisplay}%:` : `Tariff +${percentDisplay}%:`} €${modifiedPrice.toFixed(2)}
                 </span>`;
     
                 priceElement.innerHTML = `${originalStr}<br>${finalStr}`;
