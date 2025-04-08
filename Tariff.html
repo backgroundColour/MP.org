@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weltweite Tariffs</title>
+    <link rel="stylesheet" href="shopstyle.css">
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        main {
+            padding: 2rem;
+        }
+        h2 {
+            text-align: center;
+        }
+        .country-list {
+            list-style: none;
+            padding: 0;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .country-item {
+            background: white;
+            margin: 0.5rem 0;
+            padding: 1rem;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .country-flag {
+            width: 50px;
+            height: auto;
+            margin-right: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>Michi Tariffs</h1>
+            <p>Gemeinsam für einen besseren Kaffeetag!</p>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Startseite</a></li>
+                <li><a href="#">Unser Kabinett</a></li>
+                <li><a href="MPShop.html" class="active">Merch Shop</a></li>
+                <li><a href="#">Kontakt</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h2>Weltweite Tariffs</h2>
+        <ul class="country-list" id="country-list"></ul>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Michi Partei (MP). Alle Rechte vorbehalten.</p>
+        <div class="social-links">
+            <a href="#">Facebook</a>
+            <a href="#">Twitter</a>
+            <a href="#">Instagram</a>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const countries = [
+                { name: "Deutschland", flag: "https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg" },
+                { name: "Frankreich", flag: "https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg" },
+                { name: "Italien", flag: "https://upload.wikimedia.org/wikipedia/en/0/03/Flag_of_Italy.svg" },
+                { name: "Spanien", flag: "https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg" },
+                { name: "Vereinigtes Königreich", flag: "https://upload.wikimedia.org/wikipedia/en/a/ae/Flag_of_the_United_Kingdom.svg" },
+                { name: "Vereinigte Staaten", flag: "https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg" },
+                { name: "Kanada", flag: "https://upload.wikimedia.org/wikipedia/en/c/cf/Flag_of_Canada.svg" },
+                { name: "Brasilien", flag: "https://upload.wikimedia.org/wikipedia/en/0/05/Flag_of_Brazil.svg" },
+                { name: "Japan", flag: "https://upload.wikimedia.org/wikipedia/en/9/9e/Flag_of_Japan.svg" },
+                { name: "China", flag: "https://upload.wikimedia.org/wikipedia/en/f/fa/Flag_of_China.svg" },
+                { name: "Indien", flag: "https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg" },
+                { name: "Australien", flag: "https://upload.wikimedia.org/wikipedia/en/b/b9/Flag_of_Australia.svg" },
+                { name: "Russland", flag: "https://upload.wikimedia.org/wikipedia/en/f/f3/Flag_of_Russia.svg" },
+                { name: "Südafrika", flag: "https://upload.wikimedia.org/wikipedia/en/a/af/Flag_of_South_Africa.svg" },
+                { name: "Mexiko", flag: "https://upload.wikimedia.org/wikipedia/en/f/fc/Flag_of_Mexico.svg" },
+                { name: "Argentinien", flag: "https://upload.wikimedia.org/wikipedia/commons/1/1a/Flag_of_Argentina.svg" },
+                { name: "Schweden", flag: "https://upload.wikimedia.org/wikipedia/en/4/4c/Flag_of_Sweden.svg" },
+                { name: "Norwegen", flag: "https://upload.wikimedia.org/wikipedia/en/6/60/Flag_of_Norway.svg" },
+                { name: "Niederlande", flag: "https://upload.wikimedia.org/wikipedia/en/2/20/Flag_of_the_Netherlands.svg" },
+                { name: "Belgien", flag: "https://upload.wikimedia.org/wikipedia/en/1/1e/Flag_of_Belgium.svg" },
+                { name: "Österreich", flag: "https://upload.wikimedia.org/wikipedia/commons/4/41/Flag_of_Austria.svg" },
+                { name: "Schweiz", flag: "https://upload.wikimedia.org/wikipedia/commons/f/f1/Flag_of_Switzerland.svg" },
+                { name: "Dänemark", flag: "https://upload.wikimedia.org/wikipedia/commons/4/45/Flag_of_Denmark.svg" },
+                { name: "Polen", flag: "https://upload.wikimedia.org/wikipedia/en/1/12/Flag_of_Poland.svg" },
+                { name: "Finnland", flag: "https://upload.wikimedia.org/wikipedia/en/b/bc/Flag_of_Finland.svg" },
+                { name: "Neuseeland", flag: "https://upload.wikimedia.org/wikipedia/commons/4/42/Flag_of_New_Zealand.svg" },
+                { name: "Afghanistan", flag: "https://upload.wikimedia.org/wikipedia/commons/5/5c/Flag_of_the_Taliban.svg"},
+                { name: "Albanien", flag: "https://upload.wikimedia.org/wikipedia/commons/3/36/Flag_of_Albania.svg" },
+                { name: "Algerien", flag: "https://upload.wikimedia.org/wikipedia/commons/7/77/Flag_of_Algeria.svg" },
+                { name: "Andorra", flag: "https://upload.wikimedia.org/wikipedia/commons/1/19/Flag_of_Andorra.svg" },
+                { name: "Angola", flag: "https://upload.wikimedia.org/wikipedia/commons/9/9d/Flag_of_Angola.svg" },
+                { name: "Antigua und Barbuda", flag: "https://upload.wikimedia.org/wikipedia/commons/8/89/Flag_of_Antigua_and_Barbuda.svg" },
+                { name: "Argentinien", flag: "https://upload.wikimedia.org/wikipedia/commons/1/1a/Flag_of_Argentina.svg" },
+                { name: "Armenien", flag: "https://upload.wikimedia.org/wikipedia/commons/2/2f/Flag_of_Armenia.svg" },
+                { name: "Australien", flag: "https://upload.wikimedia.org/wikipedia/commons/b/b9/Flag_of_Australia.svg" },
+                { name: "Österreich", flag: "https://upload.wikimedia.org/wikipedia/commons/4/41/Flag_of_Austria.svg" },
+                { name: "Aserbaidschan", flag: "https://upload.wikimedia.org/wikipedia/commons/d/dd/Flag_of_Azerbaijan.svg" },
+                { name: "Bahamas", flag: "https://upload.wikimedia.org/wikipedia/commons/9/93/Flag_of_the_Bahamas.svg" },
+                { name: "Bahrain", flag: "https://upload.wikimedia.org/wikipedia/commons/2/2c/Flag_of_Bahrain.svg" },
+                { name: "Bangladesch", flag: "https://upload.wikimedia.org/wikipedia/commons/f/f9/Flag_of_Bangladesh.svg" },
+                { name: "Barbados", flag: "https://upload.wikimedia.org/wikipedia/commons/e/ef/Flag_of_Barbados.svg" },
+                { name: "Weißrussland", flag: "https://upload.wikimedia.org/wikipedia/commons/8/85/Flag_of_Belarus.svg" },
+                { name: "Belgien", flag: "https://upload.wikimedia.org/wikipedia/commons/6/65/Flag_of_Belgium.svg" },
+                { name: "Belize", flag: "https://upload.wikimedia.org/wikipedia/commons/e/e7/Flag_of_Belize.svg" },
+                { name: "Benin", flag: "https://upload.wikimedia.org/wikipedia/commons/0/0a/Flag_of_Benin.svg" },
+                { name: "Bhutan", flag: "https://upload.wikimedia.org/wikipedia/commons/9/91/Flag_of_Bhutan.svg" },
+                { name: "Bolivien", flag: "https://upload.wikimedia.org/wikipedia/commons/d/de/Flag_of_Bolivia_%28state%29.svg" },
+                { name: "Bosnien und Herzegowina", flag: "https://upload.wikimedia.org/wikipedia/commons/b/bf/Flag_of_Bosnia_and_Herzegovina.svg" },
+                { name: "Botswana", flag: "https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_Botswana.svg" },
+                { name: "Brasilien", flag: "https://upload.wikimedia.org/wikipedia/commons/0/05/Flag_of_Brazil.svg" },
+                { name: "Brunei", flag: "https://upload.wikimedia.org/wikipedia/commons/9/9c/Flag_of_Brunei.svg" },
+                { name: "Bulgarien", flag: "https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Bulgaria.svg" },
+                { name: "Burkina Faso", flag: "https://upload.wikimedia.org/wikipedia/commons/3/31/Flag_of_Burkina_Faso.svg" },
+                { name: "Burundi", flag: "https://upload.wikimedia.org/wikipedia/commons/5/50/Flag_of_Burundi.svg" },
+                { name: "Kambodscha", flag: "https://upload.wikimedia.org/wikipedia/commons/8/83/Flag_of_Cambodia.svg" },
+                { name: "Kamerun", flag: "https://upload.wikimedia.org/wikipedia/commons/4/4e/Flag_of_Cameroon.svg" },
+                { name: "Kanada", flag: "https://upload.wikimedia.org/wikipedia/commons/c/cf/Flag_of_Canada.svg" },
+                { name: "Kap Verde", flag: "https://upload.wikimedia.org/wikipedia/commons/3/38/Flag_of_Cape_Verde.svg" },
+                { name: "Zentralafrikanische Republik", flag: "https://upload.wikimedia.org/wikipedia/commons/6/6f/Flag_of_the_Central_African_Republic.svg" },
+                { name: "Tschad", flag: "https://upload.wikimedia.org/wikipedia/commons/4/4b/Flag_of_Chad.svg" },
+                { name: "Chile", flag: "https://upload.wikimedia.org/wikipedia/commons/7/78/Flag_of_Chile.svg" },
+                { name: "China", flag: "https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg" },
+                { name: "Kolumbien", flag: "https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Colombia.svg" },
+                { name: "Komoren", flag: "https://upload.wikimedia.org/wikipedia/commons/9/94/Flag_of_the_Comoros.svg" },
+                { name: "Kongo (Brazzaville)", flag: "https://upload.wikimedia.org/wikipedia/commons/9/92/Flag_of_the_Republic_of_the_Congo.svg" },
+                { name: "Kongo (Kinshasa)", flag: "https://upload.wikimedia.org/wikipedia/commons/6/6f/Flag_of_the_Democratic_Republic_of_the_Congo.svg" },
+                { name: "Costa Rica", flag: "https://upload.wikimedia.org/wikipedia/commons/f/f2/Flag_of_Costa_Rica.svg" },
+                { name: "Kroatien", flag: "https://upload.wikimedia.org/wikipedia/commons/1/1b/Flag_of_Croatia.svg" },
+                { name: "Kuba", flag: "https://upload.wikimedia.org/wikipedia/commons/b/bd/Flag_of_Cuba.svg" },
+                { name: "Zypern", flag: "https://upload.wikimedia.org/wikipedia/commons/d/d4/Flag_of_Cyprus.svg" },
+                { name: "Tschechien", flag: "https://upload.wikimedia.org/wikipedia/commons/c/cb/Flag_of_the_Czech_Republic.svg" },
+                { name: "Dänemark", flag: "https://upload.wikimedia.org/wikipedia/commons/9/9c/Flag_of_Denmark.svg" },
+                { name: "Dschibuti", flag: "https://upload.wikimedia.org/wikipedia/commons/3/34/Flag_of_Djibouti.svg" },
+                { name: "Dominica", flag: "https://upload.wikimedia.org/wikipedia/commons/c/c4/Flag_of_Dominica.svg" },
+                { name: "Dominikanische Republik", flag: "https://upload.wikimedia.org/wikipedia/commons/9/9f/Flag_of_the_Dominican_Republic.svg" }
+            ];
+
+            const listElement = document.getElementById("country-list");
+
+            countries.forEach(country => {
+                const li = document.createElement("li");
+                li.className = "country-item";
+
+                const img = document.createElement("img");
+                img.src = country.flag;
+                img.alt = `Flag of ${country.name}`;
+                img.className = "country-flag";
+
+                const name = document.createElement("span");
+                const tax = Math.floor(Math.random() * 101); // 0–100 %
+                name.innerHTML = `<strong>${country.name}</strong> – <span style="color:red">Tariff: ${tax}%</span>`;
+
+                li.appendChild(img);
+                li.appendChild(name);
+                listElement.appendChild(li);
+            });
+        });
+    </script>
+</body>
+</html>
