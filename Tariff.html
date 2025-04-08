@@ -189,6 +189,19 @@
                 { name: "Dominikanische Republik", flag: "https://upload.wikimedia.org/wikipedia/commons/9/9f/Flag_of_the_Dominican_Republic.svg" }
             ];
 
+            const productCategories = [
+                { category: "Autos", products: ["BMW 3er", "Mercedes-Benz A-Klasse", "Audi A4", "Volkswagen Golf", "Tesla Model S"] },
+                { category: "Haushaltsprodukte", products: ["Staubsauger", "Kühlschrank", "Mikrowelle", "Waschmaschine", "Wasserkocher"] },
+                { category: "Nahrung", products: ["Pizza", "Burger", "Pommes Frites", "Kaffee", "Schokolade", "Obst", "Gemüse"] },
+                { category: "Elektronik", products: ["Smartphone", "Laptop", "Fernseher", "Smartwatch", "Kopfhörer"] },
+                { category: "Kleidung", products: ["T-Shirt", "Hose", "Jacke", "Sneaker", "Hut"] },
+                { category: "Sportartikel", products: ["Fußball", "Tennisracket", "Fahrrad", "Yogamatte", "Fitnessgeräte"] },
+                { category: "Bürobedarf", products: ["Bürostuhl", "Schreibtisch", "Tastatur", "Maus", "Notizbuch"] },
+                { category: "Spielzeug", products: ["Lego", "Puppe", "Spielzeugauto", "Brettspiele", "Puzzle"] },
+                { category: "Kosmetik", products: ["Shampoo", "Seife", "Make-up", "Parfüm", "Hautcreme"] },
+                { category: "Gesundheit", products: ["Vitaminpräparate", "Medizin", "Fitnessgeräte", "Zahnpasta", "Mundspülung"] }
+            ];
+
             const listElementA = document.getElementById("country-list-a");
             const listElementB = document.getElementById("country-list-b");
 
@@ -198,39 +211,42 @@
             const secondHalf = countries.slice(half);
 
             function createCountryItem(country) {
-                const li = document.createElement("li");
-                li.className = "country-item";
+            const li = document.createElement("li");
+            li.className = "country-item";
 
-                const img = document.createElement("img");
-                img.src = country.flag;
-                img.alt = `Flag of ${country.name}`;
-                img.className = "country-flag";
+            const img = document.createElement("img");
+            img.src = country.flag;
+            img.alt = `Flag of ${country.name}`;
+            img.className = "country-flag";
 
-                const nameSpan = document.createElement("span");
-                nameSpan.className = "country-name";
-                nameSpan.textContent = country.name;
+            const nameSpan = document.createElement("span");
+            nameSpan.className = "country-name";
+            nameSpan.textContent = country.name;
 
-                const taxSpan = document.createElement("span");
-                taxSpan.className = "country-tariff";
-                const tax = Math.floor(Math.random() * 101); // 0–100 %
-                taxSpan.textContent = `${tax}%`;
+            // Wähle zufällig eine Produktkategorie und dann ein Produkt aus dieser Kategorie
+            const randomCategory = productCategories[Math.floor(Math.random() * productCategories.length)];
+            const randomProduct = randomCategory.products[Math.floor(Math.random() * randomCategory.products.length)];
 
-                li.appendChild(img);
-                li.appendChild(nameSpan);
-                li.appendChild(taxSpan);
+            const productSpan = document.createElement("span");
+            productSpan.className = "country-tariff";
+            productSpan.textContent = `Produkt: ${randomProduct}`;
 
-                return li;
-            }
+            li.appendChild(img);
+            li.appendChild(nameSpan);
+            li.appendChild(productSpan);
 
-            // Add countries to first column
-            firstHalf.forEach(country => {
-                listElementA.appendChild(createCountryItem(country));
-            });
+            return li;
+        }
 
-            // Add countries to second column
-            secondHalf.forEach(country => {
-                listElementB.appendChild(createCountryItem(country));
-            });
+        // Add countries to first column
+        firstHalf.forEach(country => {
+            listElementA.appendChild(createCountryItem(country));
+        });
+
+        // Add countries to second column
+        secondHalf.forEach(country => {
+            listElementB.appendChild(createCountryItem(country));
+        });
         });
     </script>
 </body>
