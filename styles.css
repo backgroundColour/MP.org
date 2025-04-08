@@ -119,7 +119,7 @@ ul {
     padding: 0;
 }
 
-li {
+.liClass {
     background: #ffcc00;
     margin: 10px 0;
     padding: 10px;
@@ -331,7 +331,7 @@ ul {
     cursor: pointer;
     transition: transform 0.3s ease, background-color 0.3s;
 }
-li:hover {
+.liClass:hover {
     transform: scale(1.5);
     background: #ffaa00;
 }
