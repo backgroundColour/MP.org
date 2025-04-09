@@ -373,7 +373,8 @@ async function initMap() {
         // Initialize FlipDown
         try {
             new FlipDown(nextKaffeetagTimestamp, {
-                showLabels: false
+                //headings: ["Tage", "Stunden", "Minuten", "Sekunden"],
+                headings: ["", "", "", ""],
             })
             .start()
             .ifEnded(() => {
