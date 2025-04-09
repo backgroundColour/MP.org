@@ -48,15 +48,16 @@ body {
     height: 91vh;
 }
 
-.header-content{
+.header-content {
     width: fit-content;
     backdrop-filter: blur(0rem);
     border-radius: 1rem;
     padding: 2rem;
+    transition: all 0.3s ease-in-out; /* Ensure transition applies for both hover and unhover */
 }
-.header-content:hover{
+
+.header-content:hover {
     backdrop-filter: blur(1rem);
-    transition: all 0.3s ease-in-out;
 }
 
 .navbar{
