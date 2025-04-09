@@ -372,7 +372,9 @@ async function initMap() {
 
         // Initialize FlipDown
         try {
-            new FlipDown(nextKaffeetagTimestamp)
+            new FlipDown(nextKaffeetagTimestamp, {
+                showLabels: false
+            })
             .start()
             .ifEnded(() => {
                 console.log('Kaffeetag has started!');
