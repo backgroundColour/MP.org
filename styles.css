@@ -56,7 +56,7 @@ body {
 }
 .header-content:hover{
     backdrop-filter: blur(1rem);
-    transition: all 0.3s ease;
+    transition: all 0.3s ease-in-out;
 }
 
 .navbar{
