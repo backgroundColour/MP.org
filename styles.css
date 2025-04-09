@@ -62,6 +62,9 @@ body {
 h1, h2, h3 {
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
+    display: flex;
+    justify-content: space-around; /* aligns the items horizontally */
+    align-items: center; /* aligns the items vertically */
 }
 
 h1 {
