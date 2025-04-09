@@ -62,6 +62,9 @@ body {
 h1, h2, h3 {
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
+    display: flex;
+    justify-content: space-around; /* aligns the items horizontally */
+    align-items: center; /* aligns the items vertically */
 }
 
 h1 {
@@ -118,6 +121,11 @@ nav a:hover {
     box-shadow: 0 4px 6px rgba(0,0,0,0.05);
     padding: 2rem;
     margin-bottom: 2rem;
+}
+
+.countdown-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 }
 
 .values-list {
