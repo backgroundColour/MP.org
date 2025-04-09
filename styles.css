@@ -35,6 +35,7 @@ body {
 }
 
 .header {
+    display: grid;
     align-content: space-around;
     justify-content: center;
     background-image: url('/MP.org/assets/img/MICHI.png');
