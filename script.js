@@ -111,6 +111,19 @@ const namen = [
         'Lambo Zuchini', 'BIG BELLY BACON BOYS (BBBB)', 'Jack Black', 'JD Vance', 'Kamilla Harris',
         'Freaky Michi', 'Aperture Science Emergency Intelligence Incinerator'
 ];
+// Map Initialization
+const majorCitiesGermany = [
+    { name: "Berlin", lat: 52.52, lng: 13.405 },
+    { name: "Hamburg", lat: 53.5511, lng: 9.9937 },
+    { name: "Munich", lat: 48.1351, lng: 11.582 },
+    { name: "Cologne", lat: 50.9375, lng: 6.9603 },
+    { name: "Frankfurt", lat: 50.1109, lng: 8.6821 },
+    { name: "Stuttgart", lat: 48.7758, lng: 9.1829 },
+    { name: "Düsseldorf", lat: 51.2277, lng: 6.7735 },
+    { name: "Dortmund", lat: 51.5136, lng: 7.4653 },
+    { name: "Essen", lat: 51.4556, lng: 7.0116 },
+    { name: "Leipzig", lat: 51.3397, lng: 12.3731 }
+];
 
     async function sleep(msec) {
         return new Promise(resolve => setTimeout(resolve, msec));
@@ -177,6 +190,44 @@ const namen = [
             }; 
     };
 
+function getRandomLatLonOffset(meters) {
+    const earthRadius = 6378000;
+    const offset = meters / earthRadius * (180 / Math.PI);
+    return (Math.random() - 0.5) * 2 * offset;
+}
+
+function getRandomMajorCity() {
+    const city = majorCitiesGermany[Math.floor(Math.random() * majorCitiesGermany.length)];
+    const radius = 1500;
+    return [city.lat + getRandomLatLonOffset(radius), city.lng + getRandomLatLonOffset(radius), city.name];
+}
+
+async function getAddress(lat, lng) {
+    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
+    const data = await response.json();
+    return data.display_name || 'Unknown Location';
+}
+
+async function initMap() {
+    const [lat, lng, cityName] = getRandomMajorCity();
+    const map = L.map('map', { maxBoundsViscosity: 1.0 }).setView([lat, lng], 12);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    const marker = L.marker([lat, lng]).addTo(map);
+
+    const address = await getAddress(lat, lng);
+    marker.bindPopup(`${cityName}: ${address}`).openPopup();
+
+    // Set meeting date
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const meetingDate = new Date();
+    meetingDate.setDate(meetingDate.getDate() + 14);
+    document.getElementById('next-meeting-date').textContent = meetingDate.toLocaleDateString('de-DE', options);
+}
+
     document.addEventListener('DOMContentLoaded', async function () {
         const popoverTriggers = document.querySelectorAll('[popovertarget]');
         popoverTriggers.forEach(trigger => {
@@ -200,6 +251,7 @@ const namen = [
         
         await sleep(1000);
         document.getElementById("imprint").innerHTML = "<p>© 2025 Michi Partei | Kontakt: info@michipartei.de | " + generateRandomAddress() + "</p>";
+
     });
 
     function setTotalDonationAmount() {
@@ -325,7 +377,12 @@ const namen = [
             .ifEnded(() => {
                 console.log('Kaffeetag has started!');
             });
+            initMap();
         } catch (error) {
             
         }
+    });
+
+    document.querySelector('.menu-toggle').addEventListener('click', function() {
+        document.querySelector('.nav').classList.toggle('active');
     });

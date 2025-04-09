@@ -7,237 +7,184 @@
     <meta name="author" content="Michi Partei Team">
     <meta name="description" content="Die Michi Partei (MP) setzt sich für eine moderne, gerechte und nachhaltige Gesellschaft ein. Erfahren Sie mehr über unsere Werte und Projekte.">
     <title>Michi Partei (MP) - Zukunft Gestalten</title>
-    <link rel="stylesheet" href="styles.css">
-    
-
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Open+Sans:wght@400;600&display=swap">
     <!-- Add FlipDown.js CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flipdown/dist/flipdown.min.css">
-    <!-- Add FlipDown.js Script -->
-    <script src="https://cdn.jsdelivr.net/npm/flipdown/dist/flipdown.min.js"></script>
-    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<iframe src="./assets/html/header.html" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
-
+    <header class="header">
+        <img src="/MP.org/assets/img/SSW.png" alt="MP Logo" class="logo">
+        <h1>Willkommen bei der Michi Partei (MP)</h1>
+        <p class="tagline">Gemeinsam für eine bessere Zukunft!</p>
+    </header>
+    
+    <nav class="navbar">
+        <ul>
+            <li><a href="/MP.org/">Startseite</a></li>
+            <li><a href="/MP.org/cabinet">Unser Kabinett</a></li>
+            <li><a href="/MP.org/MPShop.html">Merch Shop</a></li>
+            <li><a href="/MP.org/Tarriff.html">Tarifliste</a></li>
+            <li><a href="/MP.org/Wahlprogramm">Wahlprogramm</a></li>
+        </ul>
+    </nav>
+    
     <div class="container">
-        <div class="content">
-            <img src="assets/img/SSW.png" alt="MP Logo">
+        <div class="card">
+            <img src="assets/img/SSW.png" alt="MP Logo" style="max-width: 200px; display: block; margin: 0 auto 1.5rem;">
             <p>Die Michi Partei setzt sich für eine moderne, gerechte und nachhaltige Gesellschaft ein.</p>
-            <h2>Unsere Werte:</h2>
-            <ul>
-                <li class="liClass" onclick="alert('Gerechtigkeit für alle!')">Gerechtigkeit für alle</li>
-                <li class="liClass" onclick="alert('Nachhaltigkeit in Wirtschaft und Umwelt!')">Nachhaltigkeit in Wirtschaft und Umwelt</li>
-                <li class="liClass" onclick="alert('Technologischer Fortschritt mit sozialer Verantwortung!')">Technologischer Fortschritt mit sozialer Verantwortung</li>
-                <li class="liClass" onclick="alert('Bürgernähe und transparente Politik!')">Bürgernähe und transparente Politik</li>
-            </ul>
+            
+            <h2 style="text-align: center; margin-top: 2rem;">Unsere Werte:</h2>
+            <div class="values-list">
+                <div class="value-item" onclick="alert('Gerechtigkeit für alle!')">
+                    <h3>Gerechtigkeit für alle</h3>
+                    <p>Chancengleichheit und Fairness in allen Lebensbereichen</p>
+                </div>
+                <div class="value-item" onclick="alert('Nachhaltigkeit in Wirtschaft und Umwelt!')">
+                    <h3>Nachhaltigkeit</h3>
+                    <p>Umweltschutz und wirtschaftliche Stabilität im Einklang</p>
+                </div>
+                <div class="value-item" onclick="alert('Technologischer Fortschritt mit sozialer Verantwortung!')">
+                    <h3>Technologischer Fortschritt</h3>
+                    <p>Innovationen, die dem Gemeinwohl dienen</p>
+                </div>
+                <div class="value-item" onclick="alert('Bürgernähe und transparente Politik!')">
+                    <h3>Transparente Politik</h3>
+                    <p>Klare Entscheidungen für und mit den Bürgern</p>
+                </div>
+            </div>
         </div>
-    </div>
-    <!-- Neuer Bereich für das Parteitreffen -->
-    <div class="container">
-        <div class="party-meeting content">
+        
+        <div class="quote">
+            <p>"Ey Mann, diese Scheibe. Teams ist das schlechteste Produkt, das von Microsoft erstellt wurde."</p>
+            <p class="quote-author">- M. Fitzner</p>
+        </div>
+        
+        <!-- Parteitreffen Section -->
+        <div class="card party-meeting">
             <h2>Unser nächstes Parteitreffen!</h2>
             <p id="next-meeting-date"></p>
-            <!--  <p id="parteiAdresse"></p> -->
-            
-            
-            <div id="map" style="width: 100%; height: 500px; "></div>
-            
-            <!-- Leaflet CSS -->
-            <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-            <!-- Leaflet JS -->
-            <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-            
-            
-            <script>
-                const majorCitiesGermany = [
-                    { name: "Berlin", lat: 52.52, lng: 13.405 },
-                    { name: "Hamburg", lat: 53.5511, lng: 9.9937 },
-                    { name: "Munich", lat: 48.1351, lng: 11.582 },
-                    { name: "Cologne", lat: 50.9375, lng: 6.9603 },
-                    { name: "Frankfurt", lat: 50.1109, lng: 8.6821 },
-                    { name: "Stuttgart", lat: 48.7758, lng: 9.1829 },
-                    { name: "Düsseldorf", lat: 51.2277, lng: 6.7735 },
-                    { name: "Dortmund", lat: 51.5136, lng: 7.4653 },
-                    { name: "Essen", lat: 51.4556, lng: 7.0116 },
-                    { name: "Leipzig", lat: 51.3397, lng: 12.3731 }
-                ];
-
-                function getRandomLatLonOffset(meters) {
-                    const earthRadius = 6378000; // radius of Earth in meters
-                    const offset = meters / earthRadius * (180 / Math.PI);
-                    return (Math.random() - 0.5) * 2 * offset;
-                }
-
-                function getRandomMajorCity() {
-                    const city = majorCitiesGermany[Math.floor(Math.random() * majorCitiesGermany.length)];
-                    const radius = 1500;
-                    return [city.lat + getRandomLatLonOffset(radius), city.lng + getRandomLatLonOffset(radius), city.name];
-                }
-
-                async function getAddress(lat, lng) {
-                    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
-                    const data = await response.json();
-                    return data.display_name || 'Unknown Location';
-                }
-
-                async function initMap() {
-                    const [lat, lng, cityName] = getRandomMajorCity();
-                    const map = L.map('map', { maxBoundsViscosity: 1.0 }).setView([lat, lng], 12);
-
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '&copy; OpenStreetMap contributors'
-                    }).addTo(map);
-
-                    const marker = L.marker([lat, lng]).addTo(map);
-
-                    const address = await getAddress(lat, lng);
-                    marker.bindPopup(`${cityName}: ${address}`).openPopup();
-
-                    // Set map container width to 100%
-                    document.getElementById('map').style.width = '100%';
-                }
-
-                document.addEventListener('DOMContentLoaded', initMap);
-            </script>
+            <div id="map"></div>
         </div>
-    </div>
-    <div class="container content michi-section">
-        <div class="michi-image-container">
-            <img src="assets/img/michi_Logo.png" alt="M.I.C.H.I. Logo" class="michi-image">
+        
+        <!-- M.I.C.H.I. Section -->
+        <div class="card michi-section">
+            <div class="michi-image-container">
+                <img src="assets/img/michi_Logo.png" alt="M.I.C.H.I. Logo" class="michi-image">
+            </div>
+            <h2>Ministerium für Innovation, Cybersicherheit, Hochtechnologie und Infrastruktur</h2>
+            <p>
+                Das M.I.C.H.I. ist unser Ministerium, das sich mit den neuesten Technologien und Innovationen beschäftigt. 
+                Wir setzen uns für eine sichere und fortschrittliche digitale Zukunft ein.
+                <br>Unser Ziel ist es, Deutschland zu einem Vorreiter in der digitalen Welt zu machen.
+            </p>
+            <h2>Werden Sie Teil des M.I.C.H.I. Teams!</h2>
+            <p>
+                Bewerben Sie sich jetzt für eine Stelle im M.I.C.H.I. und werden Sie Teil unseres Teams!
+                <br>Wir suchen kreative Köpfe, die bereit sind, die digitale Zukunft mitzugestalten.
+            </p>
+            <h2>Projekte des M.I.C.H.I.</h2>
+            <div class="values-list">
+                <div class="value-item">
+                    <h3>Sichere digitale Identität</h3>
+                    <p>Für alle Bürger Deutschlands</p>
+                </div>
+                <div class="value-item">
+                    <h3>Cybersecurity-Zentrum</h3>
+                    <p>Nationale Sicherheit im digitalen Raum</p>
+                </div>
+                <div class="value-item">
+                    <h3>Smart City Lösungen</h3>
+                    <p>Moderne Städte für morgen</p>
+                </div>
+                <div class="value-item">
+                    <h3>Quantencomputing</h3>
+                    <p>Forschung für die Zukunft</p>
+                </div>
+            </div>
         </div>
-        <h2>Ministerium für Innovation, Cybersicherheit, Hochtechnologie und Infrastruktur</h2>
-        <p>
-            Das M.I.C.H.I. ist unser Ministerium, das sich mit den neuesten Technologien und Innovationen beschäftigt. 
-            Wir setzen uns für eine sichere und fortschrittliche digitale Zukunft ein.
-            <br>Unser Ziel ist es, Deutschland zu einem Vorreiter in der digitalen Welt zu machen.
-            <br>Wir arbeiten an Lösungen für Cybersecurity, digitale Infrastruktur und innovative Technologien.
-            <br>Gemeinsam gestalten wir die digitale Zukunft Deutschlands!
-        </p>
-        <h2>Werden Sie Teil des M.I.C.H.I. Teams!</h2>
-        <p>
-            Bewerben Sie sich jetzt für eine Stelle im M.I.C.H.I. und werden Sie Teil unseres Teams!
-            <br>Wir suchen kreative Köpfe, die bereit sind, die digitale Zukunft mitzugestalten.
-            <br>Besuchen Sie unsere <a href="./careers">Karriereseite</a> für weitere Informationen.
-        </p>
-        <h2>Projekte des M.I.C.H.I.</h2>
-        <ul>
-            <li class="liClass">Entwicklung einer sicheren digitalen Identität für alle Bürger</li>
-            <li class="liClass">Aufbau eines nationalen Cybersecurity-Zentrums</li>
-            <li class="liClass">Förderung von Startups im Bereich Künstliche Intelligenz</li>
-            <li class="liClass">Implementierung von Smart City Lösungen in deutschen Städten</li>
-            <li class="liClass">Forschung und Entwicklung im Bereich Quantencomputing</li>
-            <li class="liClass">Schaffung eines digitalen Bildungsangebots für alle Altersgruppen</li>
-            <li class="liClass">Entwicklung von Lösungen zur Bekämpfung von Fake News und Desinformation</li>
-            <li class="liClass">Aufbau eines nationalen Rechenzentrums für Forschung und Entwicklung</li>
-            <li class="liClass">Förderung von Open Source Projekten und Initiativen</li>
-            <li class="liClass">Entwicklung von Lösungen zur Verbesserung der digitalen Infrastruktur in ländlichen Gebieten</li>
-            <li class="liClass">Schaffung eines digitalen Marktplatzes für innovative Produkte und Dienstleistungen</li>
-            <li class="liClass">Entwicklung von Lösungen zur Verbesserung der digitalen Teilhabe für Menschen mit Behinderungen</li>
-            <li class="liClass">Förderung von digitalen Kompetenzen in Schulen und Bildungseinrichtungen</li>
-            <li class="liClass">Entwicklung von Lösungen zur Verbesserung der Cybersicherheit in Unternehmen</li>
-        </ul>
-    </div>
-    <div class="container content color_number time-calculator">
-        <h2>Zeitenrechner</h2>
-        <iframe src="https://backgroundcolour.github.io/Zeitrechner/" width="100%" height="500" style="border:none;"></iframe>
-    </div>
-    <div class="countdown-container container content">
-        <div class="countdown-box">
+        
+        <!-- Zeitenrechner -->
+        <div class="card">
+            <h2>Zeitenrechner</h2>
+            <iframe src="https://backgroundcolour.github.io/Zeitrechner/" width="100%" height="500" style="border:none; border-radius: 8px;"></iframe>
+        </div>
+        
+        <!-- Countdown -->
+        <div class="card">
             <h2>Nächster Kaffeetag Countdown</h2>
             <div id="flipdown" class="flipdown"></div>
         </div>
-    </div>
-    <div class="themes">
-        <div class="theme">
-            <div class="theme-image" style="background-image: url('assets/img/Jens.png');"></div>
-            <h3>Thema 1: Nachhaltigkeit</h3>
-            <p>Wir setzen uns für den Schutz unserer Umwelt und nachhaltige Entwicklung in allen Bereichen der Gesellschaft ein.</p>
+        
+        <!-- Themen -->
+        <h2 style="text-align: center; margin-top: 3rem;">Unsere Schwerpunktthemen</h2>
+        <div class="themes">
+            <div class="theme">
+                <div class="theme-image" style="background-image: url('assets/img/Jens.png');"></div>
+                <h3>Nachhaltigkeit</h3>
+                <p>Wir setzen uns für den Schutz unserer Umwelt und nachhaltige Entwicklung in allen Bereichen der Gesellschaft ein.</p>
+            </div>
+            <div class="theme">
+                <div class="theme-image" style="background-image: url('assets/img/Laufs.png');"></div>
+                <h3>Bildung für alle</h3>
+                <p>Jeder Mensch sollte Zugang zu hochwertiger Bildung haben, um sich bestmöglich zu entfalten und die Zukunft zu gestalten.</p>
+            </div>
+            <div class="theme">
+                <div class="theme-image" style="background-image: url('assets/img/Micha2.png');"></div>
+                <h3>Innovation und Technologie</h3>
+                <p>Technologische Innovationen sind der Schlüssel zu einer besseren Zukunft – wir fördern Forschung und Entwicklung.</p>
+            </div>
+            <div class="theme">
+                <div class="theme-image" style="background-image: url('assets/img/michiwehr.webp');"></div>
+                <h3>Innere Sicherheit</h3>
+                <p>Wir sichern Deutschland durch das Bereitstellen der 'Sicherheitsbehörde zur Sicherung der Bevölkerung', Codename: 'MICHIWEHR'</p>
+            </div>
         </div>
-        <div class="theme">
-            <div class="theme-image" style="background-image: url('assets/img/Laufs.png');"></div>
-            <h3>Thema 2: Bildung für alle</h3>
-            <p>Jeder Mensch sollte Zugang zu hochwertiger Bildung haben, um sich bestmöglich zu entfalten und die Zukunft zu gestalten.</p>
+        
+        <!-- Mitglied werden -->
+        <div class="card login-section">
+            <div class="login-left">
+                <img src="assets/img/Michaa.png" alt="Beispielbild" class="login-image">
+            </div>
+            <div class="login-right">
+                <h2>Jetzt Mitglied werden</h2>
+                <div class="login-form">
+                    <label for="email">E-Mail-Adresse:</label>
+                    <input type="email" id="email" name="email" placeholder="E-Mail eingeben" required>
+                    <label for="password">Passwort:</label>
+                    <input type="password" id="password" name="password" placeholder="Passwort eingeben" required>
+                    <label for="zitat">Zitat der Woche:</label>
+                    <input type="text" id="zitat" name="zitat" placeholder="Zitat der Woche eingeben" required>
+                    <label for="headcircumfrence">Ihr Kopfumfang in Lichtnanosekunden:</label>
+                    <input type="number" step="0.01" id="headcircumfrence" name="Kopfumfang" placeholder="Ihr Kopfumfang in Lichtnanosekunden" title="Jedes Mitglied erhält einen obligatorischen zeremoniellen Michipartei-Hut" required>
+                    <button class="cta-button" id="make-new-member">Beitreten</button>
+                </div>
+            </div>
         </div>
-        <div class="theme">
-            <div class="theme-image" style="background-image: url('assets/img/Micha2.png');"></div>
-            <h3>Thema 3: Innovation und Technologie</h3>
-            <p>Technologische Innovationen sind der Schlüssel zu einer besseren Zukunft – wir fördern Forschung und Entwicklung.</p>
-        </div>
-        <div class="theme">
-            <div class="theme-image" style="background-image: url('assets/img/michiwehr.webp');"></div>
-            <h3>Thema 4: Innere Sicherheit</h3>
-            <p>Wir sichern Deutschland durch das Bereitstellen der 'Sicherheitsbehörde zur Sicherung der Bevölkerung', Codename: 'MICHIWEHR'</p>
-        </div>
-    </div>
-    <div class="login-section">
-        <div class="login-left">
-            <img src="assets/img/Michaa.png" alt="Beispielbild" class="login-image">
-        </div>
-        <div class="login-right">
-            <h2>Jetzt Midglied werden</h2>
-            <div class="login-form">
-                <label for="email">E-Mail-Adresse:</label>
-                <input type="email" id="email" name="email" placeholder="E-Mail eingeben" required>
-                <label for="password">Passwort:</label>
-                <input type="password" id="password" name="password" placeholder="Passwort eingeben" required>
-                <label for="password">Zitat der Woche:</label>
-                <input type="password" id="zitat" name="zitat" placeholder="Zitat der Woche eingeben" required>
-                <label for="headcircumfrence">Ihr Kopfumfang in Lichtnanosekunden:</label>
-                <input type="number" step="0.01" id="headcircumfrence" name="Kopfumfang" placeholder="Ihr Kopfumfang in Lichtnanosekunden" title="Jedes Mitglied erhält einen obligatorischen zeremoniellen Michipartei-Hut" required>
-                <button popovertarget="new-member-popover" id="make-new-member">Beitreten</button>
+        
+        <!-- Spenden -->
+        <div class="card donation-card">
+            <h2>Danke an unsere großartigen Spender!</h2>
+            <div class="donation-content">
+                <img id="OSIBILD" src="assets/img/OSI.png" alt="OSI-Mann" class="donation-image">
+                <div>
+                    <p id="SpenderName">Den OSI-Mann</p>
+                    <p class="donation-amount" id="donation-amount"></p>
+                </div>
             </div>
             
-            <div id="new-member-popover" class="popover" popover>
-                <script>
-                    document.getElementById("make-new-member").addEventListener("click", function() {
-                        const newMemberName = document.getElementById('email').value;
-                        const newMemberQuote = document.getElementById('zitat').value;
-                        const newMemberHeadCircumference = document.getElementById('headcircumfrence').value;
-
-                        document.getElementById('new-member-name').innerText = newMemberName;
-                        document.getElementById('new-member-quote').innerText = newMemberQuote;
-                        document.getElementById('new-member-head-circumference').innerText = newMemberHeadCircumference + ' Lichtnanosekunden';
-                    });
-                </script>
-                <h2>Willkommen!</h2>
-                <p>Sie sind jetzt Mitglied der Michi Partei!</p>
-                <p>Ihr Zitat der Woche: <span id="new-member-quote"></span></p>
-                <p>Ihr Hut in Größe <span id="new-member-head-circumference"></span> Lichtnanosekunden wird bestellt.</p>
+            <div style="margin-top: 3rem;">
+                <h2>Unterstützen Sie uns!</h2>
+                <p>Ihre Spende hilft uns, unsere Ziele zu erreichen und eine bessere Zukunft zu gestalten.</p>
+                <p>Aktueller Spendenbetrag: <span id="total-donation-amount">0,00 €</span></p>
+                <button class="cta-button">Jetzt spenden</button>
             </div>
         </div>
-    </div>
-    <div class="donation-card container content">
-        <h2>Danke an unsere großartigen Spender!</h2>
-        <div class="donation-content">
-            <img id="OSIBILD" src="assets/img/OSI.png" alt="OSI-Mann" class="donation-image">
-            <div class="donation-text">
-                <p id="SpenderName">Den OSI-Mann</p>
-                <p class="donation-amount" id="donation-amount"></p>
-            </div>
-        </div>
-    </div>
-    <div class="container content">
-        <div class="donate-container">
-            <h2>Unterstützen Sie uns!</h2>
-            <p>Ihre Spende hilft uns, unsere Ziele zu erreichen und eine bessere Zukunft zu gestalten.</p>
-            <p>Wir freuen uns über jede Unterstützung!</p>
-            <p>Aktueller Spendenbetrag: <span id="total-donation-amount">0,00 €</span></p>
-            <button class="donate-button" popovertarget="donation-form">Jetzt spenden</button>
-            <div id="donation-form" class="popover" popover>
-                <h2>Spendenformular</h2>
-                <form action="spenden/index.html" method="post">
-                    <label for="name">Name:</label>
-                    <input type="text" id="name" name="name" placeholder="Ihr Name" required>
-                    <label for="amount">Spendenbetrag (€):</label>
-                    <input type="number" id="amount" name="amount" placeholder="Betrag" required>
-                    <button>Spenden</button>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <div class="container content">
-        <div class="sponsor">
+        
+        <!-- Sponsor -->
+        <div class="card sponsor">
             <h2>Unser großartiger Sponsor!</h2>
             <p><a href="https://schwanzkopf.de/">Schwanzkopf.de</a></p>
             <div class="spin-container">
@@ -245,12 +192,34 @@
             </div> 
         </div>
     </div>
-
+    
     <footer>
         <p id="imprint">© 2025 Michi Partei | Kontakt: info@michipartei.de</p>
     </footer>
 
+    <!-- Add FlipDown.js Script -->
+    <script src="https://cdn.jsdelivr.net/npm/flipdown/dist/flipdown.min.js"></script>
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        // Member form
+        document.getElementById("make-new-member").addEventListener("click", function() {
+            const newMemberName = document.getElementById('email').value;
+            const newMemberQuote = document.getElementById('zitat').value;
+            const newMemberHeadCircumference = document.getElementById('headcircumfrence').value;
+
+            alert(`Willkommen, ${newMemberName}!\n\nIhr Zitat: "${newMemberQuote}"\n\nIhr Michi-Hut in Größe ${newMemberHeadCircumference} Lichtnanosekunden wird bestellt!`);
+        });
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set random donation amount
+            const donationAmount = (Math.random() * 500 + 50).toFixed(2);
+            document.getElementById('donation-amount').textContent = `${donationAmount} €`;
+            document.getElementById('total-donation-amount').textContent = `${(Math.random() * 10000 + 1000).toFixed(2)} €`;
+        });
+    </script>
     <div id="quote" class="quote"></div>
+    <script src="script.js"></script>
 </body>
-<script src="script.js" type="module"></script>
 </html>
