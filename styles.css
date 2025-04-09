@@ -8,22 +8,41 @@
     --warning: #f39c12;
 }
 
-*::-webkit-scrollbar {
+::-webkit-scrollbar {
     width: 24px; /* Breite der Scrollbar */
 }
 
-*::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
     background: #063c8c; /* Hintergrundfarbe der Scrollbar */
 }
 
-*::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
     background: #fcc135; /* Farbe des Scrollbalkens */
     border-radius: 6px; /* Abgerundete Ecken */
 }
 
-*::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover {
     background: #ffd700; /* Farbe beim Hovern */
 }
+
+iframe ::-webkit-scrollbar {
+    width: 24px; /* Breite der Scrollbar */
+}
+
+iframe ::-webkit-scrollbar-track {
+    background: #063c8c; /* Hintergrundfarbe der Scrollbar */
+}
+
+iframe ::-webkit-scrollbar-thumb {
+    background: #fcc135; /* Farbe des Scrollbalkens */
+    border-radius: 6px; /* Abgerundete Ecken */
+}
+
+iframe ::-webkit-scrollbar-thumb:hover {
+    background: #ffd700; /* Farbe beim Hovern */
+}
+
+
 
 
 body {
