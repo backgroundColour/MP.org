@@ -35,6 +35,7 @@ body {
 }
 
 .header {
+    align-content: space-around;
     background-image: url('/MP.org/assets/img/MICHI.png');
     background-repeat: repeat-x;
     background-size: cover;
@@ -43,6 +44,11 @@ body {
     text-align: center;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     height: 91vh;
+}
+
+.header-content{
+    border: var(--light);
+    backdrop-filter: blur(1rem);
 }
 
 .navbar{
