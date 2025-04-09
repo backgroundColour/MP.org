@@ -36,6 +36,8 @@ body {
 
 .header {
     background-image: url('assets/img/MICHI.png');
+    background-repeat: repeat-x;
+    background-size: cover;
     color: white;
     padding: 2rem 0;
     text-align: center;
