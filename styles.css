@@ -375,3 +375,18 @@ footer {
     backdrop-filter: blur(10px);
     animation: popIn 0.5s ease-out forwards;
 }
+
+
+/*Fix FlipDown errors*/
+.flipdown.flipdown__theme-dark 
+.rotor-group:nth-child(n+2):nth-child(-n+3):before, 
+.flipdown.flipdown__theme-dark .rotor-group:nth-child(n+2):nth-child(-n+3):after
+{
+    background-color: unset;
+}
+.rotor-group-heading{
+    height: 0;
+}
+.flipdown{
+    height: unset;
+}
