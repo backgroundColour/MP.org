@@ -18,7 +18,6 @@ document.addEventListener("DOMContentLoaded", () => {
             setupAddToCartButton(card);
         });
 
-        setupCartButton();
         setupCheckoutButton();
     }
 
@@ -92,17 +91,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         cartTotal.innerText = `Gesamt: €${total.toFixed(2)}`;
-    }
-
-    // Setup the cart button to toggle the popover
-    function setupCartButton() {
-        cartButton.addEventListener("click", () => {
-            if (cartPopover.hasAttribute("popover")) {
-                cartPopover.removeAttribute("popover");
-            } else {
-                cartPopover.setAttribute("popover", "auto");
-            }
-        });
     }
 
     // Setup the checkout button functionality
