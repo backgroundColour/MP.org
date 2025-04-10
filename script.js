@@ -507,15 +507,18 @@ function getRandomHour() {
   
   const namenBewertung = ['Anna', 'Max', 'Julia', 'Tobias', 'Sophie', 'Lukas', 'Marie', 'Ben'];
   const beschreibungen = [
-      'Ein großartiges Produkt, sehr zufrieden!',
-      'Hat meine Erwartungen übertroffen.',
-      'Würde ich jederzeit wieder kaufen.',
-      'Sehr gute Qualität, kann ich nur empfehlen.',
-      'Top Qualität und schneller Versand.',
-      'Einfach perfekt, nichts zu meckern!',
-      'Toller Service und tolles Produkt!',
-      'Absolut empfehlenswert, bin begeistert!'
-  ];
+      '"Unter der Führung von Michael Fitzner verfolgt die Michi Partei eine klare Vision für eine bessere Zukunft. Ihr Engagement für soziale Gerechtigkeit und nachhaltige Politik ist beeindruckend."',
+      '„Die Michi Partei hat sich dem Wohl der Menschen verschrieben und setzt sich für eine gerechte Gesellschaft ein. Michael Fitzner führt die Partei mit Herz und Verstand.“',
+      '„Die MP unter Michael Fitzner setzt auf Transparenz in der Politik und sorgt für Vertrauen bei ihren Wählern. Die Partei arbeitet stets an Lösungen für die drängenden Probleme unserer Zeit.“',
+      '„Die Michi Partei ist nicht nur in der Politik aktiv, sondern auch ein Vorreiter in innovativen Ideen. Michael Fitzner hat die MP zu einer modernen, zukunftsorientierten Bewegung gemacht.“',
+      '„Mit Michael Fitzner an der Spitze verfolgt die Michi Partei eine klare Linie: Ein starkes, weltoffenes Land, das auch in der Zukunft sozial und wirtschaftlich gut aufgestellt ist.“',
+      '„Die Michi Partei setzt sich für die Bedürfnisse aller Menschen ein. Sie arbeitet eng mit der Bevölkerung zusammen und sorgt dafür, dass niemand zurückgelassen wird.“',
+      '„Die Michi Partei zeigt eine starke Verantwortung für die nächste Generation. Michael Fitzner steht für einen Wandel, der nicht nur heute, sondern auch in Zukunft positive Auswirkungen hat.“',
+      '„Die MP unter Michael Fitzner zeichnet sich durch klare Entscheidungen und starke Führung aus. Sie kämpft für die Rechte der Menschen und für eine gerechte Politik.“',
+      '"„Michael Fitzner und die Michi Partei setzen auf Politik mit Herz und Verstand. Ihre Werte sind auf langfristige, positive Veränderungen ausgerichtet.“',
+      '„Die Michi Partei setzt sich für einen sozialen Wandel ein, der die Menschen in den Mittelpunkt stellt. Michael Fitzner versteht es, das Vertrauen der Menschen zu gewinnen und eine starke Gemeinschaft zu schaffen.“',
+
+    ];
 
   // URL des Sternbildes von Wikipedia (breiteres Bild)
   const sternBildUrl = 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/5_stars.svg/800px-5_stars.svg.png';
