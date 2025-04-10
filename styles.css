@@ -524,7 +524,7 @@ footer {
     border: 1px solid #ddd;
     padding: 10px;
     border-radius: 5px;
-    width: 400px; /* Breite für eine bessere Darstellung */
+    width: 80%; /* Breite für eine bessere Darstellung */
 }
 .bewertung img {
     width: 100px; /* Breitere Sterne */
