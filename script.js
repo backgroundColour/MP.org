@@ -452,30 +452,34 @@ async function initMap() {
         ctx.stroke();
         ctx.setLineDash([]); // zurücksetzen
       
+        let prevX = 0;
+        let prevY = canvas.height - ((data[0] - min) / range) * canvas.height;
+      
         // === Chartlinie ===
-        for (let i = 0; i < data.length; i++) {
+        for (let i = 1; i < data.length; i++) {
           const x = (i / (maxPoints - 1)) * canvas.width;
           const y = canvas.height - ((data[i] - min) / range) * canvas.height;
       
-          // Linie unterhalb der 0%-Linie rot und oberhalb grün
-          if (i > 0) {
-            const prevX = ((i - 1) / (maxPoints - 1)) * canvas.width;
-            const prevY = canvas.height - ((data[i - 1] - min) / range) * canvas.height;
-      
-            // Farbe für das Segment zwischen den Punkten festlegen
-            if (y > zeroY && prevY > zeroY) {
-              ctx.strokeStyle = "#00ff88"; // Grün für beide Punkte über der 0%-Linie
-            } else if (y < zeroY && prevY < zeroY) {
-              ctx.strokeStyle = "#ff5050"; // Rot für beide Punkte unter der 0%-Linie
-            } else {
-              ctx.strokeStyle = (y > zeroY) ? "#00ff88" : "#ff5050"; // Wechselnde Farben für unterschiedliche Höhen
-            }
-      
+          // Wenn der Graph von grün nach rot oder umgekehrt geht, eine neue Linie beginnen
+          if ((prevY >= zeroY && y < zeroY) || (prevY < zeroY && y >= zeroY)) {
+            // Neuen Pfad für das Segment ab der 0%-Linie
             ctx.beginPath();
             ctx.moveTo(prevX, prevY);
-            ctx.lineTo(x, y);
-            ctx.stroke();
           }
+      
+          // Linie unterhalb der 0%-Linie rot und oberhalb grün
+          if (y < zeroY) {
+            ctx.strokeStyle = "#ff5050"; // Rot für Punkte unter der 0%-Linie
+          } else {
+            ctx.strokeStyle = "#00ff88"; // Grün für Punkte über der 0%-Linie
+          }
+      
+          // Zeichne das Segment
+          ctx.lineTo(x, y);
+          ctx.stroke();
+      
+          prevX = x;
+          prevY = y;
         }
       }
       
