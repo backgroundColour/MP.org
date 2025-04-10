@@ -35,6 +35,7 @@ body {
 }
 
 .header {
+    display: grid;
     background-image: url('/MP.org/assets/img/MICHI.png');
     background-repeat: repeat-x;
     background-size: cover;
