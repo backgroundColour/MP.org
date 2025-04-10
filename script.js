@@ -501,4 +501,59 @@ function getRandomHour() {
   
   // Beim Laden der Seite die Zeitangabe setzen
   window.addEventListener('load', updateTimeAgo);
+
   
+  const namen = ['Anna', 'Max', 'Julia', 'Tobias', 'Sophie', 'Lukas', 'Marie', 'Ben'];
+        const beschreibungen = [
+            'Ein großartiges Produkt, sehr zufrieden!',
+            'Hat meine Erwartungen übertroffen.',
+            'Würde ich jederzeit wieder kaufen.',
+            'Sehr gute Qualität, kann ich nur empfehlen.',
+            'Top Qualität und schneller Versand.',
+            'Einfach perfekt, nichts zu meckern!',
+            'Toller Service und tolles Produkt!',
+            'Absolut empfehlenswert, bin begeistert!'
+        ];
+
+        // URL des Sternbildes von Wikipedia
+        const sternBildUrl = 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/5_stars.svg/320px-5_stars.svg.png';
+
+        // Funktion, um eine zufällige Bewertung zu erstellen
+        function generiereBewertung() {
+            const bewertungDiv = document.createElement('div');
+            bewertungDiv.classList.add('bewertung');
+
+            // Erstelle das Sternbild
+            const sternBild = document.createElement('img');
+            sternBild.src = sternBildUrl;
+            bewertungDiv.appendChild(sternBild);
+
+            // Zufällige Namen und Beschreibungen
+            const zufallsName = namen[Math.floor(Math.random() * namen.length)];
+            const zufallsBeschreibung = beschreibungen[Math.floor(Math.random() * beschreibungen.length)];
+
+            // Erstelle den Bewertungstext
+            const textDiv = document.createElement('div');
+            textDiv.classList.add('text');
+
+            const nameElement = document.createElement('p');
+            nameElement.classList.add('name');
+            nameElement.textContent = zufallsName;
+
+            const beschreibungElement = document.createElement('p');
+            beschreibungElement.classList.add('beschreibung');
+            beschreibungElement.textContent = zufallsBeschreibung;
+
+            textDiv.appendChild(nameElement);
+            textDiv.appendChild(beschreibungElement);
+            bewertungDiv.appendChild(textDiv);
+
+            return bewertungDiv;
+        }
+
+        // Generiere und füge die Bewertungen zum DOM hinzu
+        const bewertungenContainer = document.getElementById('bewertungen');
+        for (let i = 0; i < 5; i++) {
+            const bewertung = generiereBewertung();
+            bewertungenContainer.appendChild(bewertung);
+        }

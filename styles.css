@@ -513,3 +513,27 @@ footer {
   .time-ago {
     font-size: 12px;
   }
+
+
+  .bewertung {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+}
+.bewertung img {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+.bewertung .text {
+    margin-left: 10px;
+}
+.bewertung .name {
+    font-weight: bold;
+}
+.bewertung .beschreibung {
+    font-style: italic;
+}
