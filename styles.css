@@ -495,9 +495,14 @@ footer {
   .story-img {
     width: 100%;
     height: 100%;
+    object-fit: cover; /* Sorgt dafür, dass das Bild das gesamte Div ausfüllt */
   }
   
   .story-footer {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
     padding: 10px;
     background-color: rgba(0, 0, 0, 0.5);
     color: white;
