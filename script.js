@@ -456,23 +456,27 @@ async function initMap() {
         for (let i = 0; i < data.length; i++) {
           const x = (i / (maxPoints - 1)) * canvas.width;
           const y = canvas.height - ((data[i] - min) / range) * canvas.height;
-          
-          // Linie unterhalb der 0%-Linie rot
-          if (y > zeroY) {
-            ctx.strokeStyle = "#00ff88"; // Grün für alles über der 0%-Linie
-          } else {
-            ctx.strokeStyle = "#ff5050"; // Rot für alles unter der 0%-Linie
-          }
       
-          if (i === 0) {
+          // Linie unterhalb der 0%-Linie rot und oberhalb grün
+          if (i > 0) {
+            const prevX = ((i - 1) / (maxPoints - 1)) * canvas.width;
+            const prevY = canvas.height - ((data[i - 1] - min) / range) * canvas.height;
+      
+            // Farbe für das Segment zwischen den Punkten festlegen
+            if (y > zeroY && prevY > zeroY) {
+              ctx.strokeStyle = "#00ff88"; // Grün für beide Punkte über der 0%-Linie
+            } else if (y < zeroY && prevY < zeroY) {
+              ctx.strokeStyle = "#ff5050"; // Rot für beide Punkte unter der 0%-Linie
+            } else {
+              ctx.strokeStyle = (y > zeroY) ? "#00ff88" : "#ff5050"; // Wechselnde Farben für unterschiedliche Höhen
+            }
+      
             ctx.beginPath();
-            ctx.moveTo(x, y);
-          } else {
+            ctx.moveTo(prevX, prevY);
             ctx.lineTo(x, y);
+            ctx.stroke();
           }
         }
-      
-        ctx.stroke();
       }
       
   
