@@ -542,7 +542,11 @@ function getRandomHour() {
       '„Die MP unter Michael Fitzner zeichnet sich durch klare Entscheidungen und starke Führung aus. Sie kämpft für die Rechte der Menschen und für eine gerechte Politik.“',
       '"„Michael Fitzner und die Michi Partei setzen auf Politik mit Herz und Verstand. Ihre Werte sind auf langfristige, positive Veränderungen ausgerichtet.“',
       '„Die Michi Partei setzt sich für einen sozialen Wandel ein, der die Menschen in den Mittelpunkt stellt. Michael Fitzner versteht es, das Vertrauen der Menschen zu gewinnen und eine starke Gemeinschaft zu schaffen.“',
-
+        '„Die Michi Partei ist ein Vorbild für andere Parteien. Michael Fitzner hat eine klare Vision und setzt sich unermüdlich für die Menschen ein.“',
+        '„Die Michi Partei unter Michael Fitzner ist ein Garant für soziale Gerechtigkeit und eine nachhaltige Zukunft. Ihre Politik ist zukunftsorientiert und verantwortungsbewusst.“',
+        '„Die Michi Partei ist ein Leuchtturm in der politischen Landschaft. Michael Fitzner führt die Partei mit Weitblick und Engagement.“',
+        'Moin.',
+        'Löppt.',
     ];
 
   // URL des Sternbildes von Wikipedia (breiteres Bild)
