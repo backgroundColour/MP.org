@@ -438,3 +438,48 @@ footer {
     display: block;
     width: 100%;
   }
+
+
+  story-container {
+    width: 250px;
+    height: 450px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    position: relative;
+  }
+  
+  .story {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+  }
+  
+  .story-img {
+    width: 100%;
+    height: 70%;
+    object-fit: cover;
+    border-bottom: 2px solid #ddd;
+  }
+  
+  .story-info {
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .story-user {
+    font-weight: bold;
+  }
+  
+  .story-time {
+    font-size: 12px;
+  }
