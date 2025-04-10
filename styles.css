@@ -392,7 +392,7 @@ footer {
   }
 
   canvas {
-    background: #000;
+    background: #4c5065000;
     border-radius: 5px;
     display: block;
     width: 100%;
