@@ -441,8 +441,8 @@ footer {
 
 
   .story-container {
-    width: 360px; /* 1080px / 3 */
-    height: 640px; /* 1920px / 3 */
+    width: 360px;
+    height: 640px;
     border-radius: 20px;
     overflow: hidden;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -450,6 +450,7 @@ footer {
   }
   
   .story {
+    display: flex;
     flex-direction: column;
     height: 100%;
   }

@@ -486,3 +486,17 @@ async function initMap() {
   }
 
   setInterval(updateData, 2000);
+
+  function getRandomHour() {
+    return Math.floor(Math.random() * 24) + 1;
+  }
+  
+  // Funktion, um die Zeitangabe zu aktualisieren
+  function updateTimeAgo() {
+    const timeAgoElement = document.getElementById('time-ago');
+    const randomHour = getRandomHour();
+    timeAgoElement.textContent = `Vor ${randomHour} Stunde${randomHour === 1 ? '' : 'n'}`;
+  }
+  
+  // Beim Laden der Seite die Zeitangabe setzen
+  window.addEventListener('load', updateTimeAgo);
