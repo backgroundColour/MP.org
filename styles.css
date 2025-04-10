@@ -386,7 +386,7 @@ footer {
   }
   
   canvas {
-    background: #000;
+    background: -var(--dark);
     border-radius: 5px;
     display: block;
     width: 100%;
