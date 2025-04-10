@@ -25,21 +25,16 @@
     background: #ffd700; /* Farbe beim Hovern */
 }
 
-
-
 body {
     font-family: 'Open Sans', sans-serif;
     line-height: 1.6;
     color: #333;
     margin: 0;
     padding: 0;
-    background-color: var(--light);
+    background-color: #f9f9f9;
 }
 
 .header {
-    display: grid;
-    align-content: space-around;
-    justify-content: center;
     background-image: url('/MP.org/assets/img/MICHI.png');
     background-repeat: repeat-x;
     background-size: cover;
@@ -48,18 +43,6 @@ body {
     text-align: center;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     height: 91vh;
-}
-
-.header-content {
-    width: fit-content;
-    backdrop-filter: blur(0rem);
-    border-radius: 1rem;
-    padding: 2rem;
-    transition: all 0.3s ease-in-out; /* Ensure transition applies for both hover and unhover */
-}
-
-.header-content:hover {
-    backdrop-filter: blur(1rem);
 }
 
 .navbar{
@@ -75,38 +58,6 @@ body {
     height: auto;
     margin-bottom: 1rem;
 }
-
-.stock-container {
-    background: #ffffff;
-    border: 1px solid #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    width: 90%;
-    max-width: 600px;
-  }
-
-  .stock-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-
-  .stock-title {
-    font-size: 1.5rem;
-  }
-
-  .stock-price {
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
-
-  canvas {
-    background: #000;
-    border-radius: 5px;
-    display: block;
-    width: 100%;
-  }
 
 h1, h2, h3 {
     font-family: 'Montserrat', sans-serif;
@@ -262,7 +213,7 @@ nav a:hover {
 }
 
 .theme {
-    background: var(--light);
+    background: white;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 4px 6px rgba(0,0,0,0.05);
@@ -410,17 +361,47 @@ footer {
     animation: popIn 0.5s ease-out forwards;
 }
 
+.stock-container {
+    background: #ffffff;
+    border: 1px solid #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 600px;
+    text-align: center;
+  }
 
-/*Fix FlipDown errors*/
-.flipdown.flipdown__theme-dark 
-.rotor-group:nth-child(n+2):nth-child(-n+3):before, 
-.flipdown.flipdown__theme-dark .rotor-group:nth-child(n+2):nth-child(-n+3):after
-{
-    background-color: unset;
-}
-.rotor-group-heading{
-    height: 0;
-}
-.flipdown{
-    height: unset;
-}
+  .stock-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 20px;
+  }
+
+  .stock-title {
+    font-size: 1.5rem;
+  }
+
+  .stock-price {
+    font-size: 1.5rem;
+    font-weight: bold;
+    transition: color 0.3s ease, transform 0.3s ease;
+  }
+
+  .price-up {
+    color: #00ff88;
+    transform: scale(1.1);
+  }
+
+  .price-down {
+    color: #ff5050;
+    transform: scale(0.9);
+  }
+
+  canvas {
+    background: #000;
+    border-radius: 5px;
+    display: block;
+    width: 100%;
+  }
