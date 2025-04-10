@@ -415,11 +415,11 @@ async function initMap() {
       priceLabel.textContent = `${formattedPrice} (${formattedChange})`;
   
       if (newVal > oldVal) {
-        priceLabel.classList.remove("price-down");
-        priceLabel.classList.add("price-up");
-      } else if (newVal < oldVal) {
         priceLabel.classList.remove("price-up");
         priceLabel.classList.add("price-down");
+      } else if (newVal < oldVal) {
+        priceLabel.classList.remove("price-down");
+        priceLabel.classList.add("price-up");
       }
   
       // Emoji drehen je nach Prozentverlauf
@@ -435,54 +435,37 @@ async function initMap() {
     }
   
     function drawChart() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-        const min = Math.min(...data, startPrice); // sicherstellen, dass startPrice mit drin ist
-        const max = Math.max(...data, startPrice);
-        const range = max - min || 1;
-      
-        const zeroY = canvas.height - ((startPrice - min) / range) * canvas.height;
-      
-        // === Basislinie bei 0% ===
-        ctx.beginPath();
-        ctx.setLineDash([5, 5]);
-        ctx.strokeStyle = "#888";
-        ctx.moveTo(0, zeroY);
-        ctx.lineTo(canvas.width, zeroY);
-        ctx.stroke();
-        ctx.setLineDash([]); // zurücksetzen
-      
-        let prevX = 0;
-        let prevY = canvas.height - ((data[0] - min) / range) * canvas.height;
-      
-        // === Chartlinie ===
-        for (let i = 1; i < data.length; i++) {
-          const x = (i / (maxPoints - 1)) * canvas.width;
-          const y = canvas.height - ((data[i] - min) / range) * canvas.height;
-      
-          // Wenn der Graph von grün nach rot oder umgekehrt geht, eine neue Linie beginnen
-          if ((prevY >= zeroY && y < zeroY) || (prevY < zeroY && y >= zeroY)) {
-            // Neuen Pfad für das Segment ab der 0%-Linie
-            ctx.beginPath();
-            ctx.moveTo(prevX, prevY);
-          }
-      
-          // Linie unterhalb der 0%-Linie rot und oberhalb grün
-          if (y < zeroY) {
-            ctx.strokeStyle = "#ff5050"; // Rot für Punkte unter der 0%-Linie
-          } else {
-            ctx.strokeStyle = "#00ff88"; // Grün für Punkte über der 0%-Linie
-          }
-      
-          // Zeichne das Segment
-          ctx.lineTo(x, y);
-          ctx.stroke();
-      
-          prevX = x;
-          prevY = y;
-        }
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+      const min = Math.min(...data, startPrice); // sicherstellen, dass startPrice mit drin ist
+      const max = Math.max(...data, startPrice);
+      const range = max - min || 1;
+  
+      const zeroY = canvas.height - ((startPrice - min) / range) * canvas.height;
+  
+      // === Basislinie bei 0% ===
+      ctx.beginPath();
+      ctx.setLineDash([5, 5]);
+      ctx.strokeStyle = "#888";
+      ctx.moveTo(0, zeroY);
+      ctx.lineTo(canvas.width, zeroY);
+      ctx.stroke();
+      ctx.setLineDash([]); // zurücksetzen
+  
+      // === Chartlinie ===
+      ctx.beginPath();
+      ctx.strokeStyle = currentPrice >= startPrice ? "#00ff88" : "#ff5050";
+      ctx.lineWidth = 2;
+  
+      for (let i = 0; i < data.length; i++) {
+        const x = (i / (maxPoints - 1)) * canvas.width;
+        const y = canvas.height - ((data[i] - min) / range) * canvas.height;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
       }
-      
+  
+      ctx.stroke();
+    }
   
     // Initiale Punkte
     for (let i = 0; i < maxPoints; i++) {
