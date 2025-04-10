@@ -362,16 +362,6 @@ footer {
 }
 
 
-.stock-container {
-    background: #1e1e1e;
-    border: 1px solid #333;
-    padding: 20px;
-    border-radius: 10px;
-    width: 90%;
-    max-width: 600px;
-    text-align: center;
-  }
-
   .stock-header {
     display: flex;
     justify-content: center;
@@ -390,6 +380,19 @@ footer {
     transition: color 0.3s ease, transform 0.3s ease;
   }
 
+  #emoji {
+    display: inline-block;
+    transition: transform 0.5s ease;
+  }
+  
+  canvas {
+    background: #000;
+    border-radius: 5px;
+    display: block;
+    width: 100%;
+  }
+  
+
   .price-up {
     color: #00ff88;
     transform: scale(1.1);
@@ -400,26 +403,9 @@ footer {
     transform: scale(0.9);
   }
 
-  .emoji {
-    transition: transform 0.3s ease;
-  }
-
-  .emoji-rotate {
-    transform: rotate(90deg);
-  }
-
   canvas {
-    background: #000;
+    background: #2b2b3c;
     border-radius: 5px;
     display: block;
     width: 100%;
-  }
-
-  .zero-line {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    right: 0;
-    border-top: 2px dashed #fff;
-    z-index: 10;
   }
