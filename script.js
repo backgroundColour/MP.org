@@ -390,6 +390,7 @@ async function initMap() {
     const canvas = document.getElementById("chart");
     const ctx = canvas.getContext("2d");
     const priceLabel = document.getElementById("price");
+    const emoji = document.getElementById("emoji");
   
     let data = [];
     const maxPoints = 50;
@@ -411,7 +412,6 @@ async function initMap() {
       const percentChange = ((newVal - startPrice) / startPrice) * 100;
       const formattedPrice = "€" + newVal.toFixed(2);
       const formattedChange = (percentChange >= 0 ? "+" : "") + percentChange.toFixed(2) + "%";
-  
       priceLabel.textContent = `${formattedPrice} (${formattedChange})`;
   
       if (newVal > oldVal) {
@@ -422,6 +422,13 @@ async function initMap() {
         priceLabel.classList.add("price-down");
       }
   
+      // Emoji drehen je nach Prozentverlauf
+      if (percentChange < 0) {
+        emoji.style.transform = "rotate(90deg)";
+      } else {
+        emoji.style.transform = "rotate(0deg)";
+      }
+  
       setTimeout(() => {
         priceLabel.classList.remove("price-up", "price-down");
       }, 500);
@@ -430,12 +437,22 @@ async function initMap() {
     function drawChart() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
   
-      // Dynamisch min/max aus den aktuellen Daten berechnen
-      const min = Math.min(...data);
-      const max = Math.max(...data);
-      const range = max - min || 1; // Falls range = 0, um Division durch 0 zu vermeiden
+      const min = Math.min(...data, startPrice); // sicherstellen, dass startPrice mit drin ist
+      const max = Math.max(...data, startPrice);
+      const range = max - min || 1;
   
-      // Farbe für Trend relativ zum Startpreis
+      const zeroY = canvas.height - ((startPrice - min) / range) * canvas.height;
+  
+      // === Basislinie bei 0% ===
+      ctx.beginPath();
+      ctx.setLineDash([5, 5]);
+      ctx.strokeStyle = "#888";
+      ctx.moveTo(0, zeroY);
+      ctx.lineTo(canvas.width, zeroY);
+      ctx.stroke();
+      ctx.setLineDash([]); // zurücksetzen
+  
+      // === Chartlinie ===
       ctx.beginPath();
       ctx.strokeStyle = currentPrice >= startPrice ? "#00ff88" : "#ff5050";
       ctx.lineWidth = 2;
