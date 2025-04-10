@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
     const productCards = document.querySelectorAll(".product-card");
-    const cartPopover = document.getElementById("cart-popover");
     const cartItems = document.getElementById("cart-items");
     const cartTotal = document.getElementById("cart-total");
     const checkoutButton = document.getElementById("checkout-button");
@@ -109,7 +108,6 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Zur Kasse gehen!");
             cart = [];
             updateCartUI();
-            cartPopover.removeAttribute("popover");
         });
     }
 });
