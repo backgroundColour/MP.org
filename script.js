@@ -435,37 +435,46 @@ async function initMap() {
     }
   
     function drawChart() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
-      const min = Math.min(...data, startPrice); // sicherstellen, dass startPrice mit drin ist
-      const max = Math.max(...data, startPrice);
-      const range = max - min || 1;
-  
-      const zeroY = canvas.height - ((startPrice - min) / range) * canvas.height;
-  
-      // === Basislinie bei 0% ===
-      ctx.beginPath();
-      ctx.setLineDash([5, 5]);
-      ctx.strokeStyle = "#888";
-      ctx.moveTo(0, zeroY);
-      ctx.lineTo(canvas.width, zeroY);
-      ctx.stroke();
-      ctx.setLineDash([]); // zurücksetzen
-  
-      // === Chartlinie ===
-      ctx.beginPath();
-      ctx.strokeStyle = currentPrice >= startPrice ? "#00ff88" : "#ff5050";
-      ctx.lineWidth = 2;
-  
-      for (let i = 0; i < data.length; i++) {
-        const x = (i / (maxPoints - 1)) * canvas.width;
-        const y = canvas.height - ((data[i] - min) / range) * canvas.height;
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+        const min = Math.min(...data, startPrice); // sicherstellen, dass startPrice mit drin ist
+        const max = Math.max(...data, startPrice);
+        const range = max - min || 1;
+      
+        const zeroY = canvas.height - ((startPrice - min) / range) * canvas.height;
+      
+        // === Basislinie bei 0% ===
+        ctx.beginPath();
+        ctx.setLineDash([5, 5]);
+        ctx.strokeStyle = "#888";
+        ctx.moveTo(0, zeroY);
+        ctx.lineTo(canvas.width, zeroY);
+        ctx.stroke();
+        ctx.setLineDash([]); // zurücksetzen
+      
+        // === Chartlinie ===
+        for (let i = 0; i < data.length; i++) {
+          const x = (i / (maxPoints - 1)) * canvas.width;
+          const y = canvas.height - ((data[i] - min) / range) * canvas.height;
+          
+          // Linie unterhalb der 0%-Linie rot
+          if (y > zeroY) {
+            ctx.strokeStyle = "#00ff88"; // Grün für alles über der 0%-Linie
+          } else {
+            ctx.strokeStyle = "#ff5050"; // Rot für alles unter der 0%-Linie
+          }
+      
+          if (i === 0) {
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+          } else {
+            ctx.lineTo(x, y);
+          }
+        }
+      
+        ctx.stroke();
       }
-  
-      ctx.stroke();
-    }
+      
   
     // Initiale Punkte
     for (let i = 0; i < maxPoints; i++) {
