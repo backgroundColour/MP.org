@@ -117,7 +117,7 @@ main {
     width: calc(100% - 2rem);
     margin: 1rem;
     padding: 0.5rem;
-    background-color: #04AA6D;
+    background-color: #0066cc;
     color: white;
     border: none;
     border-radius: 4px;
@@ -134,7 +134,7 @@ main {
 
 .product-card button:after {
     content: "";
-    background: #90EE90;
+    background: #0177ee;
     display: block;
     position: absolute;
     padding-top: 300%;
