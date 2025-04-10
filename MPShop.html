@@ -12,8 +12,9 @@
 <body>
     <iframe src="assets/html/header.html" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
 
-    <button id="cart-button" popovertarget="cart-popover">🛒 Warenkorb</button>
-    <div id="cart-popover" popover>
+    <button id="cart-button" popovertarget="cart-popover" popoverTargetAction="show">🛒 Warenkorb</button>
+    <div id="cart-popover" popover="manual">
+        <button id="cart-button" popovertarget="cart-popover" popovertargetaction="hide" style="position: absolute; width: 1rem; height: 1rem;" class="bg-close"></button>
         <h3>Warenkorb</h3>
         <ul id="cart-items"></ul>
         <p id="cart-total">Gesamt: €0.00</p>
