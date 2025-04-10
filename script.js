@@ -393,7 +393,7 @@ async function initMap() {
 
   let data = [];
   const maxPoints = 50;
-  let currentPrice = Math.random() * 100 + 50; // Startpreis
+  let currentPrice = Math.random() * 100; // Startpreis
 
   function updateData() {
     const change = (Math.random() - 0.5) * 40; // Zufällige Veränderung
