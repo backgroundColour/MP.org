@@ -7,11 +7,18 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="shopstyle.css">
     <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
+    <script src="shopscript.js"></script>
 </head>
 <body>
     <iframe src="assets/html/header.html" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
 
-
+    <button id="cart-button" aria-haspopup="true" aria-expanded="false">🛒 Warenkorb</button>
+    <div id="cart-popover" hidden>
+        <h3>Warenkorb</h3>
+        <ul id="cart-items"></ul>
+        <p id="cart-total">Gesamt: €0.00</p>
+        <button id="checkout-button">Zur Kasse</button>
+    </div>
     <main>
         <section class="intro">
             <h2>MP Merchandise Shop</h2>

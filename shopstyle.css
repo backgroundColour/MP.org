@@ -179,3 +179,53 @@ footer {
         margin: 0.5rem 0;
     }
 }
+
+
+/* Add styles for the cart popover */
+#cart-popover {
+    position: absolute;
+    top: 50px;
+    right: 20px;
+    width: 300px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    z-index: 1000;
+}
+
+#cart-popover h3 {
+    margin-top: 0;
+}
+
+#cart-items {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+}
+
+#cart-items li {
+    margin-bottom: 0.5rem;
+}
+
+#cart-total {
+    font-weight: bold;
+    margin-top: 1rem;
+}
+
+#checkout-button {
+    display: block;
+    width: 100%;
+    padding: 0.5rem;
+    background-color: #0066cc;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#checkout-button:hover {
+    background-color: #0055aa;
+}
