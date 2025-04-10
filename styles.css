@@ -76,6 +76,38 @@ body {
     margin-bottom: 1rem;
 }
 
+.stock-container {
+    background: #1e1e1e;
+    border: 1px solid #333;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 600px;
+  }
+
+  .stock-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .stock-title {
+    font-size: 1.5rem;
+  }
+
+  .stock-price {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  canvas {
+    background: #000;
+    border-radius: 5px;
+    display: block;
+    width: 100%;
+  }
+
 h1, h2, h3 {
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
