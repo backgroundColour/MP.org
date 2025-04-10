@@ -443,16 +443,18 @@ footer {
   .story-container {
     width: 360px;
     height: 640px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
   }
   
   .story {
-    display: flex;
     flex-direction: column;
     height: 100%;
   }
   
   .story-header {
-    display: flex;
     align-items: center;
     padding: 10px;
     background-color: #fff;
@@ -473,7 +475,6 @@ footer {
   
   .story-content {
     flex-grow: 1;
-    display: flex;
     justify-content: center;
     align-items: center;
   }
@@ -487,7 +488,6 @@ footer {
     padding: 10px;
     background-color: rgba(0, 0, 0, 0.5);
     color: white;
-    display: flex;
     justify-content: center;
   }
   
