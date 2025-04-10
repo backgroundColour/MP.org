@@ -505,7 +505,32 @@ function getRandomHour() {
   window.addEventListener('load', updateTimeAgo);
 
   
-  const namenBewertung = ['Anna', 'Max', 'Julia', 'Tobias', 'Sophie', 'Lukas', 'Marie', 'Ben'];
+  const namenBewertung = ['Anna', 'Max', 'Julia', 'Tobias', 'Sophie', 'Lukas', 'Marie', 'Ben',
+    'chezburger','Albert Arnold Gore Jr.','Albert Einstein','Albert Camus','Michael Fitzner',
+    'Michi','Micha','Michaela','Michaela Fitzner','Michaela Fitzner','Torsten Clever','Jens Vermaeten',
+    'Nadine Kabisch','Tobias Blechmann','Linnenkugel','choas','chezjoe','Den OSI-Mann', 'Jorchan', 'Trojonatan', 'Jonas', 'Konstantin',
+        'Jonatin', 'Philip','Micha','Mirco jabs','Marco jäbs ','Merco jubs',
+        'Morco jobs','Märko jebs','Wirco Labs','Warco Läbs','Werco Lubs',
+        'Worco Lobs','Wärko Lebs ','Malte','Micro Jabs','Mats dankwärze',
+        'Matsimal','Max','Mr Packet Tracer','Michi','Gritzner',
+        'Fritzner','Tiefkühl Fitzner','Genosse Fillip','Genosse Malte',
+        'Genosse Niels','Genosse Kovatschow','Genosse Jorchan','Niels',
+        'T.R.','Timo Richard','Danee','Dänae',
+        'Danane','Danae Talsperre','Danea','Danö',
+        'Valeria','Dana Air','Dna','Yankee Delta',
+        'Y.D.','Matsim','Maksim','Masim',
+        'Massim','Macsim','Flaufs','Flo ',
+        'Nadine "ChatGPT" Kabisch','ChatGPT','KI','Sehrgay',
+        'Cergéy', 'Mottenkugel', 'Lindenkugel', 'C.BOOM', 'Air Compressor',
+        'KFC', 'Cave Johnson', 'Lyndon Johnson', 'Dr. John Fitzgerald Kennedy Jr. Sr.',
+        'Dr. Alice Weidel', 'Elonia Musk', 'Donald Trumpina', 'RFK Jr.', 'Sabine Hoffmann', 'HOF',
+        'Jens', 'Jens Vermaeten', 'F.I.T.', 'CSV Converter', 'Jirco Mabs', 'Nick Todesblick',
+        'Z. Immerling', 'Happy Fitzner', 'Schwanzkopf.de', 'Herr der Netzwerkprotokolle', 
+        'Buff Fitzner', 'Pan Pawet', 'Bill Clinton', 'Shit in Shit out', 'IDKSterling', 'Friedrich Merz',
+        'Christian Lindner', 'Boris Pistorius', 'Armin Laschet', 'Armin Pistorius', 'Boris Laschet',
+        'Lambo Zuchini', 'BIG BELLY BACON BOYS (BBBB)', 'Jack Black', 'JD Vance', 'Kamilla Harris',
+        'Freaky Michi', 'Aperture Science Emergency Intelligence Incinerator'
+  ];
   const beschreibungen = [
       '"Unter der Führung von Michael Fitzner verfolgt die Michi Partei eine klare Vision für eine bessere Zukunft. Ihr Engagement für soziale Gerechtigkeit und nachhaltige Politik ist beeindruckend."',
       '„Die Michi Partei hat sich dem Wohl der Menschen verschrieben und setzt sich für eine gerechte Gesellschaft ein. Michael Fitzner führt die Partei mit Herz und Verstand.“',
@@ -566,4 +591,4 @@ function getRandomHour() {
 
   // Starten der zufälligen Aktualisierung
   updateBewertung();
-  setInterval(updateBewertung, 5000); // Alle 5 Sekunden wird eine neue Bewertung angezeigt
+  setInterval(updateBewertung, 10000); // Alle 5 Sekunden wird eine neue Bewertung angezeigt
