@@ -506,56 +506,61 @@ function getRandomHour() {
 
   
   const namenBewertung = ['Anna', 'Max', 'Julia', 'Tobias', 'Sophie', 'Lukas', 'Marie', 'Ben'];
-        const beschreibungen = [
-            'Ein großartiges Produkt, sehr zufrieden!',
-            'Hat meine Erwartungen übertroffen.',
-            'Würde ich jederzeit wieder kaufen.',
-            'Sehr gute Qualität, kann ich nur empfehlen.',
-            'Top Qualität und schneller Versand.',
-            'Einfach perfekt, nichts zu meckern!',
-            'Toller Service und tolles Produkt!',
-            'Absolut empfehlenswert, bin begeistert!'
-        ];
+  const beschreibungen = [
+      'Ein großartiges Produkt, sehr zufrieden!',
+      'Hat meine Erwartungen übertroffen.',
+      'Würde ich jederzeit wieder kaufen.',
+      'Sehr gute Qualität, kann ich nur empfehlen.',
+      'Top Qualität und schneller Versand.',
+      'Einfach perfekt, nichts zu meckern!',
+      'Toller Service und tolles Produkt!',
+      'Absolut empfehlenswert, bin begeistert!'
+  ];
 
-        // URL des Sternbildes von Wikipedia
-        const sternBildUrl = 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/5_stars.svg/320px-5_stars.svg.png';
+  // URL des Sternbildes von Wikipedia (breiteres Bild)
+  const sternBildUrl = 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/5_stars.svg/800px-5_stars.svg.png';
 
-        // Funktion, um eine zufällige Bewertung zu erstellen
-        function generiereBewertung() {
-            const bewertungDiv = document.createElement('div');
-            bewertungDiv.classList.add('bewertung');
+  // Funktion, um eine zufällige Bewertung zu erstellen
+  function generiereBewertung() {
+      const bewertungDiv = document.createElement('div');
+      bewertungDiv.classList.add('bewertung');
 
-            // Erstelle das Sternbild
-            const sternBild = document.createElement('img');
-            sternBild.src = sternBildUrl;
-            bewertungDiv.appendChild(sternBild);
+      // Erstelle das Sternbild
+      const sternBild = document.createElement('img');
+      sternBild.src = sternBildUrl;
+      bewertungDiv.appendChild(sternBild);
 
-            // Zufällige Namen und Beschreibungen
-            const zufallsName = namenBewertung[Math.floor(Math.random() * namenBewertung.length)];
-            const zufallsBeschreibung = beschreibungen[Math.floor(Math.random() * beschreibungen.length)];
+      // Zufällige Namen und Beschreibungen
+      const zufallsName = namenBewertung[Math.floor(Math.random() * namenBewertung.length)];
+      const zufallsBeschreibung = beschreibungen[Math.floor(Math.random() * beschreibungen.length)];
 
-            // Erstelle den Bewertungstext
-            const textDiv = document.createElement('div');
-            textDiv.classList.add('text');
+      // Erstelle den Bewertungstext
+      const textDiv = document.createElement('div');
+      textDiv.classList.add('text');
 
-            const nameElement = document.createElement('p');
-            nameElement.classList.add('name');
-            nameElement.textContent = zufallsName;
+      const nameElement = document.createElement('p');
+      nameElement.classList.add('name');
+      nameElement.textContent = zufallsName;
 
-            const beschreibungElement = document.createElement('p');
-            beschreibungElement.classList.add('beschreibung');
-            beschreibungElement.textContent = zufallsBeschreibung;
+      const beschreibungElement = document.createElement('p');
+      beschreibungElement.classList.add('beschreibung');
+      beschreibungElement.textContent = zufallsBeschreibung;
 
-            textDiv.appendChild(nameElement);
-            textDiv.appendChild(beschreibungElement);
-            bewertungDiv.appendChild(textDiv);
+      textDiv.appendChild(nameElement);
+      textDiv.appendChild(beschreibungElement);
+      bewertungDiv.appendChild(textDiv);
 
-            return bewertungDiv;
-        }
+      return bewertungDiv;
+  }
 
-        // Generiere und füge die Bewertungen zum DOM hinzu
-        const bewertungenContainer = document.getElementById('bewertungen');
-        for (let i = 0; i < 5; i++) {
-            const bewertung = generiereBewertung();
-            bewertungenContainer.appendChild(bewertung);
-        }
+  // Funktion, die die Bewertung alle 5 Sekunden aktualisiert
+  function updateBewertung() {
+      const bewertungContainer = document.getElementById('bewertung');
+      bewertungContainer.innerHTML = ''; // Alte Bewertung entfernen
+      const neueBewertung = generiereBewertung();
+      bewertungContainer.appendChild(neueBewertung);
+  }
+
+  // Starten der zufälligen Aktualisierung
+  updateBewertung();
+  setInterval(updateBewertung, 5000); // Alle 5 Sekunden wird eine neue Bewertung angezeigt
