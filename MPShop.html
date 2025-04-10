@@ -13,7 +13,7 @@
     <iframe src="assets/html/header.html" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
 
     <div id="cart-popover" popover="manual">
-        <button id="cart-button" popovertarget="cart-popover" popovertargetaction="hide" class="bg-close btn-close"></button>
+        <button class="cart-button" popovertarget="cart-popover" popovertargetaction="hide" class="bg-close btn-close"></button>
         <h3>Warenkorb</h3>
         <ul id="cart-items"></ul>
         <p id="cart-total">Gesamt: €0.00</p>
@@ -21,7 +21,7 @@
     </div>
     <main>
         <section class="hero">
-            <button id="cart-button" popovertarget="cart-popover" popoverTargetAction="show">🛒</button>
+            <button class="cart-button" popovertarget="cart-popover" popoverTargetAction="show">🛒</button>
             <div class="intro">
                 <h2>MP Merchandise Shop</h2>
                 <p>Zeige deine Unterstützung für die Michi Partei mit unseren offiziellen Produkten!</p>
