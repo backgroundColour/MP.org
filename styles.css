@@ -361,15 +361,7 @@ footer {
     animation: popIn 0.5s ease-out forwards;
 }
 
-.stock-container {
-    background: #ffffff;
-    border: 1px solid #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    width: 90%;
-    max-width: 600px;
-    text-align: center;
-  }
+
 
   .stock-header {
     display: flex;
