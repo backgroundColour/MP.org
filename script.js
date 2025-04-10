@@ -526,7 +526,7 @@ function getRandomHour() {
   // Funktion, um eine zufällige Bewertung zu erstellen
   function generiereBewertung() {
       const bewertungDiv = document.createElement('div');
-      bewertungDiv.classList.add('card bewertung');
+      bewertungDiv.classList.add('bewertung');
 
       // Erstelle das Sternbild
       const sternBild = document.createElement('img');
@@ -558,7 +558,7 @@ function getRandomHour() {
 
   // Funktion, die die Bewertung alle 5 Sekunden aktualisiert
   function updateBewertung() {
-      const bewertungContainer = document.getElementById('bewertung');
+      const bewertungContainer = document.getElementById('card bewertung');
       bewertungContainer.innerHTML = ''; // Alte Bewertung entfernen
       const neueBewertung = generiereBewertung();
       bewertungContainer.appendChild(neueBewertung);
