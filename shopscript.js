@@ -73,7 +73,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Add a product to the cart
     function addToCart(product) {
-        cart.push(product);
+        // Check if the product already exists in the cart
+        const existingProduct = cart.find(item => item.name === product.name);
+
+        if (existingProduct) {
+            // If the product exists, increase its quantity
+            existingProduct.quantity += 1;
+        } else {
+            // If the product doesn't exist, add it with a quantity of 1
+            product.quantity = 1;
+            cart.push(product);
+        }
+
         updateCartUI();
     }
 
@@ -84,9 +95,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         cart.forEach(item => {
             const li = document.createElement("li");
-            li.innerText = `${item.name} - €${item.finalPrice.toFixed(2)}`;
+            li.innerText = `${item.name} (x${item.quantity}) - €${(item.finalPrice * item.quantity).toFixed(2)}`;
             cartItems.appendChild(li);
-            total += item.finalPrice;
+            total += item.finalPrice * item.quantity;
         });
 
         cartTotal.innerText = `Gesamt: €${total.toFixed(2)}`;
