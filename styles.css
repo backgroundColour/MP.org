@@ -439,3 +439,64 @@ footer {
     width: 100%;
   }
 
+
+  .story-container {
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    width: 360px;
+    height: 640px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+  }
+  
+  .story {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  .story-header {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #ccc;
+    margin-right: 10px;
+  }
+  
+  .username {
+    font-weight: bold;
+  }
+  
+  .story-content {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .story-img {
+    width: 100%;
+    height: auto;
+  }
+  
+  .story-footer {
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .time-ago {
+    font-size: 12px;
+  }
