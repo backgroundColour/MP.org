@@ -526,7 +526,7 @@ function getRandomHour() {
   // Funktion, um eine zufällige Bewertung zu erstellen
   function generiereBewertung() {
       const bewertungDiv = document.createElement('div');
-      bewertungDiv.classList.add('bewertung');
+      bewertungDiv.classList.add('card bewertung');
 
       // Erstelle das Sternbild
       const sternBild = document.createElement('img');
