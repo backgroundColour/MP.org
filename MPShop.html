@@ -12,13 +12,13 @@
 <body>
     <iframe src="assets/html/header.html" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
 
-    <div id="cart-popover" popover="manual">
-        <button class="cart-button" popovertarget="cart-popover" popovertargetaction="hide" class="bg-close btn-close"></button>
-        <h3>Warenkorb</h3>
-        <ul id="cart-items"></ul>
-        <p id="cart-total">Gesamt: €0.00</p>
-        <button id="checkout-button">Zur Kasse</button>
-    </div>
+        <div id="cart-popover" popover="manual">
+            <button popovertarget="cart-popover" popovertargetaction="hide" class="bg-close btn-close"></button>
+            <h3>Warenkorb</h3>
+            <ul id="cart-items"></ul>
+            <p id="cart-total">Gesamt: €0.00</p>
+            <button id="checkout-button">Zur Kasse</button>
+        </div>
     <main>
         <section class="hero">
             <button class="cart-button" popovertarget="cart-popover" popoverTargetAction="show">🛒</button>
