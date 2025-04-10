@@ -487,7 +487,7 @@ async function initMap() {
 
   setInterval(updateData, 2000);
 
- // Funktion, um eine zufällige Zahl zwischen 1 und 24 zu generieren
+// Funktion, um eine zufällige Zahl zwischen 1 und 24 zu generieren
 function getRandomHour() {
     return Math.floor(Math.random() * 24) + 1;
   }
