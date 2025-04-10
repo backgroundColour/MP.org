@@ -45,6 +45,18 @@ body {
     height: 91vh;
 }
 
+.header-content {
+    width: fit-content;
+    backdrop-filter: blur(0rem);
+    border-radius: 1rem;
+    padding: 2rem;
+    transition: all 0.3s ease-in-out; /* Ensure transition applies for both hover and unhover */
+}
+
+.header-content:hover {
+    backdrop-filter: blur(1rem);
+}
+
 .navbar{
     position: sticky;
     top: 0;
@@ -213,7 +225,7 @@ nav a:hover {
 }
 
 .theme {
-    background: white;
+    background: var(--light);;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 4px 6px rgba(0,0,0,0.05);
@@ -319,6 +331,20 @@ footer {
     text-align: center;
     padding: 2rem 0;
     margin-top: 3rem;
+}
+
+/*Fix FlipDown errors*/
+.flipdown.flipdown__theme-dark 
+.rotor-group:nth-child(n+2):nth-child(-n+3):before, 
+.flipdown.flipdown__theme-dark .rotor-group:nth-child(n+2):nth-child(-n+3):after
+{
+    background-color: unset;
+}
+.rotor-group-heading{
+    height: 0;
+}
+.flipdown{
+    height: unset;
 }
 
 @media (max-width: 768px) {
