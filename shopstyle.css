@@ -74,6 +74,8 @@ main {
 }
 
 .product-card {
+    display: grid;
+    align-content: space-between;
     background: white;
     border-radius: 8px;
     overflow: hidden;
@@ -103,7 +105,6 @@ main {
 }
 
 .product-card button {
-    bottom: 0;
     display: block;
     width: calc(100% - 2rem);
     margin: 1rem;
