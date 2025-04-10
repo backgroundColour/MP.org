@@ -387,89 +387,102 @@ async function initMap() {
     //    document.querySelector('.nav').classList.toggle('active');
     //});
 
-    const canvas = document.getElementById("chart");
-    const ctx = canvas.getContext("2d");
-    const priceLabel = document.getElementById("price");
-    const emoji = document.getElementById("emoji");
-  
-    let data = [];
-    const maxPoints = 50;
-    let startPrice = Math.random() * 100 + 50;
-    let currentPrice = startPrice;
-  
-    function updateData() {
-      const oldPrice = currentPrice;
-      const change = (Math.random() - 0.5) * 40;
-      currentPrice = Math.max(1, currentPrice + change);
-      data.push(currentPrice);
-      if (data.length > maxPoints) data.shift();
-  
-      drawChart();
-      animatePrice(oldPrice, currentPrice);
+   const canvas = document.getElementById("chart");
+  const ctx = canvas.getContext("2d");
+  const priceLabel = document.getElementById("price");
+  const emoji = document.getElementById("emoji");
+
+  let data = [];
+  const maxPoints = 50;
+  let startPrice = Math.random() * 100 + 50;
+  let currentPrice = startPrice;
+
+  function updateData() {
+    const oldPrice = currentPrice;
+    const change = (Math.random() - 0.5) * 40;
+    currentPrice = Math.max(1, currentPrice + change);
+    data.push(currentPrice);
+    if (data.length > maxPoints) data.shift();
+
+    drawChart();
+    animatePrice(oldPrice, currentPrice);
+  }
+
+  function animatePrice(oldVal, newVal) {
+    const percentChange = ((newVal - startPrice) / startPrice) * 100;
+    const formattedPrice = "€" + newVal.toFixed(2);
+    const formattedChange = (percentChange >= 0 ? "+" : "") + percentChange.toFixed(2) + "%";
+    priceLabel.textContent = `${formattedPrice} (${formattedChange})`;
+
+    if (newVal > oldVal) {
+      priceLabel.classList.remove("price-down");
+      priceLabel.classList.add("price-up");
+    } else if (newVal < oldVal) {
+      priceLabel.classList.remove("price-up");
+      priceLabel.classList.add("price-down");
     }
+
+    // Emoji drehen je nach Prozentverlauf
+    if (percentChange < 0) {
+      emoji.style.transform = "rotate(90deg)";
+    } else {
+      emoji.style.transform = "rotate(0deg)";
+    }
+
+    setTimeout(() => {
+      priceLabel.classList.remove("price-up", "price-down");
+    }, 500);
+  }
+
+  function drawChart() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
   
-    function animatePrice(oldVal, newVal) {
-      const percentChange = ((newVal - startPrice) / startPrice) * 100;
-      const formattedPrice = "€" + newVal.toFixed(2);
-      const formattedChange = (percentChange >= 0 ? "+" : "") + percentChange.toFixed(2) + "%";
-      priceLabel.textContent = `${formattedPrice} (${formattedChange})`;
+    const min = Math.min(...data, startPrice); // sicherstellen, dass startPrice mit drin ist
+    const max = Math.max(...data, startPrice);
+    const range = max - min || 1;
   
-      if (newVal > oldVal) {
-        priceLabel.classList.remove("price-up");
-        priceLabel.classList.add("price-down");
-      } else if (newVal < oldVal) {
-        priceLabel.classList.remove("price-down");
-        priceLabel.classList.add("price-up");
+    const zeroY = canvas.height - ((startPrice - min) / range) * canvas.height;
+  
+    // === Basislinie bei 0% ===
+    ctx.beginPath();
+    ctx.setLineDash([5, 5]);
+    ctx.strokeStyle = "#888";
+    ctx.moveTo(0, zeroY);
+    ctx.lineTo(canvas.width, zeroY);
+    ctx.stroke();
+    ctx.setLineDash([]); // zurücksetzen
+  
+    // === Chartlinie ===
+    for (let i = 0; i < data.length; i++) {
+      const x = (i / (maxPoints - 1)) * canvas.width;
+      const y = canvas.height - ((data[i] - min) / range) * canvas.height;
+  
+      // Linie unterhalb der 0%-Linie rot und oberhalb grün
+      if (i > 0) {
+        const prevX = ((i - 1) / (maxPoints - 1)) * canvas.width;
+        const prevY = canvas.height - ((data[i - 1] - min) / range) * canvas.height;
+  
+        // Farbe für das Segment zwischen den Punkten festlegen
+        if (y > zeroY && prevY > zeroY) {
+            ctx.strokeStyle = "#ff5050"; // Rot für beide Punkte unter der 0%-Linie
+        } else if (y < zeroY && prevY < zeroY) {
+            ctx.strokeStyle = "#00ff88"; // Grün für beide Punkte über der 0%-Linie
+        } else {
+          ctx.strokeStyle = (y > zeroY) ? "#00ff88" : "#ff5050"; // Wechselnde Farben für unterschiedliche Höhen
+        }
+  
+        ctx.beginPath();
+        ctx.moveTo(prevX, prevY);
+        ctx.lineTo(x, y);
+        ctx.stroke();
       }
-  
-      // Emoji drehen je nach Prozentverlauf
-      if (percentChange < 0) {
-        emoji.style.transform = "rotate(90deg)";
-      } else {
-        emoji.style.transform = "rotate(0deg)";
-      }
-  
-      setTimeout(() => {
-        priceLabel.classList.remove("price-up", "price-down");
-      }, 500);
     }
+  }
   
-    function drawChart() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
-      const min = Math.min(...data, startPrice); // sicherstellen, dass startPrice mit drin ist
-      const max = Math.max(...data, startPrice);
-      const range = max - min || 1;
-  
-      const zeroY = canvas.height - ((startPrice - min) / range) * canvas.height;
-  
-      // === Basislinie bei 0% ===
-      ctx.beginPath();
-      ctx.setLineDash([5, 5]);
-      ctx.strokeStyle = "#888";
-      ctx.moveTo(0, zeroY);
-      ctx.lineTo(canvas.width, zeroY);
-      ctx.stroke();
-      ctx.setLineDash([]); // zurücksetzen
-  
-      // === Chartlinie ===
-      ctx.beginPath();
-      ctx.strokeStyle = currentPrice >= startPrice ? "#00ff88" : "#ff5050";
-      ctx.lineWidth = 2;
-  
-      for (let i = 0; i < data.length; i++) {
-        const x = (i / (maxPoints - 1)) * canvas.width;
-        const y = canvas.height - ((data[i] - min) / range) * canvas.height;
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
-      }
-  
-      ctx.stroke();
-    }
-  
-    // Initiale Punkte
-    for (let i = 0; i < maxPoints; i++) {
-      updateData();
-    }
-  
-    setInterval(updateData, 2000);
+
+  // Initiale Punkte
+  for (let i = 0; i < maxPoints; i++) {
+    updateData();
+  }
+
+  setInterval(updateData, 2000);
