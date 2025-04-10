@@ -123,7 +123,6 @@ main {
     border-radius: 4px;
     cursor: pointer;
     font-weight: bold;
-    font-size: 28px;
     text-align: center;
     -webkit-transition-duration: 0.4s; /* Safari */
     transition-duration: 0.4s;
