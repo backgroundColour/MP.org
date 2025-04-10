@@ -505,7 +505,7 @@ function getRandomHour() {
   window.addEventListener('load', updateTimeAgo);
 
   
-  const namen = ['Anna', 'Max', 'Julia', 'Tobias', 'Sophie', 'Lukas', 'Marie', 'Ben'];
+  const namenBewertung = ['Anna', 'Max', 'Julia', 'Tobias', 'Sophie', 'Lukas', 'Marie', 'Ben'];
         const beschreibungen = [
             'Ein großartiges Produkt, sehr zufrieden!',
             'Hat meine Erwartungen übertroffen.',
@@ -531,7 +531,7 @@ function getRandomHour() {
             bewertungDiv.appendChild(sternBild);
 
             // Zufällige Namen und Beschreibungen
-            const zufallsName = namen[Math.floor(Math.random() * namen.length)];
+            const zufallsName = namenBewertung[Math.floor(Math.random() * namenBewertung.length)];
             const zufallsBeschreibung = beschreibungen[Math.floor(Math.random() * beschreibungen.length)];
 
             // Erstelle den Bewertungstext
