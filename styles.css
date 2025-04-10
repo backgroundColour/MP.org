@@ -446,6 +446,8 @@ footer {
     border-radius: 20px;
     overflow: hidden;
     display: flex;
+    justify-content: space-around; /* aligns the items horizontally */
+    align-items: center; /* aligns the items vertically */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     background-color: #fff;
   }
