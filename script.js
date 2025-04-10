@@ -388,62 +388,71 @@ async function initMap() {
     //});
 
     const canvas = document.getElementById("chart");
-  const ctx = canvas.getContext("2d");
-  const priceLabel = document.getElementById("price");
-
-  let data = [];
-  const maxPoints = 50;
-  let startPrice = Math.random() * 100 + 50; // Basiswert
-  let currentPrice = startPrice;
-
-  function updateData() {
-    const oldPrice = currentPrice;
-    const change = (Math.random() - 0.5) * 40;
-    currentPrice = Math.max(1, currentPrice + change);
-    data.push(currentPrice);
-    if (data.length > maxPoints) data.shift();
-
-    drawChart();
-    animatePrice(oldPrice, currentPrice);
-  }
-
-  function animatePrice(oldVal, newVal) {
-    priceLabel.textContent = "€" + newVal.toFixed(2);
-    
-    if (newVal > oldVal) {
-      priceLabel.classList.remove("price-down");
-      priceLabel.classList.add("price-up");
-    } else if (newVal < oldVal) {
-      priceLabel.classList.remove("price-up");
-      priceLabel.classList.add("price-down");
+    const ctx = canvas.getContext("2d");
+    const priceLabel = document.getElementById("price");
+  
+    let data = [];
+    const maxPoints = 50;
+    let startPrice = Math.random() * 100 + 50;
+    let currentPrice = startPrice;
+  
+    function updateData() {
+      const oldPrice = currentPrice;
+      const change = (Math.random() - 0.5) * 40;
+      currentPrice = Math.max(1, currentPrice + change);
+      data.push(currentPrice);
+      if (data.length > maxPoints) data.shift();
+  
+      drawChart();
+      animatePrice(oldPrice, currentPrice);
     }
-
-    setTimeout(() => {
-      priceLabel.classList.remove("price-up", "price-down");
-    }, 500);
-  }
-
-  function drawChart() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.beginPath();
-
-    // Farbe je nach aktuellem Preis vs Basiswert
-    ctx.strokeStyle = currentPrice >= startPrice ? "#00ff88" : "#ff5050";
-    ctx.lineWidth = 2;
-
-    for (let i = 0; i < data.length; i++) {
-      const x = (i / maxPoints) * canvas.width;
-      const y = canvas.height - (data[i] / 200) * canvas.height;
-      if (i === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
+  
+    function animatePrice(oldVal, newVal) {
+      const percentChange = ((newVal - startPrice) / startPrice) * 100;
+      const formattedPrice = "€" + newVal.toFixed(2);
+      const formattedChange = (percentChange >= 0 ? "+" : "") + percentChange.toFixed(2) + "%";
+  
+      priceLabel.textContent = `${formattedPrice} (${formattedChange})`;
+  
+      if (newVal > oldVal) {
+        priceLabel.classList.remove("price-down");
+        priceLabel.classList.add("price-up");
+      } else if (newVal < oldVal) {
+        priceLabel.classList.remove("price-up");
+        priceLabel.classList.add("price-down");
+      }
+  
+      setTimeout(() => {
+        priceLabel.classList.remove("price-up", "price-down");
+      }, 500);
     }
-
-    ctx.stroke();
-  }
-
-  // Initiale Punkte
-  for (let i = 0; i < maxPoints; i++) {
-    updateData();
-  }
-
-  setInterval(updateData, 2000);
+  
+    function drawChart() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+      // Dynamisch min/max aus den aktuellen Daten berechnen
+      const min = Math.min(...data);
+      const max = Math.max(...data);
+      const range = max - min || 1; // Falls range = 0, um Division durch 0 zu vermeiden
+  
+      // Farbe für Trend relativ zum Startpreis
+      ctx.beginPath();
+      ctx.strokeStyle = currentPrice >= startPrice ? "#00ff88" : "#ff5050";
+      ctx.lineWidth = 2;
+  
+      for (let i = 0; i < data.length; i++) {
+        const x = (i / (maxPoints - 1)) * canvas.width;
+        const y = canvas.height - ((data[i] - min) / range) * canvas.height;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+  
+      ctx.stroke();
+    }
+  
+    // Initiale Punkte
+    for (let i = 0; i < maxPoints; i++) {
+      updateData();
+    }
+  
+    setInterval(updateData, 2000);
