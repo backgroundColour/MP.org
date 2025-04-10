@@ -361,11 +361,6 @@ footer {
     animation: popIn 0.5s ease-out forwards;
 }
 
-.stock-container {
-    background: #ffffff;
-    border-radius: 10px;
-    width: 90%;
-  }
 
   .stock-header {
     display: flex;
@@ -396,7 +391,7 @@ footer {
   }
 
   canvas {
-    background: #525273;
+    background: #2b2b3c;
     border-radius: 5px;
     display: block;
     width: 100%;
