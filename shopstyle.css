@@ -183,16 +183,17 @@ footer {
 
 /* Add styles for the cart popover */
 #cart-popover {
-    position: absolute;
-    top: 50px;
-    right: 20px;
+    position: fixed;
+    top: 7vh;
+    left: auto;
+    margin: 0;
+    margin-right: 1rem;
     width: 300px;
     background: white;
     border: 1px solid #ccc;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 1rem;
-    z-index: 1000;
 }
 
 #cart-popover h3 {

@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
     const productCards = document.querySelectorAll(".product-card");
-    const cartButton = document.getElementById("cart-button");
     const cartPopover = document.getElementById("cart-popover");
     const cartItems = document.getElementById("cart-items");
     const cartTotal = document.getElementById("cart-total");
