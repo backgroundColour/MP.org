@@ -516,6 +516,8 @@ footer {
 
 
   .bewertung {
+    margin: 2rem auto;
+    padding: 0 1.5rem;
     display: flex;
     align-items: center;
     margin-bottom: 10px;
