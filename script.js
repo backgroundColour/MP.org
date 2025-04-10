@@ -372,10 +372,7 @@ async function initMap() {
 
         // Initialize FlipDown
         try {
-            new FlipDown(nextKaffeetagTimestamp, {
-                //headings: ["Tage", "Stunden", "Minuten", "Sekunden"],
-                headings: ["", "", "", ""],
-            })
+            new FlipDown(nextKaffeetagTimestamp)
             .start()
             .ifEnded(() => {
                 console.log('Kaffeetag has started!');
@@ -389,44 +386,3 @@ async function initMap() {
     document.querySelector('.menu-toggle').addEventListener('click', function() {
         document.querySelector('.nav').classList.toggle('active');
     });
-
-    const canvas = document.getElementById("chart");
-  const ctx = canvas.getContext("2d");
-  const priceLabel = document.getElementById("price");
-
-  let data = [];
-  const maxPoints = 50;
-  let currentPrice = Math.random() * 100 + 50; // Startpreis
-
-  function updateData() {
-    const change = (Math.random() - 0.5) * 5; // Zufällige Veränderung
-    currentPrice = Math.max(1, currentPrice + change); // Nie unter 1€
-    data.push(currentPrice);
-    if (data.length > maxPoints) data.shift();
-    drawChart();
-    priceLabel.textContent = "€" + currentPrice.toFixed(2);
-  }
-
-  function drawChart() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.beginPath();
-    ctx.strokeStyle = "#00ff88";
-    ctx.lineWidth = 2;
-
-    for (let i = 0; i < data.length; i++) {
-      const x = (i / maxPoints) * canvas.width;
-      const y = canvas.height - (data[i] / 200) * canvas.height; // Skaliert
-      if (i === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
-    }
-
-    ctx.stroke();
-  }
-
-  // Starte mit ein paar Punkten
-  for (let i = 0; i < maxPoints; i++) {
-    updateData();
-  }
-
-  // Aktualisiere alle 2 Sekunden
-  setInterval(updateData, 2000);
