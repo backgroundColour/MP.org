@@ -218,7 +218,7 @@ footer {
 /* Add styles for the cart popover */
 #cart-popover {
     position: fixed;
-    top: 7vh;
+    top: 7rem;
     left: auto;
     margin: 0;
     margin-right: 1rem;
