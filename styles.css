@@ -11,6 +11,7 @@
 .KabinettBild{
     max-width: 25%;
     max-height: 25%;
+    border: #ddd 5% solid;
 }
 
 ::-webkit-scrollbar {
