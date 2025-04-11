@@ -608,7 +608,7 @@ function getRandomHour() {
   try{updateBewertung();
   setInterval(updateBewertung, 10000); // Alle 5 Sekunden wird eine neue Bewertung angezeigt
   }catch (error) { 
-    
+
   }
   
   
@@ -620,6 +620,10 @@ function getRandomHour() {
     'assets/img/Ukraine.png',
   ];
   
+  try{ 
   const imgElement = document.getElementById('storyTime');
   imgElement.src = stories[Math.floor(Math.random() * stories.length)];
+  }catch (error) {
+
+  }
   
