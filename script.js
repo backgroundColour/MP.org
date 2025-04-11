@@ -605,6 +605,6 @@ function getRandomHour() {
     'assets/img/Ukraine.png',
   ];
   
-  const randomImage = stories[Math.floor(Math.random() * stories.length)];
-  document.getElementById('storyTime').innerHTML = `<img src="${randomImage}" alt="Story Image" />`;
+  const imgElement = document.getElementById('storyTime');
+  imgElement.src = stories[Math.floor(Math.random() * stories.length)];
   
