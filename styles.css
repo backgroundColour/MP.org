@@ -8,6 +8,11 @@
     --warning: #f39c12;
 }
 
+.KabinettBild{
+    max-width: 50%;
+    max-height: 50;
+}
+
 ::-webkit-scrollbar {
     width: 24px; /* Breite der Scrollbar */
 }
