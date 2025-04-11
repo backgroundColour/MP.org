@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const urlParams = new URLSearchParams(window.location.search);
     var total = 0;
     var cart = [];
-    urlParams.has("checkouttotal") ? total = urlParams.get("checkouttotal") : null;
     urlParams.has("cart") ? cart = JSON.parse(urlParams.get("cart")) : null;
 
     // Elements
@@ -15,6 +14,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const li = document.createElement("li");
         li.innerText = `${item.name} (x${item.quantity}) - €${(item.finalPrice * item.quantity).toFixed(2)}`;
         cartItems.appendChild(li);
+        // Calculate the total
+        total += item.finalPrice * item.quantity;
     });
     // Display the total
     cartTotal.innerText = total;
