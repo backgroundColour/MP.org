@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const checkoutButton = document.getElementById("checkout-button");
 
     let cart = [];
+    let total = 0;
 
     // Initialize the shop
     initializeShop();
@@ -90,7 +91,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // Update the cart UI
     function updateCartUI() {
         cartItems.innerHTML = "";
-        let total = 0;
 
         cart.forEach(item => {
             const li = document.createElement("li");
@@ -105,8 +105,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // Setup the checkout button functionality
     function setupCheckoutButton() {
         checkoutButton.addEventListener("click", () => {
-            alert("Zur Kasse gehen!");
+            alert("Zur Kasse gehen!" + "\n" + total.toFixed(2));
             cart = [];
+            total = 0;
             updateCartUI();
         });
     }
