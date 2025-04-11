@@ -596,3 +596,13 @@ function getRandomHour() {
   // Starten der zufälligen Aktualisierung
   updateBewertung();
   setInterval(updateBewertung, 10000); // Alle 5 Sekunden wird eine neue Bewertung angezeigt
+
+  const stories = [
+    'assets/img/DaIsserWieder.png',
+    'assets/img/Außen.png',
+    'assets/img/HQ.png',
+    'assets/img/Parteitag.png',
+    'assets/img/Ukraine.png',
+  ];
+
+  document.getElementById('storyTime').innerHTML.image = stories[Math.floor(Math.random() * stories.length)];
