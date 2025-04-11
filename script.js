@@ -1,19 +1,19 @@
 const streetNames = [
     "Hauptstraße", "Bahnhofstraße", "Kirchweg", "Dorfplatz", "Am Waldrand", 
     "Goethestraße", "Schillerweg", "Lindenallee", "Bergstraße", "Mühlenweg",
-    "Sonnenallee", "Rosenweg", "Eichenweg", "Bachgasse", "Ahornstraße"
+    "Sonnenallee", "Rosenweg", "Eichenweg", "Bachgasse", "Ahornstraße", 'Altschauerberg 8'
     ];
     
 const cityNames = [
     "Berlin", "München", "Hamburg", "Köln", "Frankfurt", 
-    "Stuttgart", "Düsseldorf", "Dortmund", "Essen", "Leipzig",
-    "Bremen", "Dresden", "Hannover", "Nürnberg", "Bonn"
+    "Stuttgart", "Düsseldorf", "Dortmund", "Essen", "Leipzig", 'Wipperfürth',
+    "Bremen", "Dresden", "Hannover", "Nürnberg", "Bonn", 'Altschauerberg'
 ];
 
 const postalCodes = [
     "10115", "80331", "20095", "50667", "60311",
-    "70173", "40213", "44135", "45127", "04109",
-    "28195", "01067", "30159", "90402", "53111"
+    "70173", "40213", "44135", "45127", "04109", '51688',
+    "28195", "01067", "30159", "90402", "53111", '91448'
 ];
 
 const quotes = [
