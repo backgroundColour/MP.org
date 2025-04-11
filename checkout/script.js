@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
         total += item.finalPrice * item.quantity;
     });
     // Display the total
-    cartTotal.innerText = total;
+    cartTotal.innerText = total.toFixed(2);
 });
 
 
