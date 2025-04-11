@@ -12,8 +12,6 @@
     max-width: 25%;
     max-height: 25%;
     border:10px solid #0b3c89;
-    margin: 2rem auto;
-    padding: 0 1.5rem;
 }
 
 ::-webkit-scrollbar {
@@ -207,6 +205,11 @@ nav a:hover {
 /* Parteitreffen Stile */
 .party-meeting {
     text-align: center;
+}
+
+.member{
+    margin: 2rem auto;
+    padding: 0 1.5rem;
 }
 
 #map {
