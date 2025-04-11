@@ -13,9 +13,9 @@
 <body>
     <iframe src="/MP.org/assets/html/header.html" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
     
-    <main class="checkout-container container content">
+    <main class="checkout-container container">
         <h1>Checkout</h1>
-        <form class="checkout-form" action="/MP.org/checkout/submit" method="POST">
+        <form class="checkout-form card" action="/MP.org/checkout/submit" method="POST">
             <section class="billing-details">
                 <h2>Rechungsadresse</h2>
                 <label for="full-name">Name</label>
@@ -48,14 +48,14 @@
             
             <button type="submit" class="checkout-button">Complete Purchase</button>
         </form>
-        <section>
+        <section class="card">
             <h2>Warenkorb</h2>
-            <ul id="cart-items">
-                <!-- Cart items will be dynamically inserted here -->
-            </ul>
-            <p id="cart-total">Gesamt: €<span id="total"></span></p>
-        </section>
-    </main>
+                <ul id="cart-items">
+                    <!-- Cart items will be dynamically inserted here -->
+                </ul>
+                <p id="cart-total">Gesamt: €<span id="total"></span></p>
+            </section>
+        </main>
     
     <iframe src="/MP.org/assets/html/footer.html" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
     <script src="/MP.org/script.js"></script>
