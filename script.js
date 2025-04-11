@@ -505,7 +505,11 @@ function getRandomHour() {
   function updateTimeAgo() {
     const timeAgoElement = document.getElementById('time-ago');
     const randomHour = getRandomHour();
+    try{
     timeAgoElement.textContent = `Vor ${randomHour} Stunde${randomHour === 1 ? '' : 'n'}`;
+    }catch(error) {
+        console.log("Element nicht gefunden");
+    }
   }
   
   // Beim Laden der Seite die Zeitangabe setzen
@@ -601,8 +605,12 @@ function getRandomHour() {
   }
 
   // Starten der zufälligen Aktualisierung
-  updateBewertung();
+  try{updateBewertung();
   setInterval(updateBewertung, 10000); // Alle 5 Sekunden wird eine neue Bewertung angezeigt
+  }catch (error) { 
+    
+  }
+  
   
   const stories = [
     'assets/img/DaIsserWieder.png',
