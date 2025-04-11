@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
         li.innerText = `${item.name} (x${item.quantity}) - €${(item.finalPrice * item.quantity).toFixed(2)}`;
         cartItems.appendChild(li);
         // Calculate the total
-        print(item);
+        console.log(item);
         total += item.finalPrice * item.quantity;
     });
     // Display the total
