@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const cartString = JSON.stringify(cart);
             const encodedCart = encodeURIComponent(cartString);
             const encodedTotal = encodeURIComponent(total.toFixed(2));
-            const checkoutUrl = `/MP.org/checkout.html?cart=${encodedCart}&total=${encodedTotal}`;
+            const checkoutUrl = `/MP.org/checkout.html?cart=${encodedCart}&checkouttotal=${encodedTotal}`;
 
             window.location.href = checkoutUrl;
             cart = [];
