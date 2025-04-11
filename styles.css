@@ -548,7 +548,7 @@ footer {
 .bewertung .beschreibung {
     font-style: italic;
 }
-.checkout-container{
+.checkout-form{
     display: grid;
     grid-template-columns: 1fr 4fr;
 }
