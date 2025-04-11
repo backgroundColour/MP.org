@@ -389,10 +389,12 @@ async function initMap() {
     //    document.querySelector('.nav').classList.toggle('active');
     //});
 
+
+try{
    const canvas = document.getElementById("chart");
-  const ctx = canvas.getContext("2d");
-  const priceLabel = document.getElementById("price");
-  const emoji = document.getElementById("emoji");
+   const ctx = canvas.getContext("2d");
+   const priceLabel = document.getElementById("price");
+   const emoji = document.getElementById("emoji");
 
   let data = [];
   const maxPoints = 50;
@@ -488,6 +490,11 @@ async function initMap() {
   }
 
   setInterval(updateData, 2000);
+
+}
+catch (error) {
+    console.log("Canvas nicht gefunden");
+}
 
 // Funktion, um eine zufällige Zahl zwischen 1 und 24 zu generieren
 function getRandomHour() {
