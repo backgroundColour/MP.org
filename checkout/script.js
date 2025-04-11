@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Display the cart items
     cart.forEach(item => {
         const li = document.createElement("li");
-        li.innerText = `${item.name} (x${item.quantity}) - €${(item.finalPrice * item.quantity).toFixed(2)}`;
+        li.innerText = `${item.name} (x${item.quantity}) [€${item.finalPrice}]- €${(item.finalPrice * item.quantity).toFixed(2)}`;
         cartItems.appendChild(li);
         // Calculate the total
         console.log(item);
