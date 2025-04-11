@@ -105,12 +105,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // Setup the checkout button functionality
     function setupCheckoutButton() {
         checkoutButton.addEventListener("click", () => {
-            alert("Zur Kasse gehen!" + "\n" + total.toFixed(2));
             // Redirect to the checkout page with the cart and total as URL parameters
             const cartString = JSON.stringify(cart);
             const encodedCart = encodeURIComponent(cartString);
-            const encodedTotal = encodeURIComponent(total.toFixed(2));
-            const checkoutUrl = `/MP.org/checkout.html?cart=${encodedCart}`;
+            const checkoutUrl = `/MP.org/checkout?cart=${encodedCart}`;
 
             window.location.href = checkoutUrl;
             cart = [];
