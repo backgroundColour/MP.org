@@ -677,3 +677,48 @@ footer {
     padding: 2rem 1rem;
     font-size: 0.9rem;
 }
+
+
+/* Kampagnenartikel Container */
+.article-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 2rem 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Einzelne Artikel */
+.campaign-article {
+    background-color: #f9f9f9;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.campaign-article:hover {
+    transform: scale(1.02);
+}
+
+/* Bild im Artikel */
+.campaign-article img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Text unter dem Bild */
+.campaign-article h3 {
+    font-size: 1.8rem;
+    margin: 1rem 0 0.5rem;
+    color: #333;
+}
+
+.campaign-article p {
+    font-size: 1.1rem;
+    color: #555;
+    margin: 0 1rem 1.5rem;
+}
