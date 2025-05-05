@@ -70,9 +70,9 @@ main {
 
 /* Bild */
 .KabinettBild {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
+    max-width: 10%;
+    max-height: 10%;
+    border-radius: 5%;
     object-fit: cover;
     border: 4px solid #2a2a72;
     box-shadow: 0 0 12px rgba(42, 42, 114, 0.25);
