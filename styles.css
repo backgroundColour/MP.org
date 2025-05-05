@@ -705,7 +705,7 @@ footer {
 
 /* Bild im Artikel */
 .campaign-article img {
-    width: 100%;
+    width: 80%;
     height: auto;
     display: block;
 }
