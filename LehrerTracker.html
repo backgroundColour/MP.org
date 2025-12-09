@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Lehrer-Tracking (Fake-Echtzeit)</title>
+  <link rel="stylesheet" href="style.css"> <!-- Deine CSS-Datei -->
+</head>
+<body>
+  <!-- Optional: vorhandenes Header-/Navbar-Layout weiterverwenden -->
+  <header class="header">
+    <div class="header-content">
+      <h1>Lehrer-Tracking</h1>
+      <p class="tagline">Pseudo-Echtzeit, komplett zufällig – nur zum Spaß</p>
+    </div>
+  </header>
+
+  <nav class="navbar">
+    <nav>
+      <ul>
+        <li><a href="#">Übersicht</a></li>
+        <li><a href="#">Lehrer</a></li>
+        <li><a href="#">Räume</a></li>
+      </ul>
+    </nav>
+  </nav>
+
+  <main>
+    <div class="container content">
+      <h2>Aktuelle Lehrerpositionen</h2>
+      <p>Alle Daten sind zufällig generiert und dienen nur zur Demonstration.</p>
+
+      <section class="card">
+        <div class="values-list" id="teacherGrid">
+          <!-- Karten werden per JS gefüllt -->
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <p>Fake-Tracking &copy; 2025</p>
+  </footer>
+
+  <script>
+    const teachers = [
+      "Kabisch",
+      "Fitzner",
+      "Hoffmann",
+      "Jabs",
+      "Linnenkugel",
+      "Blechmann",
+      "Stark Charles",
+      "Clever",
+      "Böhmer",
+      "Vermaeten"
+    ];
+
+    // Beispielräume – anpassen nach Bedarf
+    const rooms = [
+      "A101", "A102", "A201", "B001", "B102",
+      "Computerraum", "Werkraum", "Sporthalle", "Lehrerzimmer", "Sekretariat"
+    ];
+
+    // Für jeden Lehrer wird ein Eintrag mit Countdown gepflegt
+    const teacherState = {};
+
+    function randomRoom() {
+      return rooms[Math.floor(Math.random() * rooms.length)];
+    }
+
+    function randomDurationSeconds() {
+      // Zufällige Dauer zwischen 2 und 15 Minuten
+      const min = 2 * 60;
+      const max = 15 * 60;
+      return Math.floor(Math.random() * (max - min)) + min;
+    }
+
+    function initTeachers() {
+      teachers.forEach(name => {
+        teacherState[name] = {
+          room: randomRoom(),
+          remaining: randomDurationSeconds()
+        };
+      });
+    }
+
+    function formatTime(sec) {
+      const m = Math.floor(sec / 60);
+      const s = sec % 60;
+      return `${m.toString().padStart(2,"0")}:${s.toString().padStart(2,"0")} min`;
+    }
+
+    function updateAssignments() {
+      Object.keys(teacherState).forEach(name => {
+        const t = teacherState[name];
+        t.remaining -= 1;
+        if (t.remaining <= 0) {
+          // Neue zufällige Zuordnung, wenn Zeit abgelaufen ist
+          t.room = randomRoom();
+          t.remaining = randomDurationSeconds();
+        }
+      });
+      renderGrid();
+    }
+
+    function renderGrid() {
+      const grid = document.getElementById("teacherGrid");
+      grid.innerHTML = "";
+
+      Object.keys(teacherState).forEach(name => {
+        const { room, remaining } = teacherState[name];
+
+        const card = document.createElement("div");
+        card.className = "value-item";
+
+        const title = document.createElement("h3");
+        title.textContent = name;
+
+        const roomP = document.createElement("p");
+        roomP.innerHTML = `<strong>Raum:</strong> ${room}`;
+
+        const timeP = document.createElement("p");
+        timeP.innerHTML = `<strong>Noch dort für:</strong> <span class="time">${formatTime(remaining)}</span>`;
+
+        card.appendChild(title);
+        card.appendChild(roomP);
+        card.appendChild(timeP);
+        grid.appendChild(card);
+      });
+    }
+
+    // Initialisierung
+    initTeachers();
+    renderGrid();
+    // Jede Sekunde "Echtzeit"-Update
+    setInterval(updateAssignments, 1000);
+  </script>
+</body>
+</html>
