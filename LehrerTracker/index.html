@@ -5,7 +5,7 @@
   <title>Echtzeit Lehrer-Tracking</title>
   <link rel="stylesheet" href="/MP.org/styles.css">
   <style>
-    /* Zusätzliche Optik für Lehrer + Klasse + Emoji */
+    /* Zusätzliche Optik für Lehrer + Klasse + Fach + Emoji */
     .teacher-cell {
       background: linear-gradient(135deg, #fbcd37 0%, #ffe894 100%);
       font-weight: 700;
@@ -13,7 +13,7 @@
       box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);
       transform: scale(1.02);
       animation: teacherPop 0.4s ease-out;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
     }
 
     .teacher-line {
@@ -21,6 +21,7 @@
       flex-direction: column;
       gap: 2px;
       align-items: center;
+      text-align: center;
     }
 
     .teacher-name {
@@ -28,7 +29,11 @@
     }
 
     .teacher-class {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
+    }
+
+    .teacher-subject {
+      font-size: 0.75rem;
     }
 
     .teacher-emoji {
@@ -55,7 +60,7 @@
 
   <header class="header">
     <div class="header-content">
-      <h1>Lehrer-Tracking</h1>
+      <h1>MP Patentierter HR.284 Echtzeit Lehrer-Tracker</h1>
     </div>
   </header>
 
@@ -142,20 +147,26 @@
       "Mücher",
     ];
 
-    // alle möglichen Klassen-Kombinationen vorab erzeugen
+    // Klassen: BASIS-25 bis BASIS-23, keine Duplikate pro Refresh
     function buildClassList() {
       const result = [];
-      const bases = ["HBFI","HBFT","ITA","HZM","OBMA","Zähne Putzen"];
-      const years = [25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,"09","08","07","06","05","04","03","02","01",2000,1999];
+      const bases = ["HBFI","HBFT","ITA","HZM","OBMA"];
+      const years = [25, 24, 23];
       bases.forEach(base => {
         years.forEach(year => {
-          result.push(`${year}-${base}`);
+          result.push(`${base}-${year}`);
         });
       });
       return result;
     }
 
-    const allClasses = buildClassList(); // 5 * 3 = 15 mögliche eindeutige Klassen
+    const allClasses = buildClassList(); // 15 eindeutige Klassen
+
+    // Fächerliste
+    const subjects = [
+      "MC","DB","PO","ELT","M","SOW",
+      "BEN","SP","AM","E","DKM","RL"
+    ];
 
     // Emoji-Liste – absichtlich wild gemischt
     const emojis = [
@@ -186,6 +197,10 @@
       return emojis[randomInt(0, emojis.length - 1)];
     }
 
+    function pickRandomSubject() {
+      return subjects[randomInt(0, subjects.length - 1)];
+    }
+
     function pickRandomCells() {
       const tbody = document.querySelector("#timetable tbody");
       const rows = Array.from(tbody.querySelectorAll("tr"));
@@ -205,7 +220,7 @@
       });
 
       // zufällige Reihenfolge für Zellen, Lehrer, Klassen
-      const shuffledCells   = shuffle([...allCells]);
+      const shuffledCells    = shuffle([...allCells]);
       const shuffledTeachers = shuffle([...teachers]);
       const shuffledClasses  = shuffle([...allClasses]);
 
@@ -218,7 +233,8 @@
       for (let i = 0; i < maxEntries; i++) {
         const cell = shuffledCells[i].cell;
         const teacher = shuffledTeachers[i];
-        const studentClass = shuffledClasses[i];  // jede Klasse max. einmal
+        const studentClass = shuffledClasses[i]; // jede Klasse max. einmal
+        const subject = pickRandomSubject();
         const emoji = pickRandomEmoji();
 
         cell.classList.add("teacher-cell");
@@ -226,6 +242,7 @@
           <div class="teacher-line">
             <span class="teacher-name">${teacher}</span>
             <span class="teacher-class">${studentClass}</span>
+            <span class="teacher-subject">${subject}</span>
             <span class="teacher-emoji">${emoji}</span>
           </div>
         `;
