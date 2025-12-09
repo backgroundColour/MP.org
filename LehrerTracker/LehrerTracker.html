@@ -2,31 +2,21 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Lehrer-Tracking (Fake-Echtzeit)</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>Echtzeit Lehrer-Tracking</title>
+    <link rel="stylesheet" href="/MP.org/styles.css">
 </head>
 <body>
+  <iframe src="../assets/html/header.html" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
   <header class="header">
     <div class="header-content">
       <h1>Lehrer-Tracking</h1>
-      <p class="tagline">Pseudo-Echtzeit, komplett zufällig – nur zum Spaß</p>
     </div>
   </header>
-
-  <nav class="navbar">
-    <nav>
-      <ul>
-        <li><a href="#">Übersicht</a></li>
-        <li><a href="#">Lehrer</a></li>
-        <li><a href="#">Räume</a></li>
-      </ul>
-    </nav>
-  </nav>
 
   <main>
     <div class="container content">
       <h2>Stundenplan / Raumplan</h2>
-      <p>Die Räume und Zeiten sind fest, nur die Lehrernamen bewegen sich zufällig über den Plan.</p>
+      <p>Das ist echt!</p>
 
       <section class="card">
         <div class="timetable-wrapper">
@@ -34,13 +24,13 @@
             <thead>
               <tr>
                 <th>Zeit / Raum</th>
-                <th>A101</th>
-                <th>A102</th>
-                <th>A201</th>
-                <th>B001</th>
-                <th>B102</th>
-                <th>Computerraum</th>
-                <th>Werkraum</th>
+                <th>501</th>
+                <th>008</th>
+                <th>007</th>
+                <th>401</th>
+                <th>408</th>
+                <th>250</th>
+                <th>Disco</th>
                 <th>Sporthalle</th>
                 <th>Lehrerzimmer</th>
                 <th>Sekretariat</th>
@@ -81,7 +71,7 @@
             </tbody>
           </table>
           <div class="legend">
-            Aktualisierung in: <span id="countdown">--</span> s (dann werden alle Lehrernamen neu verteilt)
+            Aktualisierung in: <span id="countdown">--</span>
           </div>
         </div>
       </section>
@@ -89,7 +79,7 @@
   </main>
 
   <footer>
-    <p>Fake-Tracking &copy; 2025</p>
+    <p>MUC-Tracker &copy; 2025</p>
   </footer>
 
   <script>
@@ -103,7 +93,8 @@
       "Stark Charles",
       "Clever",
       "Böhmer",
-      "Vermaeten"
+      "Vermaeten",
+      "Mücher",
     ];
 
     const REFRESH_MIN = 20;  // Sekunden
