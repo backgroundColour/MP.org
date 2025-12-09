@@ -3,10 +3,56 @@
 <head>
   <meta charset="UTF-8">
   <title>Echtzeit Lehrer-Tracking</title>
-    <link rel="stylesheet" href="/MP.org/styles.css">
+  <link rel="stylesheet" href="/MP.org/styles.css">
+  <style>
+    /* Zusätzliche Optik für Lehrer + Klasse + Emoji */
+    .teacher-cell {
+      background: linear-gradient(135deg, #fbcd37 0%, #ffe894 100%);
+      font-weight: 700;
+      color: #2c3e50;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);
+      transform: scale(1.02);
+      animation: teacherPop 0.4s ease-out;
+      font-size: 0.85rem;
+    }
+
+    .teacher-line {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      align-items: center;
+    }
+
+    .teacher-name {
+      font-weight: 700;
+    }
+
+    .teacher-class {
+      font-size: 0.8rem;
+    }
+
+    .teacher-emoji {
+      font-size: 1.1rem;
+      margin-top: 2px;
+    }
+
+    @keyframes teacherPop {
+      0% { opacity: 0; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1.02); }
+    }
+
+    .legend {
+      margin-top: 0.8rem;
+      font-size: 0.9rem;
+      color: #555;
+    }
+  </style>
 </head>
 <body>
-  <iframe src="../assets/html/header.html" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
+  <iframe src="../assets/html/header.html"
+    onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()">
+  </iframe>
+
   <header class="header">
     <div class="header-content">
       <h1>Lehrer-Tracking</h1>
@@ -37,7 +83,6 @@
               </tr>
             </thead>
             <tbody>
-              <!-- feste Zeiten; Räume bleiben, Lehrer werden per JS eingetragen -->
               <tr data-slot="0">
                 <th>08:00–08:45</th>
                 <td></td><td></td><td></td><td></td><td></td>
@@ -97,12 +142,49 @@
       "Mücher",
     ];
 
+    // alle möglichen Klassen-Kombinationen vorab erzeugen
+    function buildClassList() {
+      const result = [];
+      const bases = ["HBFI","HBFT","ITA","HZM","OBMA"];
+      const years = [25,24,23];
+      bases.forEach(base => {
+        years.forEach(year => {
+          result.push(`${base}-${year}`);
+        });
+      });
+      return result;
+    }
+
+    const allClasses = buildClassList(); // 5 * 3 = 15 mögliche eindeutige Klassen
+
+    // Emoji-Liste – absichtlich wild gemischt
+    const emojis = [
+      "😀","😂","🤣","😊","😇","🙂","🙃","😉","😍","😘","😜","🤪","🤨","🧐","😎","🥸",
+      "🤩","🥳","😡","🤬","😱","😴","🤤","🤢","🤮","🤧","🥶","🥵","😈","👿","👻","💀",
+      "🤖","🎃","👽","👾","🤡","💩","👋","🤚","🖐️","✋","🖖","👌","🤌","🤏","✌️","🤞",
+      "🤟","🤘","🤙","👈","👉","👆","👇","☝️","👍","👎","✊","👊","👏","🙌","👐","🤲",
+      "🙏","💪","🦵","🦶","👂","🦻","👃","🧠","🫀","🫁","🦷","👀","👁️","👅","👄","🦴",
+      "🌚","🌝","🌞","⭐","⚡","🔥","💧","🍕","🍺","🧨","🎈","🎉","🚀","🛸","💣","🧬"
+    ];
+
     const REFRESH_MIN = 20;  // Sekunden
     const REFRESH_MAX = 60;  // Sekunden
     let refreshRemaining = 0;
 
     function randomInt(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function pickRandomEmoji() {
+      return emojis[randomInt(0, emojis.length - 1)];
     }
 
     function pickRandomCells() {
@@ -123,20 +205,32 @@
         cell.classList.remove("teacher-cell");
       });
 
-      // Lehrer auf zufällige, eindeutige Zellen verteilen
-      const usedIndices = new Set();
-      teachers.forEach(teacher => {
-        if (usedIndices.size >= allCells.length) return;
-        let idx;
-        do {
-          idx = randomInt(0, allCells.length - 1);
-        } while (usedIndices.has(idx));
-        usedIndices.add(idx);
+      // zufällige Reihenfolge für Zellen, Lehrer, Klassen
+      const shuffledCells   = shuffle([...allCells]);
+      const shuffledTeachers = shuffle([...teachers]);
+      const shuffledClasses  = shuffle([...allClasses]);
 
-        const target = allCells[idx].cell;
-        target.textContent = teacher;
-        target.classList.add("teacher-cell");
-      });
+      const maxEntries = Math.min(
+        shuffledCells.length,
+        shuffledTeachers.length,
+        shuffledClasses.length
+      );
+
+      for (let i = 0; i < maxEntries; i++) {
+        const cell = shuffledCells[i].cell;
+        const teacher = shuffledTeachers[i];
+        const studentClass = shuffledClasses[i];  // jede Klasse max. einmal
+        const emoji = pickRandomEmoji();
+
+        cell.classList.add("teacher-cell");
+        cell.innerHTML = `
+          <div class="teacher-line">
+            <span class="teacher-name">${teacher}</span>
+            <span class="teacher-class">${studentClass}</span>
+            <span class="teacher-emoji">${emoji}</span>
+          </div>
+        `;
+      }
     }
 
     function resetRefreshTimer() {
