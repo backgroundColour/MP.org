@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <title>Lehrer-Tracking (Fake-Echtzeit)</title>
-  <link rel="stylesheet" href="styles.css"> <!-- Deine CSS-Datei -->
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- Optional: vorhandenes Header-/Navbar-Layout weiterverwenden -->
   <header class="header">
     <div class="header-content">
       <h1>Lehrer-Tracking</h1>
@@ -26,12 +25,64 @@
 
   <main>
     <div class="container content">
-      <h2>Aktuelle Lehrerpositionen</h2>
-      <p>Alle Daten sind zufällig generiert und dienen nur zur Demonstration.</p>
+      <h2>Stundenplan / Raumplan</h2>
+      <p>Die Räume und Zeiten sind fest, nur die Lehrernamen bewegen sich zufällig über den Plan.</p>
 
       <section class="card">
-        <div class="values-list" id="teacherGrid">
-          <!-- Karten werden per JS gefüllt -->
+        <div class="timetable-wrapper">
+          <table class="timetable" id="timetable">
+            <thead>
+              <tr>
+                <th>Zeit / Raum</th>
+                <th>A101</th>
+                <th>A102</th>
+                <th>A201</th>
+                <th>B001</th>
+                <th>B102</th>
+                <th>Computerraum</th>
+                <th>Werkraum</th>
+                <th>Sporthalle</th>
+                <th>Lehrerzimmer</th>
+                <th>Sekretariat</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- feste Zeiten; Räume bleiben, Lehrer werden per JS eingetragen -->
+              <tr data-slot="0">
+                <th>08:00–08:45</th>
+                <td></td><td></td><td></td><td></td><td></td>
+                <td></td><td></td><td></td><td></td><td></td>
+              </tr>
+              <tr data-slot="1">
+                <th>08:50–09:35</th>
+                <td></td><td></td><td></td><td></td><td></td>
+                <td></td><td></td><td></td><td></td><td></td>
+              </tr>
+              <tr data-slot="2">
+                <th>09:40–10:25</th>
+                <td></td><td></td><td></td><td></td><td></td>
+                <td></td><td></td><td></td><td></td><td></td>
+              </tr>
+              <tr data-slot="3">
+                <th>10:40–11:25</th>
+                <td></td><td></td><td></td><td></td><td></td>
+                <td></td><td></td><td></td><td></td><td></td>
+              </tr>
+              <tr data-slot="4">
+                <th>11:30–12:15</th>
+                <td></td><td></td><td></td><td></td><td></td>
+                <td></td><td></td><td></td><td></td><td></td>
+              </tr>
+              <tr data-slot="5">
+                <th>12:20–13:05</th>
+                <td></td><td></td><td></td><td></td><td></td>
+                <td></td><td></td><td></td><td></td><td></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="legend">
+            Aktualisierung in: <span id="countdown">--</span> s (dann werden alle Lehrernamen neu verteilt)
+          </div>
         </div>
       </section>
     </div>
@@ -55,85 +106,67 @@
       "Vermaeten"
     ];
 
-    // Beispielräume – anpassen nach Bedarf
-    const rooms = [
-      "A101", "A102", "A201", "B001", "B102",
-      "Computerraum", "Werkraum", "Sporthalle", "Lehrerzimmer", "Sekretariat"
-    ];
+    const REFRESH_MIN = 20;  // Sekunden
+    const REFRESH_MAX = 60;  // Sekunden
+    let refreshRemaining = 0;
 
-    // Für jeden Lehrer wird ein Eintrag mit Countdown gepflegt
-    const teacherState = {};
-
-    function randomRoom() {
-      return rooms[Math.floor(Math.random() * rooms.length)];
+    function randomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    function randomDurationSeconds() {
-      // Zufällige Dauer zwischen 2 und 15 Minuten
-      const min = 2 * 60;
-      const max = 15 * 60;
-      return Math.floor(Math.random() * (max - min)) + min;
-    }
+    function pickRandomCells() {
+      const tbody = document.querySelector("#timetable tbody");
+      const rows = Array.from(tbody.querySelectorAll("tr"));
+      const allCells = [];
 
-    function initTeachers() {
-      teachers.forEach(name => {
-        teacherState[name] = {
-          room: randomRoom(),
-          remaining: randomDurationSeconds()
-        };
+      rows.forEach((row, rowIndex) => {
+        const tds = Array.from(row.querySelectorAll("td"));
+        tds.forEach((cell, colIndex) => {
+          allCells.push({ cell, rowIndex, colIndex });
+        });
+      });
+
+      // zuerst alles leeren
+      allCells.forEach(({ cell }) => {
+        cell.textContent = "";
+        cell.classList.remove("teacher-cell");
+      });
+
+      // Lehrer auf zufällige, eindeutige Zellen verteilen
+      const usedIndices = new Set();
+      teachers.forEach(teacher => {
+        if (usedIndices.size >= allCells.length) return;
+        let idx;
+        do {
+          idx = randomInt(0, allCells.length - 1);
+        } while (usedIndices.has(idx));
+        usedIndices.add(idx);
+
+        const target = allCells[idx].cell;
+        target.textContent = teacher;
+        target.classList.add("teacher-cell");
       });
     }
 
-    function formatTime(sec) {
-      const m = Math.floor(sec / 60);
-      const s = sec % 60;
-      return `${m.toString().padStart(2,"0")}:${s.toString().padStart(2,"0")} min`;
+    function resetRefreshTimer() {
+      refreshRemaining = randomInt(REFRESH_MIN, REFRESH_MAX);
+      document.getElementById("countdown").textContent = refreshRemaining;
     }
 
-    function updateAssignments() {
-      Object.keys(teacherState).forEach(name => {
-        const t = teacherState[name];
-        t.remaining -= 1;
-        if (t.remaining <= 0) {
-          // Neue zufällige Zuordnung, wenn Zeit abgelaufen ist
-          t.room = randomRoom();
-          t.remaining = randomDurationSeconds();
-        }
-      });
-      renderGrid();
+    function tick() {
+      refreshRemaining--;
+      if (refreshRemaining <= 0) {
+        pickRandomCells();
+        resetRefreshTimer();
+      } else {
+        document.getElementById("countdown").textContent = refreshRemaining;
+      }
     }
 
-    function renderGrid() {
-      const grid = document.getElementById("teacherGrid");
-      grid.innerHTML = "";
-
-      Object.keys(teacherState).forEach(name => {
-        const { room, remaining } = teacherState[name];
-
-        const card = document.createElement("div");
-        card.className = "value-item";
-
-        const title = document.createElement("h3");
-        title.textContent = name;
-
-        const roomP = document.createElement("p");
-        roomP.innerHTML = `<strong>Raum:</strong> ${room}`;
-
-        const timeP = document.createElement("p");
-        timeP.innerHTML = `<strong>Noch dort für:</strong> <span class="time">${formatTime(remaining)}</span>`;
-
-        card.appendChild(title);
-        card.appendChild(roomP);
-        card.appendChild(timeP);
-        grid.appendChild(card);
-      });
-    }
-
-    // Initialisierung
-    initTeachers();
-    renderGrid();
-    // Jede Sekunde "Echtzeit"-Update
-    setInterval(updateAssignments, 1000);
+    // Initial
+    pickRandomCells();
+    resetRefreshTimer();
+    setInterval(tick, 1000);
   </script>
 </body>
 </html>

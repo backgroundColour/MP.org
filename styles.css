@@ -8,6 +8,83 @@
     --warning: #f39c12;
 }
 
+/* Raumplan-Optik */
+.timetable-wrapper {
+  overflow-x: auto;
+}
+
+.timetable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  background-color: #fff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.timetable thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background-color: var(--dark);
+  color: #fff;
+  padding: 0.6rem 0.4rem;
+  text-align: center;
+  border-right: 1px solid rgba(255,255,255,0.1);
+  white-space: nowrap;
+}
+
+.timetable tbody th {
+  background-color: #f3f5ff;
+  color: #2a2a72;
+  font-weight: 600;
+  padding: 0.5rem;
+  text-align: right;
+  border-right: 1px solid #ddd;
+  white-space: nowrap;
+}
+
+.timetable td {
+  min-width: 80px;
+  height: 3rem;
+  text-align: center;
+  border: 1px solid #e0e0e0;
+  padding: 0.2rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Zebra-Linien für bessere Lesbarkeit */
+.timetable tbody tr:nth-child(odd) td {
+  background-color: #fafbff;
+}
+
+/* Hervorhebung der Zelle mit Lehrer */
+.teacher-cell {
+  background: linear-gradient(135deg, #fbcd37 0%, #ffe894 100%);
+  font-weight: 700;
+  color: #2c3e50;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);
+  transform: scale(1.02);
+}
+
+/* Kleine Fade-Animation beim Neusetzen (optional) */
+.teacher-cell {
+  animation: teacherPop 0.4s ease-out;
+}
+
+@keyframes teacherPop {
+  0% { opacity: 0; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1.02); }
+}
+
+.legend {
+  margin-top: 0.8rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+
 .KabinettBild{
     max-width: 25%;
     max-height: 25%;
