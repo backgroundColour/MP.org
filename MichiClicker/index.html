@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Michi Clicker</title>
+    
+    <style>
+        /* Spezifisches CSS für die Spiel-Logik und Animationen */
+        :root {
+            --primary-bg: #1e1e1e;
+            --secondary-bg: #2d2d2d;
+            --text-color: #ffffff;
+            --accent-color: #00bceb; /* Cisco Blau */
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Layout: Links Klicker, Rechts Upgrades */
+        .game-container {
+            display: flex;
+            width: 100%;
+        }
+
+        .click-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-right: 2px solid var(--secondary-bg);
+            position: relative;
+        }
+
+        .upgrade-area {
+            width: 350px;
+            background-color: var(--secondary-bg);
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        /* Score Board */
+        .score-board {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .score-board h1 {
+            font-size: 3rem;
+            margin: 0;
+        }
+
+        .score-board p {
+            font-size: 1.2rem;
+            color: #aaa;
+        }
+
+        /* Der klickbare "Michi" */
+        .michi-button {
+            width: 250px;
+            height: 250px;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+            user-select: none;
+            /* Falls das Bild noch fehlt, ein Platzhalter-Design: */
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            box-shadow: 0 0 20px rgba(0, 188, 235, 0.5);
+        }
+
+        /* Klick-Animation */
+        .michi-button:active {
+            transform: scale(0.95);
+            box-shadow: 0 0 10px rgba(0, 188, 235, 0.8);
+        }
+
+        /* Fliegende Nummern (+1) Animation */
+        .floating-number {
+            position: absolute;
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: bold;
+            pointer-events: none;
+            animation: floatUp 1s ease-out forwards;
+            z-index: 100;
+        }
+
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-100px) scale(1.5); }
+        }
+
+        /* Upgrade Liste */
+        .upgrade-item {
+            display: flex;
+            align-items: center;
+            background-color: var(--primary-bg);
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            user-select: none;
+        }
+
+        .upgrade-item:hover {
+            background-color: #3d3d3d;
+        }
+
+        .upgrade-item.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .upgrade-icon {
+            width: 50px;
+            height: 50px;
+            margin-right: 15px;
+            background-color: #444; /* Platzhalter für Cisco Bilder */
+            border-radius: 5px;
+            object-fit: cover;
+        }
+
+        .upgrade-info {
+            flex: 1;
+        }
+
+        .upgrade-name {
+            font-weight: bold;
+            margin: 0 0 5px 0;
+        }
+
+        .upgrade-cost {
+            color: #ffaa00;
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        .upgrade-count {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+
+    <main class="game-container">
+        <section class="click-area">
+            <div class="score-board">
+                <h1 id="score-display">0</h1>
+                <p>Pakete pro Sekunde: <span id="pps-display">0</span></p>
+            </div>
+            
+            <div class="michi-button" id="michi">
+                Michi Bild
+            </div>
+        </section>
+
+        <section class="upgrade-area">
+            <h2>Netzwerk Upgrades</h2>
+            <div id="upgrades-list">
+                </div>
+        </section>
+    </main>
+
+    <script>
+        // --- SPIEL LOGIK ---
+
+        let score = 0;
+        let packetsPerSecond = 0;
+
+        // Definition der Upgrades (Cisco Geräte)
+        // Ersetze die 'image' Pfade durch deine eigenen Bilder
+        const upgrades = [
+            { id: 'switch', name: 'Cisco Switch (2960)', baseCost: 15, pps: 1, count: 0, image: 'switch.png' },
+            { id: 'router', name: 'Cisco Router (ISR 4000)', baseCost: 100, pps: 5, count: 0, image: 'router.png' },
+            { id: 'firewall', name: 'Cisco Firewall (ASA)', baseCost: 1100, pps: 20, count: 0, image: 'firewall.png' },
+            { id: 'core', name: 'Cisco Core Switch (Nexus)', baseCost: 12000, pps: 100, count: 0, image: 'nexus.png' }
+        ];
+
+        // DOM Elemente
+        const scoreDisplay = document.getElementById('score-display');
+        const ppsDisplay = document.getElementById('pps-display');
+        const michiButton = document.getElementById('michi');
+        const upgradesList = document.getElementById('upgrades-list');
+
+        // Funktion: Michi klicken
+        michiButton.addEventListener('click', (e) => {
+            score++;
+            updateDisplay();
+            createFloatingText(e);
+        });
+
+        // Funktion: Fliegende Zahlen Animation
+        function createFloatingText(e) {
+            const floater = document.createElement('div');
+            floater.classList.add('floating-number');
+            floater.innerText = '+1';
+            
+            // Setze die Position auf die Mauskoordinaten
+            floater.style.left = `${e.clientX}px`;
+            floater.style.top = `${e.clientY}px`;
+            
+            document.body.appendChild(floater);
+
+            // Entferne das Element nach der Animation (1 Sekunde)
+            setTimeout(() => {
+                floater.remove();
+            }, 1000);
+        }
+
+        // Berechnet die aktuellen Kosten eines Upgrades (Cookie Clicker Formel: BaseCost * 1.15^Count)
+        function getCost(upgrade) {
+            return Math.floor(upgrade.baseCost * Math.pow(1.15, upgrade.count));
+        }
+
+        // Funktion: Upgrades kaufen
+        function buyUpgrade(index) {
+            const upgrade = upgrades[index];
+            const cost = getCost(upgrade);
+
+            if (score >= cost) {
+                score -= cost;
+                upgrade.count++;
+                
+                // Packets Per Second neu berechnen
+                recalculatePPS();
+                updateDisplay();
+                renderUpgrades();
+            }
+        }
+
+        // Funktion: PPS (Pakete pro Sekunde) berechnen
+        function recalculatePPS() {
+            packetsPerSecond = 0;
+            upgrades.forEach(upgrade => {
+                packetsPerSecond += upgrade.count * upgrade.pps;
+            });
+            ppsDisplay.innerText = packetsPerSecond;
+        }
+
+        // Funktion: Upgrades im HTML rendern
+        function renderUpgrades() {
+            upgradesList.innerHTML = ''; // Liste leeren
+
+            upgrades.forEach((upgrade, index) => {
+                const cost = getCost(upgrade);
+                const canAfford = score >= cost;
+
+                const upgradeElement = document.createElement('div');
+                upgradeElement.className = `upgrade-item ${canAfford ? '' : 'disabled'}`;
+                upgradeElement.onclick = () => buyUpgrade(index);
+
+                upgradeElement.innerHTML = `
+                    <div class="upgrade-icon"></div> 
+                    <div class="upgrade-info">
+                        <p class="upgrade-name">${upgrade.name}</p>
+                        <p class="upgrade-cost">${cost} Pakete</p>
+                    </div>
+                    <div class="upgrade-count">${upgrade.count}</div>
+                `;
+                
+                upgradesList.appendChild(upgradeElement);
+            });
+        }
+
+        // Funktion: Anzeigen aktualisieren
+        function updateDisplay() {
+            scoreDisplay.innerText = Math.floor(score);
+            
+            // UI für Upgrades aktualisieren (grau machen, wenn man sie sich nicht leisten kann)
+            const upgradeItems = document.querySelectorAll('.upgrade-item');
+            upgrades.forEach((upgrade, index) => {
+                if (upgradeItems[index]) {
+                    const cost = getCost(upgrade);
+                    if (score >= cost) {
+                        upgradeItems[index].classList.remove('disabled');
+                    } else {
+                        upgradeItems[index].classList.add('disabled');
+                    }
+                }
+            });
+        }
+
+        // Game Loop (Fügt die PPS jeden Tick zum Score hinzu)
+        // Läuft 10 Mal pro Sekunde für flüssigere Updates
+        setInterval(() => {
+            if (packetsPerSecond > 0) {
+                score += packetsPerSecond / 10;
+                updateDisplay();
+            }
+        }, 100);
+
+        // Initiales Rendern
+        renderUpgrades();
+        updateDisplay();
+
+    </script>
+</body>
+</html>
