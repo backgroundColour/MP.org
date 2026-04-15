@@ -220,6 +220,7 @@
 
     <script>
         // --- SERVER KOMMUNIKATION (Dreamlo) ---
+        // Hier sind deine exakten Keys eingefügt
         const DREAMLO_PUBLIC_KEY = '69df899e8f40bc2f606c2109';
         const DREAMLO_PRIVATE_KEY = 'gx0LmtikcUiceklh41xVyAQEPyt0hxK024rxVHnezX-A';
 
@@ -268,15 +269,18 @@
         // --- API CALLS (DREAMLO) ---
         async function fetchLeaderboard() {
             try {
-                // Ein zufälliger Parameter am Ende verhindert, dass der Browser die alte Liste aus dem Cache lädt
-                const response = await fetch(`https://www.dreamlo.com/lb/${DREAMLO_PUBLIC_KEY}/json?cb=${new Date().getTime()}`);
+                // Verhindert das cachen der alten Datei im Browser
+                const response = await fetch(`https://dreamlo.com/lb/${DREAMLO_PUBLIC_KEY}/json`, {
+                    cache: 'no-store'
+                });
+                
                 if (response.ok) {
                     const data = await response.json();
                     
                     if (data.dreamlo && data.dreamlo.leaderboard && data.dreamlo.leaderboard.entry) {
                         let entries = data.dreamlo.leaderboard.entry;
                         
-                        // Wenn es nur 1 Eintrag gibt, ist es ein Objekt, sonst ein Array. Wir wandeln es immer in ein Array um.
+                        // Bei nur 1 Eintrag gibt es kein Array, wir erzwingen eines
                         if (!Array.isArray(entries)) {
                             entries = [entries];
                         }
@@ -296,20 +300,26 @@
         }
 
         async function submitScoreToServer() {
-            if (score <= 0) return; // Nichts abspeichern wenn noch bei 0
-            
             try {
-                // Name sicher für die URL machen
-                const safeName = encodeURIComponent(playerName);
-                // Kommazahlen abschneiden
+                // Sehr wichtig: Unerlaubte Zeichen durch Unterstrich ersetzen, da Dreamlo sonst den URL-Request ignoriert
+                let safeName = playerName.replace(/[^a-zA-Z0-9_-]/g, '_');
+                if (!safeName) safeName = "Spieler";
+                
                 const safeScore = Math.floor(score);
                 
-                await fetch(`https://www.dreamlo.com/lb/${DREAMLO_PRIVATE_KEY}/add/${safeName}/${safeScore}`);
+                // Wir senden per GET mit mode: 'no-cors' - das verhindert Browser-Blockaden
+                await fetch(`https://dreamlo.com/lb/${DREAMLO_PRIVATE_KEY}/add/${safeName}/${safeScore}`, {
+                    method: 'GET',
+                    mode: 'no-cors',
+                    cache: 'no-store'
+                });
                 
-                // Danach die Liste direkt nochmal frisch ziehen
-                fetchLeaderboard();
+                // Leicht verzögert die neue Liste ziehen, damit der Server Zeit hatte
+                setTimeout(() => {
+                    fetchLeaderboard();
+                }, 500);
             } catch (error) {
-                console.error("Fehler beim Speichern des Scores auf Dreamlo:", error);
+                console.error("Fehler beim Speichern auf Dreamlo:", error);
             }
         }
 
@@ -324,12 +334,14 @@
                 let inputName = "";
                 
                 while (!validName) {
-                    inputName = prompt("Willkommen beim Michi Clicker!\nBitte gib deinen Namen für die weltweite Rangliste ein:", "Spieler");
+                    inputName = prompt("Willkommen beim Michi Clicker!\nBitte gib deinen Namen für die weltweite Rangliste ein (Keine Leerzeichen!):", "Spieler");
                     
                     if (!inputName || inputName.trim() === "") {
                         inputName = "Gast_" + Math.floor(Math.random() * 10000);
                     }
-                    inputName = inputName.trim().substring(0, 15);
+                    
+                    // Sofort bereinigen, damit der User den echten Namen auf dem Schirm hat
+                    inputName = inputName.replace(/[^a-zA-Z0-9_-]/g, '_').substring(0, 15);
                     
                     const nameTaken = globalLeaderboard.some(p => p.name.toLowerCase() === inputName.toLowerCase());
                     
@@ -347,14 +359,14 @@
             
             displayPlayerName.innerText = playerName;
             loadGame();
-            submitScoreToServer();
+            submitScoreToServer(); // Direkt einen Eintrag auf Dreamlo erstellen!
         }
 
         function changeName() {
-            let newName = prompt("Wie möchtest du stattdessen heißen?", playerName);
+            let newName = prompt("Wie möchtest du stattdessen heißen? (Keine Leerzeichen)", playerName);
             
             if (newName && newName.trim() !== "") {
-                newName = newName.trim().substring(0, 15);
+                newName = newName.replace(/[^a-zA-Z0-9_-]/g, '_').substring(0, 15);
                 
                 if (newName.toLowerCase() === playerName.toLowerCase()) return; 
                 
@@ -364,15 +376,14 @@
                     return;
                 }
 
-                // Lösche den alten Namen aus Dreamlo (indem man ihm Score -1 oder 0 gibt, bei Dreamlo löschen wir ihn via 'delete')
-                const safeOldName = encodeURIComponent(playerName);
-                fetch(`https://www.dreamlo.com/lb/${DREAMLO_PRIVATE_KEY}/delete/${safeOldName}`);
+                // Den alten Namen auf Dreamlo löschen
+                const safeOldName = playerName.replace(/[^a-zA-Z0-9_-]/g, '_');
+                fetch(`https://dreamlo.com/lb/${DREAMLO_PRIVATE_KEY}/delete/${safeOldName}`, { mode: 'no-cors' });
 
                 playerName = newName;
                 localStorage.setItem('michiPlayerName', playerName);
                 displayPlayerName.innerText = playerName;
                 
-                // Und speichere den neuen
                 submitScoreToServer(); 
             }
         }
@@ -641,7 +652,7 @@
             }
         }, 100);
 
-        // Leaderboard alle 10 Sekunden frisch abfragen (schont die Verbindung)
+        // Leaderboard alle 10 Sekunden abfragen
         setInterval(() => {
             fetchLeaderboard();
         }, 10000);
