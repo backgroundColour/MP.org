@@ -11,7 +11,6 @@
         /* --- SPIEL LAYOUT --- */
         .game-layout {
             display: grid;
-            /* Jetzt 3 Spalten: Leaderboard | Clicker | Upgrades */
             grid-template-columns: 300px 1.2fr 1fr; 
             gap: 2rem;
             margin-top: 2rem;
@@ -19,19 +18,12 @@
         }
 
         @media (max-width: 1100px) {
-            .game-layout {
-                grid-template-columns: 1fr 1fr;
-            }
-            .leaderboard-panel {
-                grid-column: span 2;
-                order: 3; /* Leaderboard wandert auf kleinen Screens nach unten */
-            }
+            .game-layout { grid-template-columns: 1fr 1fr; }
+            .leaderboard-panel { grid-column: span 2; order: 3; }
         }
 
         @media (max-width: 800px) {
-            .game-layout {
-                grid-template-columns: 1fr;
-            }
+            .game-layout { grid-template-columns: 1fr; }
             .leaderboard-panel { grid-column: span 1; }
         }
 
@@ -97,9 +89,25 @@
             border-radius: 12px;
             padding: 2rem;
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            position: relative;
         }
 
-        .score-display-container { margin-bottom: 1.5rem; }
+        /* Spieler Info */
+        .player-info {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 0.9rem;
+            color: var(--dark);
+            background: var(--light);
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+        }
+        .player-info:hover { background: #e0e0e0; }
+
+        .score-display-container { margin-bottom: 1.5rem; margin-top: 1rem; }
         
         .score-display {
             font-size: 3.5rem;
@@ -118,7 +126,6 @@
             margin: 0;
         }
 
-        /* Save & Reset Buttons */
         .save-controls {
             display: flex;
             gap: 10px;
@@ -148,7 +155,6 @@
             text-align: left;
         }
 
-        /* Der Cookie */
         .michi-target-container {
             position: relative;
             margin-bottom: 2rem;
@@ -175,7 +181,6 @@
             filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.5));
         }
 
-        /* Level & XP System */
         .level-card {
             width: 100%;
             padding: 1.2rem;
@@ -206,7 +211,6 @@
             transition: width 0.3s ease, background 0.3s ease;
         }
 
-        /* --- ANIMATIONEN --- */
         .floating-text {
             position: absolute;
             color: var(--accent, #e74c3c);
@@ -374,12 +378,16 @@
         <div class="game-layout">
             
             <div class="leaderboard-panel">
-                <h3 style="margin-top: 0; color: var(--primary); border-bottom: 2px solid #eee; padding-bottom: 10px;">Top 15 Ranking</h3>
+                <h3 style="margin-top: 0; color: var(--primary); border-bottom: 2px solid #eee; padding-bottom: 10px;">Rangliste</h3>
                 <ul class="leaderboard-list" id="leaderboard-list">
                     </ul>
             </div>
 
             <div class="clicker-panel">
+                <div class="player-info" onclick="changeName()" title="Namen ändern">
+                    👤 <span id="display-player-name">Spieler</span>
+                </div>
+
                 <div class="score-display-container">
                     <p class="score-display" id="score-text"><span id="score">0</span></p>
                     <p class="pps-display">Pakete pro Sekunde: <span id="pps">0</span></p>
@@ -401,7 +409,7 @@
 
                 <div class="save-controls">
                     <button class="btn-action btn-save" onclick="saveGame(true)">Speichern</button>
-                    <button class="btn-action btn-reset" onclick="resetGame()">Neustart</button>
+                    <button class="btn-action btn-reset" onclick="resetGame()">Neues Spiel</button>
                     <span id="save-indicator"></span>
                 </div>
             </div>
@@ -448,24 +456,9 @@
         let level = 1;
         let currentXP = 0;
         const mainCookieImgSrc = document.getElementById('michi-button').src;
-
-        // --- BOTS (Simuliertes Leaderboard) ---
-        let bots = [
-            { name: "Cisco_God", score: 5000000, pps: 20000 },
-            { name: "Admin_Root", score: 2500000, pps: 10000 },
-            { name: "NetworkKing", score: 1000000, pps: 5000 },
-            { name: "SwitchMaster", score: 500000, pps: 2000 },
-            { name: "PacketPusher", score: 250000, pps: 1000 },
-            { name: "Router_Ranger", score: 100000, pps: 500 },
-            { name: "Ping_Pong", score: 50000, pps: 200 },
-            { name: "Latency_Zero", score: 25000, pps: 100 },
-            { name: "ByteMe", score: 10000, pps: 50 },
-            { name: "TCP_IP_Pro", score: 5000, pps: 20 },
-            { name: "FiberOptic", score: 2500, pps: 10 },
-            { name: "Subnet_Mask", score: 1000, pps: 5 },
-            { name: "IPv6_Ready", score: 500, pps: 2 },
-            { name: "Lag_Spike", score: 100, pps: 1 }
-        ];
+        
+        let playerName = "Gast";
+        let globalLeaderboard = []; // Die echte gespeicherte Rangliste
 
         function getRequiredXP(lvl) {
             return Math.floor(100 * Math.pow(2.2, lvl - 1));
@@ -484,9 +477,40 @@
         const uiXpFill = document.getElementById('xp-fill');
         const leaderboardList = document.getElementById('leaderboard-list');
         const saveIndicator = document.getElementById('save-indicator');
+        const displayPlayerName = document.getElementById('display-player-name');
 
-        // --- SPEICHER SYSTEM ---
+        // --- INITIALISIERUNG & NAMENSGEBUNG ---
+        function initPlayer() {
+            let savedName = localStorage.getItem('michiPlayerName');
+            
+            if (!savedName) {
+                // Name erfragen, falls noch nicht gesetzt
+                let inputName = prompt("Willkommen beim Michi Clicker!\nBitte gib deinen Namen für die Rangliste ein:", "Spieler");
+                if (!inputName || inputName.trim() === "") inputName = "Gast_" + Math.floor(Math.random() * 1000);
+                playerName = inputName.substring(0, 15); // Maximal 15 Zeichen
+                localStorage.setItem('michiPlayerName', playerName);
+            } else {
+                playerName = savedName;
+            }
+            
+            displayPlayerName.innerText = playerName;
+            loadGame();
+            updateLeaderboard();
+        }
+
+        function changeName() {
+            let newName = prompt("Wie möchtest du stattdessen heißen?", playerName);
+            if (newName && newName.trim() !== "") {
+                playerName = newName.substring(0, 15);
+                localStorage.setItem('michiPlayerName', playerName);
+                displayPlayerName.innerText = playerName;
+                saveGame(false); // Direkt speichern, damit der Name in der Liste landet
+            }
+        }
+
+        // --- SPEICHER SYSTEM & RANGLISTE ---
         function saveGame(manual = false) {
+            // Aktuellen Spielstand für diesen Browser speichern
             const saveState = {
                 score: score,
                 level: level,
@@ -494,16 +518,40 @@
                 clickPower: clickPower,
                 upgrades: upgradesConfig.map(u => u.count)
             };
-            
             localStorage.setItem('michiSave', JSON.stringify(saveState));
-            localStorage.setItem('michiBots', JSON.stringify(bots));
+
+            // ECHTES LEADERBOARD UPDATE
+            updateGlobalLeaderboardEntry();
 
             if (manual) {
                 saveIndicator.innerText = "Gespeichert!";
-            } else {
-                saveIndicator.innerText = "Auto-Save...";
+                setTimeout(() => saveIndicator.innerText = "", 2000);
             }
-            setTimeout(() => saveIndicator.innerText = "", 2000);
+        }
+
+        function updateGlobalLeaderboardEntry() {
+            // Liste aus dem Speicher laden
+            let storedList = localStorage.getItem('michiRealLeaderboard');
+            if (storedList) {
+                globalLeaderboard = JSON.parse(storedList);
+            }
+
+            // Schauen, ob der Spieler schon in der Liste ist
+            let playerIndex = globalLeaderboard.findIndex(p => p.name === playerName);
+            
+            if (playerIndex !== -1) {
+                // Nur updaten, wenn der neue Score höher ist als der alte
+                if (score > globalLeaderboard[playerIndex].score) {
+                    globalLeaderboard[playerIndex].score = score;
+                }
+            } else {
+                // Neuen Spieler hinzufügen
+                globalLeaderboard.push({ name: playerName, score: score });
+            }
+
+            // Liste wieder speichern
+            localStorage.setItem('michiRealLeaderboard', JSON.stringify(globalLeaderboard));
+            renderLeaderboardUI();
         }
 
         function loadGame() {
@@ -525,23 +573,56 @@
                 uiLevel.innerText = level;
                 recalculatePPS();
             }
-
-            const savedBots = localStorage.getItem('michiBots');
-            if (savedBots) {
-                bots = JSON.parse(savedBots);
-            }
         }
 
         function resetGame() {
-            if(confirm("Willst du deinen Spielstand wirklich komplett löschen? Das kann nicht rückgängig gemacht werden!")) {
+            if(confirm("Willst du von vorne beginnen? Dein Highscore in der Rangliste bleibt erhalten!")) {
                 localStorage.removeItem('michiSave');
-                localStorage.removeItem('michiBots');
                 location.reload();
             }
         }
 
+        function renderLeaderboardUI() {
+            // Sortieren nach absteigendem Score
+            let sortedList = [...globalLeaderboard].sort((a, b) => b.score - a.score);
+            const top15 = sortedList.slice(0, 15);
+            
+            leaderboardList.innerHTML = '';
+            
+            if(top15.length === 0) {
+                leaderboardList.innerHTML = '<li style="padding: 10px; color: #888;">Noch keine Einträge. Klicke los!</li>';
+                return;
+            }
 
-        // --- EVENTS ---
+            top15.forEach((player, index) => {
+                const isMe = (player.name === playerName);
+                const li = document.createElement('li');
+                li.className = `leaderboard-item ${isMe ? 'is-me' : ''}`;
+                
+                // Live Score für den aktuellen Spieler anzeigen, falls er im Array noch einen alten hat
+                let displayScore = player.score;
+                if (isMe && score > player.score) {
+                    displayScore = score; 
+                }
+
+                li.innerHTML = `
+                    <span class="lb-rank">#${index + 1}</span>
+                    <span class="lb-name">${player.name}</span>
+                    <span class="lb-score">${Math.floor(displayScore).toLocaleString('de-DE')}</span>
+                `;
+                leaderboardList.appendChild(li);
+            });
+        }
+
+        function updateLeaderboard() {
+            let storedList = localStorage.getItem('michiRealLeaderboard');
+            if (storedList) {
+                globalLeaderboard = JSON.parse(storedList);
+            }
+            renderLeaderboardUI();
+        }
+
+        // --- KLICK EVENTS ---
         uiMichiBtn.addEventListener('click', (e) => {
             score += clickPower;
             addXP(clickPower);
@@ -617,7 +698,7 @@
             document.getElementById('overlay-levelup').classList.add('active');
             uiLevel.innerText = level;
             renderUpgrades();
-            saveGame(); // Speichern bei jedem Level Up
+            saveGame(); 
         }
 
         function updateXPBar() {
@@ -650,31 +731,6 @@
             packetsPerSecond = 0;
             upgradesConfig.forEach(u => packetsPerSecond += u.count * u.pps);
             uiPPS.innerText = packetsPerSecond.toLocaleString('de-DE');
-        }
-
-        // --- LEADERBOARD RENDERING ---
-        function updateLeaderboard() {
-            // Kombiniere Bots und dich selbst
-            let allPlayers = [...bots, { name: "Du (Lokal)", score: score, isMe: true }];
-            
-            // Absteigend nach Score sortieren
-            allPlayers.sort((a, b) => b.score - a.score);
-            
-            // Top 15 extrahieren
-            const top15 = allPlayers.slice(0, 15);
-            
-            leaderboardList.innerHTML = '';
-            
-            top15.forEach((player, index) => {
-                const li = document.createElement('li');
-                li.className = `leaderboard-item ${player.isMe ? 'is-me' : ''}`;
-                li.innerHTML = `
-                    <span class="lb-rank">#${index + 1}</span>
-                    <span class="lb-name">${player.name}</span>
-                    <span class="lb-score">${Math.floor(player.score).toLocaleString('de-DE')}</span>
-                `;
-                leaderboardList.appendChild(li);
-            });
         }
 
         // --- UI RENDERING ---
@@ -739,35 +795,27 @@
             document.getElementById(id).classList.remove('active');
         }
 
-        // --- INITIALISIERUNG ---
-        loadGame();
+        // --- START ---
+        initPlayer();
         renderUpgrades();
         updateUI();
         updateXPBar();
-        updateLeaderboard();
 
         // --- GAME LOOPS ---
-        
-        // Main Loop (10 Ticks pro Sekunde)
         setInterval(() => {
-            // Spieler Einkommen
             if (packetsPerSecond > 0) {
                 const amount = packetsPerSecond / 10;
                 score += amount;
-                addXP(amount * 0.05); // Passive XP
+                addXP(amount * 0.05);
                 updateUI();
             }
-            
-            // Bot Einkommen
-            bots.forEach(bot => bot.score += bot.pps / 10);
         }, 100);
 
-        // Leaderboard Update Loop (1x pro Sekunde reicht)
+        // Leaderboard UI regelmäßig mit dem aktuellen Score updaten
         setInterval(() => {
-            updateLeaderboard();
+            renderLeaderboardUI();
         }, 1000);
 
-        // Animations Loop für fliegende Cookies
         setInterval(() => {
             if (packetsPerSecond > 0) {
                 let chance = Math.min(packetsPerSecond / 50, 5); 
@@ -775,10 +823,10 @@
             }
         }, 500);
 
-        // Auto-Save Loop (Alle 30 Sekunden)
+        // Auto-Save Loop
         setInterval(() => {
             saveGame(false);
-        }, 30000);
+        }, 15000); // Alle 15 Sekunden
 
     </script>
 </body>
