@@ -11,19 +11,83 @@
         /* --- SPIEL LAYOUT --- */
         .game-layout {
             display: grid;
-            grid-template-columns: 1.2fr 1fr;
+            /* Jetzt 3 Spalten: Leaderboard | Clicker | Upgrades */
+            grid-template-columns: 300px 1.2fr 1fr; 
             gap: 2rem;
             margin-top: 2rem;
             position: relative;
         }
 
-        @media (max-width: 900px) {
+        @media (max-width: 1100px) {
             .game-layout {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr 1fr;
+            }
+            .leaderboard-panel {
+                grid-column: span 2;
+                order: 3; /* Leaderboard wandert auf kleinen Screens nach unten */
             }
         }
 
-        /* --- LINKE SEITE (Klicker) --- */
+        @media (max-width: 800px) {
+            .game-layout {
+                grid-template-columns: 1fr;
+            }
+            .leaderboard-panel { grid-column: span 1; }
+        }
+
+        /* --- LINKE SEITE (Leaderboard) --- */
+        .leaderboard-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .leaderboard-panel::-webkit-scrollbar { width: 8px; }
+        .leaderboard-panel::-webkit-scrollbar-track { background: var(--light, #ecf0f1); border-radius: 5px; }
+        .leaderboard-panel::-webkit-scrollbar-thumb { background: var(--primary, #063c8c); border-radius: 5px; }
+
+        .leaderboard-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .leaderboard-item {
+            display: grid;
+            grid-template-columns: 30px 1fr auto;
+            gap: 10px;
+            padding: 12px 10px;
+            border-bottom: 1px solid #eee;
+            align-items: center;
+            font-size: 0.95rem;
+            transition: background 0.3s ease;
+        }
+
+        .leaderboard-item:last-child { border-bottom: none; }
+
+        .leaderboard-item.is-me {
+            background-color: var(--secondary, #fbcd37);
+            border-radius: 8px;
+            font-weight: bold;
+            color: var(--dark, #2c3e50);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-bottom: none;
+            transform: scale(1.02);
+        }
+
+        .lb-rank { font-weight: bold; color: #888; }
+        .leaderboard-item.is-me .lb-rank { color: var(--dark, #2c3e50); }
+        
+        .lb-score {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--primary, #063c8c);
+            font-weight: bold;
+        }
+
+        /* --- MITTE (Klicker & Save-System) --- */
         .clicker-panel {
             display: flex;
             flex-direction: column;
@@ -54,8 +118,37 @@
             margin: 0;
         }
 
-        /* --- DER COOKIE --- 
-           Border und Radius entfernt. Drop-Shadow für transparente Bilder hinzugefügt. */
+        /* Save & Reset Buttons */
+        .save-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 1.5rem;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .btn-action {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .btn-action:hover { opacity: 0.8; }
+        .btn-save { background: var(--success, #27ae60); color: white; }
+        .btn-reset { background: var(--accent, #e74c3c); color: white; }
+        
+        #save-indicator {
+            font-size: 0.9rem;
+            color: var(--success, #27ae60);
+            font-weight: bold;
+            min-width: 90px;
+            text-align: left;
+        }
+
+        /* Der Cookie */
         .michi-target-container {
             position: relative;
             margin-bottom: 2rem;
@@ -82,7 +175,7 @@
             filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.5));
         }
 
-        /* --- LEVEL & XP SYSTEM --- */
+        /* Level & XP System */
         .level-card {
             width: 100%;
             padding: 1.2rem;
@@ -113,7 +206,7 @@
             transition: width 0.3s ease, background 0.3s ease;
         }
 
-        /* --- ANIMATIONEN (Partikel & Passive Cookies) --- */
+        /* --- ANIMATIONEN --- */
         .floating-text {
             position: absolute;
             color: var(--accent, #e74c3c);
@@ -179,7 +272,6 @@
             box-shadow: 0 8px 20px rgba(0,0,0,0.1);
         }
 
-        /* Gesperrtes Item Style */
         .upgrade-item.locked {
             opacity: 0.6;
             cursor: not-allowed;
@@ -248,9 +340,7 @@
             transition: opacity 0.5s ease;
         }
 
-        .game-overlay.active {
-            opacity: 1; pointer-events: auto;
-        }
+        .game-overlay.active { opacity: 1; pointer-events: auto; }
 
         .overlay-card {
             background: rgba(255, 255, 255, 0.1);
@@ -278,10 +368,17 @@
 </head>
 <body>
 
-    <main class="container" style="max-width: 1200px; margin: 0 auto; padding: 20px;">
+    <main class="container" style="max-width: 1400px; margin: 0 auto; padding: 20px;">
         <h1 style="text-align: center; color: var(--primary); font-size: 3rem;">Michi Clicker</h1>
         
         <div class="game-layout">
+            
+            <div class="leaderboard-panel">
+                <h3 style="margin-top: 0; color: var(--primary); border-bottom: 2px solid #eee; padding-bottom: 10px;">Top 15 Ranking</h3>
+                <ul class="leaderboard-list" id="leaderboard-list">
+                    </ul>
+            </div>
+
             <div class="clicker-panel">
                 <div class="score-display-container">
                     <p class="score-display" id="score-text"><span id="score">0</span></p>
@@ -289,7 +386,7 @@
                 </div>
 
                 <div class="michi-target-container">
-                    <img src="img/DerMichi.png" id="michi-button" class="michi-target" alt="Cookie" draggable="false">
+                    <img src="img/DerMichi.png" id="michi-button" class="michi-target" alt="Cookie" draggable="false" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/b/b9/Chocolate_Chip_Cookie_-_NCI_Visuals_Online.png'">
                 </div>
 
                 <div class="level-card">
@@ -300,6 +397,12 @@
                     <div style="text-align: right; font-size: 0.8rem; margin-top: 8px; color: #777;">
                         XP: <span id="xp-current">0</span> / <span id="xp-needed">100</span>
                     </div>
+                </div>
+
+                <div class="save-controls">
+                    <button class="btn-action btn-save" onclick="saveGame(true)">Speichern</button>
+                    <button class="btn-action btn-reset" onclick="resetGame()">Neustart</button>
+                    <span id="save-indicator"></span>
                 </div>
             </div>
 
@@ -327,7 +430,6 @@
 
     <script>
         // --- UPGRADES CONFIG ---
-        // reqLevel = Level, ab dem das Item freigeschaltet und sichtbar wird
         const upgradesConfig = [
             { id: 'cable', name: 'RJ45 Patchkabel', baseCost: 15, pps: 0.5, count: 0, reqLevel: 1, image: 'https://www.kabelscheune.de/out/pictures/generated/product/1/450_450_90/cat6-patchkabel-rj45-lan-kabel-s-ftp-pimf-weiss.jpg' },
             { id: 'switch2960', name: 'Catalyst Switch', baseCost: 100, pps: 2, count: 0, reqLevel: 2, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9S6zATrWKjk07KfrVYbvhxSC5ATVYAblFDg&s' },
@@ -347,7 +449,24 @@
         let currentXP = 0;
         const mainCookieImgSrc = document.getElementById('michi-button').src;
 
-        // Dynamische, steile XP Skalierung (100, 220, 484, 1064...)
+        // --- BOTS (Simuliertes Leaderboard) ---
+        let bots = [
+            { name: "Cisco_God", score: 5000000, pps: 20000 },
+            { name: "Admin_Root", score: 2500000, pps: 10000 },
+            { name: "NetworkKing", score: 1000000, pps: 5000 },
+            { name: "SwitchMaster", score: 500000, pps: 2000 },
+            { name: "PacketPusher", score: 250000, pps: 1000 },
+            { name: "Router_Ranger", score: 100000, pps: 500 },
+            { name: "Ping_Pong", score: 50000, pps: 200 },
+            { name: "Latency_Zero", score: 25000, pps: 100 },
+            { name: "ByteMe", score: 10000, pps: 50 },
+            { name: "TCP_IP_Pro", score: 5000, pps: 20 },
+            { name: "FiberOptic", score: 2500, pps: 10 },
+            { name: "Subnet_Mask", score: 1000, pps: 5 },
+            { name: "IPv6_Ready", score: 500, pps: 2 },
+            { name: "Lag_Spike", score: 100, pps: 1 }
+        ];
+
         function getRequiredXP(lvl) {
             return Math.floor(100 * Math.pow(2.2, lvl - 1));
         }
@@ -359,11 +478,68 @@
         const uiPPS = document.getElementById('pps');
         const uiMichiBtn = document.getElementById('michi-button');
         const upgradesContainer = document.getElementById('upgrades-container');
-        
         const uiLevel = document.getElementById('level');
         const uiXpCurrent = document.getElementById('xp-current');
         const uiXpNeeded = document.getElementById('xp-needed');
         const uiXpFill = document.getElementById('xp-fill');
+        const leaderboardList = document.getElementById('leaderboard-list');
+        const saveIndicator = document.getElementById('save-indicator');
+
+        // --- SPEICHER SYSTEM ---
+        function saveGame(manual = false) {
+            const saveState = {
+                score: score,
+                level: level,
+                currentXP: currentXP,
+                clickPower: clickPower,
+                upgrades: upgradesConfig.map(u => u.count)
+            };
+            
+            localStorage.setItem('michiSave', JSON.stringify(saveState));
+            localStorage.setItem('michiBots', JSON.stringify(bots));
+
+            if (manual) {
+                saveIndicator.innerText = "Gespeichert!";
+            } else {
+                saveIndicator.innerText = "Auto-Save...";
+            }
+            setTimeout(() => saveIndicator.innerText = "", 2000);
+        }
+
+        function loadGame() {
+            const saved = localStorage.getItem('michiSave');
+            if (saved) {
+                const saveState = JSON.parse(saved);
+                score = saveState.score || 0;
+                level = saveState.level || 1;
+                currentXP = saveState.currentXP || 0;
+                clickPower = saveState.clickPower || 1;
+                
+                if (saveState.upgrades) {
+                    saveState.upgrades.forEach((count, i) => {
+                        if (upgradesConfig[i]) upgradesConfig[i].count = count;
+                    });
+                }
+                
+                xpRequired = getRequiredXP(level);
+                uiLevel.innerText = level;
+                recalculatePPS();
+            }
+
+            const savedBots = localStorage.getItem('michiBots');
+            if (savedBots) {
+                bots = JSON.parse(savedBots);
+            }
+        }
+
+        function resetGame() {
+            if(confirm("Willst du deinen Spielstand wirklich komplett löschen? Das kann nicht rückgängig gemacht werden!")) {
+                localStorage.removeItem('michiSave');
+                localStorage.removeItem('michiBots');
+                location.reload();
+            }
+        }
+
 
         // --- EVENTS ---
         uiMichiBtn.addEventListener('click', (e) => {
@@ -373,7 +549,6 @@
             updateUI();
         });
 
-        // Visueller Klick-Effekt
         function createFloatingText(e, text) {
             const floater = document.createElement('div');
             floater.classList.add('floating-text');
@@ -385,22 +560,18 @@
             setTimeout(() => floater.remove(), 1200);
         }
 
-        // --- FLIEGENDE COOKIES (Passiv) ---
+        // --- FLIEGENDE COOKIES ---
         function triggerPassiveCookie() {
             if (packetsPerSecond === 0) return;
-
             const cookie = document.createElement('img');
             cookie.src = mainCookieImgSrc;
             cookie.classList.add('flying-passive-cookie');
-
             const michiPos = uiMichiBtn.getBoundingClientRect();
             const scorePos = uiScoreText.getBoundingClientRect();
 
-            // Startpunkt: Mitte des großen Cookies
             cookie.style.left = `${michiPos.left + michiPos.width / 2 - 20}px`;
             cookie.style.top = `${michiPos.top + michiPos.height / 2 - 20}px`;
 
-            // Endpunkt berechnen
             const dx = (scorePos.left + scorePos.width / 2) - (michiPos.left + michiPos.width / 2);
             const dy = (scorePos.top + scorePos.height / 2) - (michiPos.top + michiPos.height / 2);
 
@@ -420,7 +591,7 @@
         function addXP(amount) {
             currentXP += amount;
             if (currentXP >= xpRequired) {
-                currentXP -= xpRequired; // Restliche XP übernehmen
+                currentXP -= xpRequired;
                 levelUp();
             }
             updateXPBar();
@@ -431,10 +602,7 @@
             xpRequired = getRequiredXP(level);
             clickPower = Math.ceil(level * 1.5); 
 
-            // Prüfen, ob durch dieses Level ein neues Item freigeschaltet wird
             const newlyUnlockedItem = upgradesConfig.find(u => u.reqLevel === level);
-            
-            // LevelUp Overlay vorbereiten
             document.getElementById('overlay-levelup-level').innerText = level;
             
             const unlockContainer = document.getElementById('levelup-unlock-info');
@@ -443,14 +611,13 @@
                 document.getElementById('levelup-unlock-img').src = newlyUnlockedItem.image;
                 document.getElementById('levelup-unlock-name').innerText = newlyUnlockedItem.name;
             } else {
-                unlockContainer.style.display = 'none'; // Verstecken, wenn nichts neues kommt
+                unlockContainer.style.display = 'none';
             }
 
             document.getElementById('overlay-levelup').classList.add('active');
             uiLevel.innerText = level;
-            
-            // Shop neu rendern, damit das Item sichtbar wird
             renderUpgrades();
+            saveGame(); // Speichern bei jedem Level Up
         }
 
         function updateXPBar() {
@@ -485,7 +652,32 @@
             uiPPS.innerText = packetsPerSecond.toLocaleString('de-DE');
         }
 
-        // --- RENDERING ---
+        // --- LEADERBOARD RENDERING ---
+        function updateLeaderboard() {
+            // Kombiniere Bots und dich selbst
+            let allPlayers = [...bots, { name: "Du (Lokal)", score: score, isMe: true }];
+            
+            // Absteigend nach Score sortieren
+            allPlayers.sort((a, b) => b.score - a.score);
+            
+            // Top 15 extrahieren
+            const top15 = allPlayers.slice(0, 15);
+            
+            leaderboardList.innerHTML = '';
+            
+            top15.forEach((player, index) => {
+                const li = document.createElement('li');
+                li.className = `leaderboard-item ${player.isMe ? 'is-me' : ''}`;
+                li.innerHTML = `
+                    <span class="lb-rank">#${index + 1}</span>
+                    <span class="lb-name">${player.name}</span>
+                    <span class="lb-score">${Math.floor(player.score).toLocaleString('de-DE')}</span>
+                `;
+                leaderboardList.appendChild(li);
+            });
+        }
+
+        // --- UI RENDERING ---
         function renderUpgrades() {
             const title = upgradesContainer.querySelector('h3');
             upgradesContainer.innerHTML = '';
@@ -498,7 +690,6 @@
 
                 const item = document.createElement('div');
                 
-                // Status bestimmen: Locked, Aktiviert oder Zu teuer
                 if (!isUnlocked) {
                     item.className = 'upgrade-item locked';
                 } else if (!canAfford) {
@@ -507,10 +698,8 @@
                     item.className = 'upgrade-item';
                 }
                 
-                // Verhindert Kauf wenn gelocked
                 item.onclick = () => { if(isUnlocked) buyUpgrade(index); };
 
-                // Wenn nicht freigeschaltet, zeige ??? und Platzhalter
                 const displayName = isUnlocked ? upgrade.name : '???';
                 const displayImg = isUnlocked ? upgrade.image : 'https://placehold.co/70x70/ecf0f1/2c3e50?text=?';
 
@@ -531,12 +720,11 @@
         function updateUI() {
             uiScore.innerText = Math.floor(score).toLocaleString('de-DE');
             
-            // Buttons live updaten
             const items = upgradesContainer.querySelectorAll('.upgrade-item');
             upgradesConfig.forEach((upgrade, index) => {
                 if (items[index]) {
                     const isUnlocked = level >= upgrade.reqLevel;
-                    if (!isUnlocked) return; // Gesperrte Items bleiben gesperrt
+                    if (!isUnlocked) return; 
 
                     if (score >= getCost(upgrade)) {
                         items[index].classList.remove('disabled');
@@ -551,16 +739,35 @@
             document.getElementById(id).classList.remove('active');
         }
 
-        // --- GAME LOOP ---
+        // --- INITIALISIERUNG ---
+        loadGame();
+        renderUpgrades();
+        updateUI();
+        updateXPBar();
+        updateLeaderboard();
+
+        // --- GAME LOOPS ---
+        
+        // Main Loop (10 Ticks pro Sekunde)
         setInterval(() => {
+            // Spieler Einkommen
             if (packetsPerSecond > 0) {
                 const amount = packetsPerSecond / 10;
                 score += amount;
                 addXP(amount * 0.05); // Passive XP
                 updateUI();
             }
+            
+            // Bot Einkommen
+            bots.forEach(bot => bot.score += bot.pps / 10);
         }, 100);
 
+        // Leaderboard Update Loop (1x pro Sekunde reicht)
+        setInterval(() => {
+            updateLeaderboard();
+        }, 1000);
+
+        // Animations Loop für fliegende Cookies
         setInterval(() => {
             if (packetsPerSecond > 0) {
                 let chance = Math.min(packetsPerSecond / 50, 5); 
@@ -568,10 +775,10 @@
             }
         }, 500);
 
-        // Init
-        renderUpgrades();
-        updateUI();
-        updateXPBar();
+        // Auto-Save Loop (Alle 30 Sekunden)
+        setInterval(() => {
+            saveGame(false);
+        }, 30000);
 
     </script>
 </body>
