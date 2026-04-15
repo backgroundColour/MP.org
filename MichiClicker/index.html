@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../styles.css">
 
     <style>
-        /* Spezifische Styles für das Spiel, die deine CSS-Variablen nutzen */
+        /* --- SPIEL LAYOUT --- */
         .game-layout {
             display: grid;
             grid-template-columns: 1.2fr 1fr;
@@ -23,7 +23,7 @@
             }
         }
 
-        /* Linke Seite: Clicker & Stats */
+        /* --- LINKE SEITE (Klicker) --- */
         .clicker-panel {
             display: flex;
             flex-direction: column;
@@ -54,31 +54,35 @@
             margin: 0;
         }
 
-        /* Der klickbare Michi / Cookie */
+        /* --- DER COOKIE --- 
+           Border und Radius entfernt. Drop-Shadow für transparente Bilder hinzugefügt. */
         .michi-target-container {
             position: relative;
             margin-bottom: 2rem;
+            width: 250px;
+            height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .michi-target {
-            width: 250px;
-            height: 250px;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 10px solid var(--primary, #063c8c);
-            box-shadow: 0 15px 35px rgba(6, 60, 140, 0.4);
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.3));
             cursor: pointer;
-            transition: transform 0.05s ease, box-shadow 0.05s ease;
+            transition: transform 0.05s ease, filter 0.05s ease;
             user-select: none;
             z-index: 10;
         }
 
         .michi-target:active {
             transform: scale(0.92);
-            box-shadow: 0 5px 20px rgba(6, 60, 140, 0.6);
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.5));
         }
 
-        /* Level & XP System */
+        /* --- LEVEL & XP SYSTEM --- */
         .level-card {
             width: 100%;
             padding: 1.2rem;
@@ -109,7 +113,7 @@
             transition: width 0.3s ease, background 0.3s ease;
         }
 
-        /* Fliegende Klick-Partikel (+1) */
+        /* --- ANIMATIONEN (Partikel & Passive Cookies) --- */
         .floating-text {
             position: absolute;
             color: var(--accent, #e74c3c);
@@ -125,14 +129,12 @@
             100% { opacity: 0; transform: translateY(-100px) scale(1.6); }
         }
 
-        /* Fliegende passive "Cookies" */
         .flying-passive-cookie {
             position: absolute;
             width: 40px;
             height: 40px;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 2px solid var(--primary, #063c8c);
+            object-fit: contain;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2));
             pointer-events: none;
             animation: flyToScore 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
             z-index: 40;
@@ -144,7 +146,7 @@
             100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.5) rotate(360deg); }
         }
 
-        /* Rechte Seite: Upgrades */
+        /* --- RECHTE SEITE (Upgrades) --- */
         .upgrades-panel {
             max-height: 85vh;
             overflow-y: auto;
@@ -177,26 +179,33 @@
             box-shadow: 0 8px 20px rgba(0,0,0,0.1);
         }
 
-        .upgrade-item.disabled {
-            opacity: 0.5;
+        /* Gesperrtes Item Style */
+        .upgrade-item.locked {
+            opacity: 0.6;
             cursor: not-allowed;
-            filter: grayscale(100%);
+            background-color: #f8f9fa;
         }
-
-        .upgrade-item.disabled:hover {
+        
+        .upgrade-item.locked:hover {
             border-color: #eee;
             transform: none;
             box-shadow: 0 3px 6px rgba(0,0,0,0.03);
         }
 
+        .upgrade-item.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         .upgrade-img {
             width: 70px;
             height: 70px;
-            object-fit: cover;
+            object-fit: contain;
             border-radius: 8px;
-            background-color: var(--light, #ecf0f1);
+            background-color: white;
             margin-right: 18px;
             border: 1px solid #ddd;
+            padding: 5px;
         }
 
         .upgrade-info { flex-grow: 1; }
@@ -227,7 +236,7 @@
             margin-left: 10px;
         }
 
-        /* Full-screen Overlays für LevelUp & Unlock */
+        /* --- FULL SCREEN OVERLAY --- */
         .game-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -257,16 +266,6 @@
             margin: 0 0 1rem 0; text-shadow: 0 0 20px rgba(39, 174, 96, 0.8);
         }
 
-        .unlock-img {
-            max-width: 250px; max-height: 250px;
-            object-fit: cover; border-radius: 10px;
-            margin-bottom: 2rem;
-            box-shadow: 0 0 30px rgba(255,255,255,0.3);
-        }
-
-        .unlock-text-large { color: var(--warning, #f39c12); font-size: 2rem; margin: 0; }
-        .unlock-device-name { font-size: 2.5rem; font-weight: bold; margin: 1rem 0; }
-
         .btn-overlay-close {
             margin-top: 2rem; padding: 0.8rem 2.5rem;
             font-size: 1.2rem; background-color: var(--primary, #063c8c);
@@ -290,7 +289,7 @@
                 </div>
 
                 <div class="michi-target-container">
-                    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Choc-Chip-Cookie.jpg?width=400" id="michi-button" class="michi-target" alt="Cookie" draggable="false">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b9/Chocolate_Chip_Cookie_-_NCI_Visuals_Online.png" id="michi-button" class="michi-target" alt="Cookie" draggable="false">
                 </div>
 
                 <div class="level-card">
@@ -299,7 +298,7 @@
                         <div class="xp-bar-fill" id="xp-fill"></div>
                     </div>
                     <div style="text-align: right; font-size: 0.8rem; margin-top: 8px; color: #777;">
-                        XP: <span id="xp-current">0</span> / <span id="xp-needed">30</span>
+                        XP: <span id="xp-current">0</span> / <span id="xp-needed">100</span>
                     </div>
                 </div>
             </div>
@@ -314,31 +313,30 @@
         <div class="overlay-card">
             <h1 class="level-up-title">LEVEL UP!</h1>
             <p style="font-size: 1.8rem; margin: 0;">Du bist jetzt Level <span id="overlay-levelup-level">X</span></p>
-            <p style="color: #aaa; margin-top: 1rem;">Deine Klickkraft wurde erhöht.</p>
+            <p style="color: #aaa; margin-top: 1rem;">Deine Klickkraft wurde erhöht!</p>
+            
+            <div id="levelup-unlock-info" style="display: none; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.2);">
+                <p style="color: var(--warning, #f39c12); font-size: 1.5rem; margin-bottom: 1rem; font-weight: bold;">NEUES GERÄT IM SHOP VERFÜGBAR!</p>
+                <img src="" id="levelup-unlock-img" alt="Unlocked Device" style="max-width: 150px; max-height: 150px; object-fit: contain; filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));">
+                <h2 id="levelup-unlock-name" style="margin: 1rem 0 0 0; font-size: 2rem;">Name</h2>
+            </div>
+
             <button class="btn-overlay-close" onclick="closeOverlay('overlay-levelup')">Weiter</button>
         </div>
     </div>
 
-    <div class="game-overlay" id="overlay-unlock">
-        <div class="overlay-card">
-            <p class="unlock-text-large">NEUES GERÄT FREIGESCHALTET!</p>
-            <img src="" class="unlock-img" id="overlay-unlock-img" alt="Unlocked Device">
-            <h2 class="unlock-device-name" id="overlay-unlock-name">Nexus 9000</h2>
-            <button class="btn-overlay-close" onclick="closeOverlay('overlay-unlock')">Super!</button>
-        </div>
-    </div>
-
     <script>
-        // --- UPGRADES CONFIG (Bilder direkt aus dem Internet / Wikipedia) ---
+        // --- UPGRADES CONFIG ---
+        // reqLevel = Level, ab dem das Item freigeschaltet und sichtbar wird
         const upgradesConfig = [
-            { id: 'cable', name: 'RJ45 Patchkabel', baseCost: 15, pps: 0.5, count: 0, image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Ethernet_Cable.jpg?width=300' },
-            { id: 'switch2960', name: 'Catalyst Switch', baseCost: 100, pps: 2, count: 0, image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Network_switch.jpg?width=300' },
-            { id: 'ap_meraki', name: 'Wireless Access Point', baseCost: 500, pps: 8, count: 0, image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Wireless_router.jpg?width=300' },
-            { id: 'router4000', name: 'Cisco Router', baseCost: 3000, pps: 30, count: 0, image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Cisco_1841.jpg?width=300' },
-            { id: 'firewall', name: 'Hardware Firewall', baseCost: 10000, pps: 120, count: 0, image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Hardware_firewall.jpg?width=300' },
-            { id: 'switch9300', name: 'Core Switch', baseCost: 40000, pps: 500, count: 0, image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Cisco_Catalyst_2960_Series_PoE_Switch.jpg?width=300' },
-            { id: 'nexus', name: 'Nexus Datacenter', baseCost: 200000, pps: 2500, count: 0, image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Datacenter.jpg?width=300' },
-            { id: 'asr', name: 'ASR Edge Router', baseCost: 1000000, pps: 15000, count: 0, image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Server_rack.jpg?width=300' }
+            { id: 'cable', name: 'RJ45 Patchkabel', baseCost: 15, pps: 0.5, count: 0, reqLevel: 1, image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Ethernet_Cable.jpg?width=300' },
+            { id: 'switch2960', name: 'Catalyst Switch', baseCost: 100, pps: 2, count: 0, reqLevel: 2, image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Network_switch.jpg?width=300' },
+            { id: 'ap_meraki', name: 'Wireless Access Point', baseCost: 500, pps: 8, count: 0, reqLevel: 3, image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Wireless_router.jpg?width=300' },
+            { id: 'router4000', name: 'Cisco Router', baseCost: 3000, pps: 30, count: 0, reqLevel: 4, image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Cisco_1841.jpg?width=300' },
+            { id: 'firewall', name: 'Hardware Firewall', baseCost: 10000, pps: 120, count: 0, reqLevel: 5, image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Hardware_firewall.jpg?width=300' },
+            { id: 'switch9300', name: 'Core Switch', baseCost: 40000, pps: 500, count: 0, reqLevel: 6, image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Cisco_Catalyst_2960_Series_PoE_Switch.jpg?width=300' },
+            { id: 'nexus', name: 'Nexus Datacenter', baseCost: 200000, pps: 2500, count: 0, reqLevel: 7, image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Datacenter.jpg?width=300' },
+            { id: 'asr', name: 'ASR Edge Router', baseCost: 1000000, pps: 15000, count: 0, reqLevel: 8, image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Server_rack.jpg?width=300' }
         ];
 
         // --- SPIEL VARIABLEN ---
@@ -349,11 +347,9 @@
         let currentXP = 0;
         const mainCookieImgSrc = document.getElementById('michi-button').src;
 
-        // Dynamische XP Skalierung (z.B. 30, 50, 80, 120...)
+        // Dynamische, steile XP Skalierung (100, 220, 484, 1064...)
         function getRequiredXP(lvl) {
-            const predefined = { 1: 30, 2: 50, 3: 80, 4: 120, 5: 170 };
-            if (predefined[lvl]) return predefined[lvl];
-            return Math.floor(170 * Math.pow(1.4, lvl - 5)); // Skaliert danach stetig weiter
+            return Math.floor(100 * Math.pow(2.2, lvl - 1));
         }
         let xpRequired = getRequiredXP(level);
 
@@ -404,7 +400,7 @@
             cookie.style.left = `${michiPos.left + michiPos.width / 2 - 20}px`;
             cookie.style.top = `${michiPos.top + michiPos.height / 2 - 20}px`;
 
-            // Endpunkt berechnen (Vektor zum Score-Text)
+            // Endpunkt berechnen
             const dx = (scorePos.left + scorePos.width / 2) - (michiPos.left + michiPos.width / 2);
             const dy = (scorePos.top + scorePos.height / 2) - (michiPos.top + michiPos.height / 2);
 
@@ -413,7 +409,6 @@
 
             document.body.appendChild(cookie);
             
-            // Score aufploppen lassen, wenn der Cookie ankommt
             setTimeout(() => {
                 cookie.remove();
                 uiScoreText.classList.add('pulse');
@@ -434,12 +429,28 @@
         function levelUp() {
             level++;
             xpRequired = getRequiredXP(level);
-            clickPower = Math.ceil(level * 1.5); // Jeder Klick bringt nun mehr
+            clickPower = Math.ceil(level * 1.5); 
 
-            // LevelUp Overlay anzeigen
+            // Prüfen, ob durch dieses Level ein neues Item freigeschaltet wird
+            const newlyUnlockedItem = upgradesConfig.find(u => u.reqLevel === level);
+            
+            // LevelUp Overlay vorbereiten
             document.getElementById('overlay-levelup-level').innerText = level;
+            
+            const unlockContainer = document.getElementById('levelup-unlock-info');
+            if (newlyUnlockedItem) {
+                unlockContainer.style.display = 'block';
+                document.getElementById('levelup-unlock-img').src = newlyUnlockedItem.image;
+                document.getElementById('levelup-unlock-name').innerText = newlyUnlockedItem.name;
+            } else {
+                unlockContainer.style.display = 'none'; // Verstecken, wenn nichts neues kommt
+            }
+
             document.getElementById('overlay-levelup').classList.add('active');
             uiLevel.innerText = level;
+            
+            // Shop neu rendern, damit das Item sichtbar wird
+            renderUpgrades();
         }
 
         function updateXPBar() {
@@ -457,17 +468,10 @@
         function buyUpgrade(index) {
             const upgrade = upgradesConfig[index];
             const cost = getCost(upgrade);
+            const isUnlocked = level >= upgrade.reqLevel;
 
-            if (score >= cost) {
+            if (score >= cost && isUnlocked) {
                 score -= cost;
-                
-                // Overlay anzeigen, wenn das erste Mal gekauft
-                if (upgrade.count === 0) {
-                    document.getElementById('overlay-unlock-img').src = upgrade.image;
-                    document.getElementById('overlay-unlock-name').innerText = upgrade.name;
-                    document.getElementById('overlay-unlock').classList.add('active');
-                }
-                
                 upgrade.count++;
                 recalculatePPS();
                 renderUpgrades();
@@ -483,25 +487,39 @@
 
         // --- RENDERING ---
         function renderUpgrades() {
-            // Alte Elemente löschen, aber die Überschrift behalten
             const title = upgradesContainer.querySelector('h3');
             upgradesContainer.innerHTML = '';
             upgradesContainer.appendChild(title);
 
             upgradesConfig.forEach((upgrade, index) => {
                 const cost = getCost(upgrade);
-                const canAfford = score >= cost;
+                const isUnlocked = level >= upgrade.reqLevel;
+                const canAfford = score >= cost && isUnlocked;
 
                 const item = document.createElement('div');
-                item.className = `upgrade-item ${canAfford ? '' : 'disabled'}`;
-                item.onclick = () => buyUpgrade(index);
+                
+                // Status bestimmen: Locked, Aktiviert oder Zu teuer
+                if (!isUnlocked) {
+                    item.className = 'upgrade-item locked';
+                } else if (!canAfford) {
+                    item.className = 'upgrade-item disabled';
+                } else {
+                    item.className = 'upgrade-item';
+                }
+                
+                // Verhindert Kauf wenn gelocked
+                item.onclick = () => { if(isUnlocked) buyUpgrade(index); };
+
+                // Wenn nicht freigeschaltet, zeige ??? und Platzhalter
+                const displayName = isUnlocked ? upgrade.name : '???';
+                const displayImg = isUnlocked ? upgrade.image : 'https://placehold.co/70x70/ecf0f1/2c3e50?text=?';
 
                 item.innerHTML = `
-                    <img src="${upgrade.image}" class="upgrade-img" alt="${upgrade.name}" onerror="this.src='https://loremflickr.com/70/70/hardware'">
+                    <img src="${displayImg}" class="upgrade-img" alt="Gerät">
                     <div class="upgrade-info">
-                        <h4 class="upgrade-name">${upgrade.name}</h4>
+                        <h4 class="upgrade-name">${displayName}</h4>
                         <p class="upgrade-cost">${cost.toLocaleString('de-DE')} Pakete</p>
-                        <p class="upgrade-pps">+${upgrade.pps} PPS</p>
+                        <p class="upgrade-pps">+${isUnlocked ? upgrade.pps : '?'} PPS</p>
                     </div>
                     <div class="upgrade-count">${upgrade.count}</div>
                 `;
@@ -513,10 +531,13 @@
         function updateUI() {
             uiScore.innerText = Math.floor(score).toLocaleString('de-DE');
             
-            // Buttons live updaten (grau färben oder aktivieren)
+            // Buttons live updaten
             const items = upgradesContainer.querySelectorAll('.upgrade-item');
             upgradesConfig.forEach((upgrade, index) => {
                 if (items[index]) {
+                    const isUnlocked = level >= upgrade.reqLevel;
+                    if (!isUnlocked) return; // Gesperrte Items bleiben gesperrt
+
                     if (score >= getCost(upgrade)) {
                         items[index].classList.remove('disabled');
                     } else {
@@ -526,30 +547,24 @@
             });
         }
 
-        // --- OVERLAYS SCHLIESSEN ---
         function closeOverlay(id) {
             document.getElementById(id).classList.remove('active');
         }
 
         // --- GAME LOOP ---
-        // Generiert 10x pro Sekunde PPS (für flüssiges Hochzählen)
         setInterval(() => {
             if (packetsPerSecond > 0) {
                 const amount = packetsPerSecond / 10;
                 score += amount;
-                addXP(amount * 0.05); // Passive Generation gibt ein klein wenig XP
+                addXP(amount * 0.05); // Passive XP
                 updateUI();
             }
         }, 100);
 
-        // Fliegende Cookie Animation Loop (Je mehr PPS, desto öfter fliegen Cookies)
         setInterval(() => {
             if (packetsPerSecond > 0) {
-                // Bei 100 PPS fliegen mehr Cookies als bei 1 PPS, gecapped auf max. 5 pro Sekunde
                 let chance = Math.min(packetsPerSecond / 50, 5); 
-                if (Math.random() < chance) {
-                    triggerPassiveCookie();
-                }
+                if (Math.random() < chance) triggerPassiveCookie();
             }
         }, 500);
 
