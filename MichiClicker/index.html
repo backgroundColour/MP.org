@@ -268,10 +268,11 @@
         // --- API CALLS (DREAMLO) ---
         async function fetchLeaderboard() {
             try {
-                // Die original Dreamlo URL
-                const dreamloUrl = `https://www.dreamlo.com/lb/${DREAMLO_PUBLIC_KEY}/json?cb=${Date.now()}`;
+                // WICHTIG: Hier nutzen wir 'http://' (ohne s und ohne www), 
+                // um den SSL-Fehler des Proxys zu umgehen!
+                const dreamloUrl = `http://dreamlo.com/lb/${DREAMLO_PUBLIC_KEY}/json?cb=${Date.now()}`;
                 
-                // Wir schicken die Anfrage über einen kostenlosen Proxy (AllOrigins), der die Browser-Sperre umgeht
+                // Wir schicken die Anfrage über den Proxy
                 const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(dreamloUrl)}`;
                 
                 const response = await fetch(proxyUrl);
@@ -280,7 +281,7 @@
                     const proxyData = await response.json();
                     
                     // AllOrigins packt das Ergebnis in ein Feld namens "contents"
-                    if (proxyData.contents) {
+                    if (proxyData.contents && proxyData.contents !== "null") {
                         try {
                             const data = JSON.parse(proxyData.contents);
                             
