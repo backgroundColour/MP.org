@@ -266,43 +266,35 @@
         const displayPlayerName = document.getElementById('display-player-name');
 
         // --- API CALLS (DREAMLO) ---
+        // --- API CALLS (DREAMLO) ---
         async function fetchLeaderboard() {
             try {
-                // WICHTIG: Hier nutzen wir 'http://' (ohne s und ohne www), 
-                // um den SSL-Fehler des Proxys zu umgehen!
+                // Die unverschlüsselte Dreamlo-URL (verhindert SSL-Zertifikat-Fehler)
                 const dreamloUrl = `http://dreamlo.com/lb/${DREAMLO_PUBLIC_KEY}/json?cb=${Date.now()}`;
                 
-                // Wir schicken die Anfrage über den Proxy
-                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(dreamloUrl)}`;
+                // Wir nutzen einen neuen, viel stabileren Proxy (CorsProxy.io)
+                const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(dreamloUrl)}`;
                 
                 const response = await fetch(proxyUrl);
                 
                 if (response.ok) {
-                    const proxyData = await response.json();
+                    // CorsProxy gibt uns direkt das saubere JSON zurück!
+                    const data = await response.json();
                     
-                    // AllOrigins packt das Ergebnis in ein Feld namens "contents"
-                    if (proxyData.contents && proxyData.contents !== "null") {
-                        try {
-                            const data = JSON.parse(proxyData.contents);
-                            
-                            if (data.dreamlo && data.dreamlo.leaderboard && data.dreamlo.leaderboard.entry) {
-                                let entries = data.dreamlo.leaderboard.entry;
-                                
-                                // Bei nur 1 Eintrag gibt es kein Array, wir erzwingen eines
-                                if (!Array.isArray(entries)) {
-                                    entries = [entries];
-                                }
-
-                                globalLeaderboard = entries.map(player => ({
-                                    name: player.name,
-                                    score: parseFloat(player.score)
-                                }));
-                            } else {
-                                globalLeaderboard = []; 
-                            }
-                        } catch (parseError) {
-                            console.error("Fehler beim Lesen der Dreamlo-Daten:", parseError);
+                    if (data.dreamlo && data.dreamlo.leaderboard && data.dreamlo.leaderboard.entry) {
+                        let entries = data.dreamlo.leaderboard.entry;
+                        
+                        // Bei nur 1 Eintrag gibt es kein Array, wir erzwingen eines
+                        if (!Array.isArray(entries)) {
+                            entries = [entries];
                         }
+
+                        globalLeaderboard = entries.map(player => ({
+                            name: player.name,
+                            score: parseFloat(player.score)
+                        }));
+                    } else {
+                        globalLeaderboard = []; 
                     }
                 }
             } catch (error) {
