@@ -92,7 +92,6 @@
             position: relative;
         }
 
-        /* Spieler Info */
         .player-info {
             position: absolute;
             top: 15px;
@@ -104,6 +103,7 @@
             border-radius: 5px;
             border: 1px solid #ddd;
             cursor: pointer;
+            transition: background 0.2s;
         }
         .player-info:hover { background: #e0e0e0; }
 
@@ -481,13 +481,36 @@
 
         // --- INITIALISIERUNG & NAMENSGEBUNG ---
         function initPlayer() {
+            // Lade zuerst das Leaderboard, um Namen vergleichen zu können
+            let storedList = localStorage.getItem('michiRealLeaderboard');
+            if (storedList) {
+                globalLeaderboard = JSON.parse(storedList);
+            }
+
             let savedName = localStorage.getItem('michiPlayerName');
             
             if (!savedName) {
-                // Name erfragen, falls noch nicht gesetzt
-                let inputName = prompt("Willkommen beim Michi Clicker!\nBitte gib deinen Namen für die Rangliste ein:", "Spieler");
-                if (!inputName || inputName.trim() === "") inputName = "Gast_" + Math.floor(Math.random() * 1000);
-                playerName = inputName.substring(0, 15); // Maximal 15 Zeichen
+                let validName = false;
+                let inputName = "";
+                
+                while (!validName) {
+                    inputName = prompt("Willkommen beim Michi Clicker!\nBitte gib deinen Namen für die Rangliste ein:", "Spieler");
+                    
+                    if (!inputName || inputName.trim() === "") {
+                        inputName = "Gast_" + Math.floor(Math.random() * 10000);
+                    }
+                    inputName = inputName.trim().substring(0, 15);
+                    
+                    // Prüfen, ob der Name (unabhängig von Groß-/Kleinschreibung) schon vergeben ist
+                    const nameTaken = globalLeaderboard.some(p => p.name.toLowerCase() === inputName.toLowerCase());
+                    
+                    if (nameTaken) {
+                        alert("Dieser Name ist leider schon vergeben! Bitte wähle einen anderen.");
+                    } else {
+                        validName = true;
+                    }
+                }
+                playerName = inputName;
                 localStorage.setItem('michiPlayerName', playerName);
             } else {
                 playerName = savedName;
@@ -495,22 +518,44 @@
             
             displayPlayerName.innerText = playerName;
             loadGame();
-            updateLeaderboard();
+            updateGlobalLeaderboardEntry(); // Direkt am Anfang in die Liste eintragen
         }
 
         function changeName() {
             let newName = prompt("Wie möchtest du stattdessen heißen?", playerName);
+            
             if (newName && newName.trim() !== "") {
-                playerName = newName.substring(0, 15);
+                newName = newName.trim().substring(0, 15);
+                
+                // Wenn man genau denselben Namen wieder eingibt, passiert nichts
+                if (newName.toLowerCase() === playerName.toLowerCase()) {
+                    return; 
+                }
+                
+                // Prüfen ob der neue Name vergeben ist
+                const nameTaken = globalLeaderboard.some(p => p.name.toLowerCase() === newName.toLowerCase());
+                if (nameTaken) {
+                    alert("Dieser Name wird bereits von einem anderen Spieler verwendet! Bitte wähle einen anderen.");
+                    return;
+                }
+
+                // Den alten Namen im Leaderboard mit dem neuen überschreiben
+                let playerIndex = globalLeaderboard.findIndex(p => p.name === playerName);
+                if (playerIndex !== -1) {
+                    globalLeaderboard[playerIndex].name = newName;
+                    localStorage.setItem('michiRealLeaderboard', JSON.stringify(globalLeaderboard));
+                }
+
+                playerName = newName;
                 localStorage.setItem('michiPlayerName', playerName);
                 displayPlayerName.innerText = playerName;
-                saveGame(false); // Direkt speichern, damit der Name in der Liste landet
+                saveGame(false); 
+                renderLeaderboardUI();
             }
         }
 
         // --- SPEICHER SYSTEM & RANGLISTE ---
         function saveGame(manual = false) {
-            // Aktuellen Spielstand für diesen Browser speichern
             const saveState = {
                 score: score,
                 level: level,
@@ -520,7 +565,6 @@
             };
             localStorage.setItem('michiSave', JSON.stringify(saveState));
 
-            // ECHTES LEADERBOARD UPDATE
             updateGlobalLeaderboardEntry();
 
             if (manual) {
@@ -530,26 +574,21 @@
         }
 
         function updateGlobalLeaderboardEntry() {
-            // Liste aus dem Speicher laden
             let storedList = localStorage.getItem('michiRealLeaderboard');
             if (storedList) {
                 globalLeaderboard = JSON.parse(storedList);
             }
 
-            // Schauen, ob der Spieler schon in der Liste ist
             let playerIndex = globalLeaderboard.findIndex(p => p.name === playerName);
             
             if (playerIndex !== -1) {
-                // Nur updaten, wenn der neue Score höher ist als der alte
                 if (score > globalLeaderboard[playerIndex].score) {
                     globalLeaderboard[playerIndex].score = score;
                 }
             } else {
-                // Neuen Spieler hinzufügen
                 globalLeaderboard.push({ name: playerName, score: score });
             }
 
-            // Liste wieder speichern
             localStorage.setItem('michiRealLeaderboard', JSON.stringify(globalLeaderboard));
             renderLeaderboardUI();
         }
@@ -583,7 +622,6 @@
         }
 
         function renderLeaderboardUI() {
-            // Sortieren nach absteigendem Score
             let sortedList = [...globalLeaderboard].sort((a, b) => b.score - a.score);
             const top15 = sortedList.slice(0, 15);
             
@@ -599,7 +637,6 @@
                 const li = document.createElement('li');
                 li.className = `leaderboard-item ${isMe ? 'is-me' : ''}`;
                 
-                // Live Score für den aktuellen Spieler anzeigen, falls er im Array noch einen alten hat
                 let displayScore = player.score;
                 if (isMe && score > player.score) {
                     displayScore = score; 
@@ -612,14 +649,6 @@
                 `;
                 leaderboardList.appendChild(li);
             });
-        }
-
-        function updateLeaderboard() {
-            let storedList = localStorage.getItem('michiRealLeaderboard');
-            if (storedList) {
-                globalLeaderboard = JSON.parse(storedList);
-            }
-            renderLeaderboardUI();
         }
 
         // --- KLICK EVENTS ---
