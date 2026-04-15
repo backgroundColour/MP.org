@@ -219,6 +219,10 @@
     </div>
 
     <script>
+        // --- SERVER KOMMUNIKATION (Dreamlo) ---
+        const DREAMLO_PUBLIC_KEY = '69df899e8f40bc2f606c2109';
+        const DREAMLO_PRIVATE_KEY = 'gx0LmtikcUiceklh41xVyAQEPyt0hxK024rxVHnezX-A';
+
         // --- UPGRADES CONFIG ---
         const upgradesConfig = [
             { id: 'cable', name: 'RJ45 Patchkabel', baseCost: 15, pps: 0.5, count: 0, reqLevel: 1, image: 'https://www.kabelscheune.de/out/pictures/generated/product/1/450_450_90/cat6-patchkabel-rj45-lan-kabel-s-ftp-pimf-weiss.jpg' },
@@ -261,40 +265,56 @@
         const saveIndicator = document.getElementById('save-indicator');
         const displayPlayerName = document.getElementById('display-player-name');
 
-        // --- SERVER KOMMUNIKATION (Leaderboard) ---
-        
-        // Liste vom Server laden
+        // --- API CALLS (DREAMLO) ---
         async function fetchLeaderboard() {
             try {
-                // Wir hängen einen Timestamp an, um Browser-Caching der JSON zu verhindern
-                const response = await fetch('leaderboard.json?t=' + new Date().getTime());
+                // Ein zufälliger Parameter am Ende verhindert, dass der Browser die alte Liste aus dem Cache lädt
+                const response = await fetch(`https://www.dreamlo.com/lb/${DREAMLO_PUBLIC_KEY}/json?cb=${new Date().getTime()}`);
                 if (response.ok) {
-                    globalLeaderboard = await response.json();
+                    const data = await response.json();
+                    
+                    if (data.dreamlo && data.dreamlo.leaderboard && data.dreamlo.leaderboard.entry) {
+                        let entries = data.dreamlo.leaderboard.entry;
+                        
+                        // Wenn es nur 1 Eintrag gibt, ist es ein Objekt, sonst ein Array. Wir wandeln es immer in ein Array um.
+                        if (!Array.isArray(entries)) {
+                            entries = [entries];
+                        }
+
+                        globalLeaderboard = entries.map(player => ({
+                            name: player.name,
+                            score: parseFloat(player.score)
+                        }));
+                    } else {
+                        globalLeaderboard = []; 
+                    }
                 }
             } catch (error) {
-                console.log("Leaderboard konnte nicht geladen werden (vielleicht existiert die Datei noch nicht).");
+                console.log("Leaderboard konnte nicht geladen werden.");
             }
             renderLeaderboardUI();
         }
 
-        // Eigenen Score an den Server senden
         async function submitScoreToServer() {
+            if (score <= 0) return; // Nichts abspeichern wenn noch bei 0
+            
             try {
-                await fetch('save_score.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name: playerName, score: score })
-                });
-                // Direkt danach die neue Liste abrufen
+                // Name sicher für die URL machen
+                const safeName = encodeURIComponent(playerName);
+                // Kommazahlen abschneiden
+                const safeScore = Math.floor(score);
+                
+                await fetch(`https://www.dreamlo.com/lb/${DREAMLO_PRIVATE_KEY}/add/${safeName}/${safeScore}`);
+                
+                // Danach die Liste direkt nochmal frisch ziehen
                 fetchLeaderboard();
             } catch (error) {
-                console.error("Fehler beim Senden des Scores:", error);
+                console.error("Fehler beim Speichern des Scores auf Dreamlo:", error);
             }
         }
 
         // --- INITIALISIERUNG & NAMENSGEBUNG ---
         async function initPlayer() {
-            // Erstmal Server-Liste laden, damit wir prüfen können ob ein Name belegt ist
             await fetchLeaderboard();
 
             let savedName = localStorage.getItem('michiPlayerName');
@@ -327,8 +347,6 @@
             
             displayPlayerName.innerText = playerName;
             loadGame();
-            
-            // Einmal direkt den Score übertragen
             submitScoreToServer();
         }
 
@@ -346,16 +364,21 @@
                     return;
                 }
 
+                // Lösche den alten Namen aus Dreamlo (indem man ihm Score -1 oder 0 gibt, bei Dreamlo löschen wir ihn via 'delete')
+                const safeOldName = encodeURIComponent(playerName);
+                fetch(`https://www.dreamlo.com/lb/${DREAMLO_PRIVATE_KEY}/delete/${safeOldName}`);
+
                 playerName = newName;
                 localStorage.setItem('michiPlayerName', playerName);
                 displayPlayerName.innerText = playerName;
-                submitScoreToServer(); // Direkt an den Server schicken
+                
+                // Und speichere den neuen
+                submitScoreToServer(); 
             }
         }
 
-        // --- SPEICHER SYSTEM ---
+        // --- SPEICHER SYSTEM (Lokal & Online) ---
         function saveGame(manual = false) {
-            // Lokal Browser-Status speichern (Geld, Level, Upgrades)
             const saveState = {
                 score: score,
                 level: level,
@@ -365,7 +388,6 @@
             };
             localStorage.setItem('michiSave', JSON.stringify(saveState));
 
-            // Weltweites Leaderboard updaten
             submitScoreToServer();
 
             if (manual) {
@@ -396,7 +418,7 @@
         }
 
         function resetGame() {
-            if(confirm("Willst du von vorne beginnen? (Hinweis: Dein weltweiter Highscore bleibt in der Liste stehen!)")) {
+            if(confirm("Willst du von vorne beginnen? (Dein weltweiter Highscore bleibt erhalten!)")) {
                 localStorage.removeItem('michiSave');
                 location.reload();
             }
@@ -410,14 +432,13 @@
                 return;
             }
 
-            // Da das PHP Skript uns die Liste schon sortiert und gekürzt gibt, können wir sie einfach rendern
             globalLeaderboard.forEach((player, index) => {
                 const isMe = (player.name === playerName);
                 const li = document.createElement('li');
                 li.className = `leaderboard-item ${isMe ? 'is-me' : ''}`;
                 
-                // Live Score für den eigenen Spieler anzeigen, falls das Backend noch nicht das Neueste hat
                 let displayScore = player.score;
+                // Live Update für eigene Punktzahl, bevor der Server antwortet
                 if (isMe && score > player.score) {
                     displayScore = score; 
                 }
@@ -507,7 +528,7 @@
             document.getElementById('overlay-levelup').classList.add('active');
             uiLevel.innerText = level;
             renderUpgrades();
-            saveGame(); // Speichern an Server bei Levelup
+            saveGame(); 
         }
 
         function updateXPBar() {
@@ -620,10 +641,10 @@
             }
         }, 100);
 
-        // Leaderboard alle 5 Sekunden frisch vom Server abfragen
+        // Leaderboard alle 10 Sekunden frisch abfragen (schont die Verbindung)
         setInterval(() => {
             fetchLeaderboard();
-        }, 5000);
+        }, 10000);
 
         setInterval(() => {
             if (packetsPerSecond > 0) {
@@ -632,10 +653,10 @@
             }
         }, 500);
 
-        // Auto-Save Loop (Speichert Spielstand und updatet Server alle 15 Sekunden)
+        // Auto-Save Loop (Alle 15 Sekunden)
         setInterval(() => {
             saveGame(false);
-        }, 15000); 
+        }, 15000);
 
     </script>
 </body>
