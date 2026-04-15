@@ -220,7 +220,6 @@
 
     <script>
         // --- SERVER KOMMUNIKATION (Dreamlo) ---
-        // Hier sind deine exakten Keys eingefügt
         const DREAMLO_PUBLIC_KEY = '69df899e8f40bc2f606c2109';
         const DREAMLO_PRIVATE_KEY = 'gx0LmtikcUiceklh41xVyAQEPyt0hxK024rxVHnezX-A';
 
@@ -269,10 +268,8 @@
         // --- API CALLS (DREAMLO) ---
         async function fetchLeaderboard() {
             try {
-                // Verhindert das cachen der alten Datei im Browser
-                const response = await fetch(`https://dreamlo.com/lb/${DREAMLO_PUBLIC_KEY}/json`, {
-                    cache: 'no-store'
-                });
+                // WICHTIG: www.dreamlo.com nutzen für ein gültiges SSL-Zertifikat!
+                const response = await fetch(`https://www.dreamlo.com/lb/${DREAMLO_PUBLIC_KEY}/json?cb=${Date.now()}`);
                 
                 if (response.ok) {
                     const data = await response.json();
@@ -280,7 +277,6 @@
                     if (data.dreamlo && data.dreamlo.leaderboard && data.dreamlo.leaderboard.entry) {
                         let entries = data.dreamlo.leaderboard.entry;
                         
-                        // Bei nur 1 Eintrag gibt es kein Array, wir erzwingen eines
                         if (!Array.isArray(entries)) {
                             entries = [entries];
                         }
@@ -299,28 +295,24 @@
             renderLeaderboardUI();
         }
 
-        async function submitScoreToServer() {
-            try {
-                // Sehr wichtig: Unerlaubte Zeichen durch Unterstrich ersetzen, da Dreamlo sonst den URL-Request ignoriert
-                let safeName = playerName.replace(/[^a-zA-Z0-9_-]/g, '_');
-                if (!safeName) safeName = "Spieler";
-                
-                const safeScore = Math.floor(score);
-                
-                // Wir senden per GET mit mode: 'no-cors' - das verhindert Browser-Blockaden
-                await fetch(`https://dreamlo.com/lb/${DREAMLO_PRIVATE_KEY}/add/${safeName}/${safeScore}`, {
-                    method: 'GET',
-                    mode: 'no-cors',
-                    cache: 'no-store'
-                });
-                
-                // Leicht verzögert die neue Liste ziehen, damit der Server Zeit hatte
-                setTimeout(() => {
-                    fetchLeaderboard();
-                }, 500);
-            } catch (error) {
-                console.error("Fehler beim Speichern auf Dreamlo:", error);
-            }
+        function submitScoreToServer() {
+            // Unzulässige Zeichen (wie Leerzeichen oder Sterne) für Dreamlo durch Unterstrich ersetzen
+            let safeName = playerName.replace(/[^a-zA-Z0-9_-]/g, '_');
+            if (!safeName) safeName = "Spieler";
+            
+            const safeScore = Math.floor(score);
+            
+            // DER ULTIMATIVE HACK: Ein unsichtbares Bild laden!
+            // Das umgeht alle Browser-Blockaden (CORS) zu 100%, weil Bilder immer geladen werden dürfen.
+            const img = new Image();
+            
+            // Egal ob Erfolg oder Fehler (Dreamlo gibt keinen echten Bild-Code zurück, 
+            // sondern Text, daher schlägt das Bildladen immer fehl, aber der Request kam durch!)
+            img.onload = () => fetchLeaderboard();
+            img.onerror = () => fetchLeaderboard();
+            
+            // WICHTIG: www.dreamlo.com nutzen!
+            img.src = `https://www.dreamlo.com/lb/${DREAMLO_PRIVATE_KEY}/add/${safeName}/${safeScore}`;
         }
 
         // --- INITIALISIERUNG & NAMENSGEBUNG ---
@@ -340,7 +332,6 @@
                         inputName = "Gast_" + Math.floor(Math.random() * 10000);
                     }
                     
-                    // Sofort bereinigen, damit der User den echten Namen auf dem Schirm hat
                     inputName = inputName.replace(/[^a-zA-Z0-9_-]/g, '_').substring(0, 15);
                     
                     const nameTaken = globalLeaderboard.some(p => p.name.toLowerCase() === inputName.toLowerCase());
@@ -359,7 +350,7 @@
             
             displayPlayerName.innerText = playerName;
             loadGame();
-            submitScoreToServer(); // Direkt einen Eintrag auf Dreamlo erstellen!
+            submitScoreToServer(); // Direkt mit 0 Punkten abspeichern!
         }
 
         function changeName() {
@@ -376,15 +367,16 @@
                     return;
                 }
 
-                // Den alten Namen auf Dreamlo löschen
+                // Den alten Namen auf Dreamlo löschen (wieder über den Image Hack)
                 const safeOldName = playerName.replace(/[^a-zA-Z0-9_-]/g, '_');
-                fetch(`https://dreamlo.com/lb/${DREAMLO_PRIVATE_KEY}/delete/${safeOldName}`, { mode: 'no-cors' });
+                const delImg = new Image();
+                delImg.src = `https://www.dreamlo.com/lb/${DREAMLO_PRIVATE_KEY}/delete/${safeOldName}`;
 
                 playerName = newName;
                 localStorage.setItem('michiPlayerName', playerName);
                 displayPlayerName.innerText = playerName;
                 
-                submitScoreToServer(); 
+                setTimeout(() => submitScoreToServer(), 1000); 
             }
         }
 
