@@ -8,12 +8,13 @@
     <link rel="stylesheet" href="../styles.css">
 
     <style>
-        /* Michi Clicker spezifische Styles, die deine Variablen nutzen */
+        /* Spezifische Styles für das Spiel, die deine CSS-Variablen nutzen */
         .game-layout {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1.2fr 1fr;
             gap: 2rem;
             margin-top: 2rem;
+            position: relative;
         }
 
         @media (max-width: 900px) {
@@ -28,56 +29,68 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
 
+        .score-display-container { margin-bottom: 1.5rem; }
+        
         .score-display {
-            font-size: 3rem;
+            font-size: 3.5rem;
             font-weight: 700;
-            color: var(--primary);
+            color: var(--primary, #063c8c);
             font-family: 'Montserrat', sans-serif;
             margin: 0;
+            transition: transform 0.05s ease;
         }
+
+        .score-display.pulse { transform: scale(1.05); }
 
         .pps-display {
             font-size: 1.2rem;
-            color: var(--dark);
+            color: var(--dark, #2c3e50);
+            margin: 0;
+        }
+
+        /* Der klickbare Michi / Cookie */
+        .michi-target-container {
+            position: relative;
             margin-bottom: 2rem;
         }
 
-        /* Der klickbare Michi */
         .michi-target {
             width: 250px;
             height: 250px;
             object-fit: cover;
             border-radius: 50%;
-            border: 8px solid var(--primary);
-            box-shadow: 0 10px 25px rgba(6, 60, 140, 0.3);
+            border: 10px solid var(--primary, #063c8c);
+            box-shadow: 0 15px 35px rgba(6, 60, 140, 0.4);
             cursor: pointer;
             transition: transform 0.05s ease, box-shadow 0.05s ease;
             user-select: none;
-            margin-bottom: 2rem;
+            z-index: 10;
         }
 
         .michi-target:active {
             transform: scale(0.92);
-            box-shadow: 0 5px 15px rgba(6, 60, 140, 0.5);
+            box-shadow: 0 5px 20px rgba(6, 60, 140, 0.6);
         }
 
-        /* XP und Level System */
-        .level-container {
+        /* Level & XP System */
+        .level-card {
             width: 100%;
-            background: var(--light);
-            border-radius: 20px;
-            padding: 1rem;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
-            position: relative;
+            padding: 1.2rem;
+            background: var(--light, #ecf0f1);
+            border-radius: 10px;
         }
 
         .level-title {
             font-weight: bold;
-            color: var(--dark);
-            margin-bottom: 0.5rem;
-            font-size: 1.2rem;
+            color: var(--dark, #2c3e50);
+            margin: 0 0 0.8rem 0;
+            font-size: 1.3rem;
         }
 
         .xp-bar-bg {
@@ -86,91 +99,82 @@
             background-color: #ddd;
             border-radius: 12.5px;
             overflow: hidden;
-            position: relative;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .xp-bar-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--secondary), #f39c12);
+            background: linear-gradient(90deg, var(--secondary, #fbcd37), #f39c12);
             width: 0%;
-            transition: width 0.3s ease;
+            transition: width 0.3s ease, background 0.3s ease;
         }
 
-        /* Level Up Animation */
-        .level-up-popup {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            background: var(--success);
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 10px;
-            font-weight: bold;
-            font-size: 2rem;
-            box-shadow: 0 10px 30px rgba(39, 174, 96, 0.5);
-            opacity: 0;
-            pointer-events: none;
-            z-index: 100;
-        }
-
-        .level-up-anim {
-            animation: levelUpPop 2s ease-out forwards;
-        }
-
-        @keyframes levelUpPop {
-            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
-            20% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
-            40% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-            80% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-            100% { transform: translate(-50%, -100%) scale(0.8); opacity: 0; }
-        }
-
-        /* Klick-Partikel (+1) */
+        /* Fliegende Klick-Partikel (+1) */
         .floating-text {
             position: absolute;
-            color: var(--accent);
+            color: var(--accent, #e74c3c);
             font-size: 1.5rem;
             font-weight: bold;
             pointer-events: none;
-            animation: floatUp 1s ease-out forwards;
+            animation: floatUpAndFade 1.2s ease-out forwards;
             z-index: 50;
         }
 
-        @keyframes floatUp {
+        @keyframes floatUpAndFade {
             0% { opacity: 1; transform: translateY(0) scale(1); }
-            100% { opacity: 0; transform: translateY(-80px) scale(1.5); }
+            100% { opacity: 0; transform: translateY(-100px) scale(1.6); }
+        }
+
+        /* Fliegende passive "Cookies" */
+        .flying-passive-cookie {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid var(--primary, #063c8c);
+            pointer-events: none;
+            animation: flyToScore 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            z-index: 40;
+        }
+
+        @keyframes flyToScore {
+            0% { opacity: 0; transform: translate(0, 0) scale(0.2) rotate(0deg); }
+            10% { opacity: 1; transform: translate(0, -20px) scale(1) rotate(45deg); }
+            100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.5) rotate(360deg); }
         }
 
         /* Rechte Seite: Upgrades */
         .upgrades-panel {
-            max-height: 80vh;
+            max-height: 85vh;
             overflow-y: auto;
-            padding-right: 10px;
+            padding: 1rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
 
-        /* Scrollbar Styling (an dein CSS angepasst) */
         .upgrades-panel::-webkit-scrollbar { width: 10px; }
-        .upgrades-panel::-webkit-scrollbar-track { background: var(--light); border-radius: 5px; }
-        .upgrades-panel::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 5px; }
+        .upgrades-panel::-webkit-scrollbar-track { background: var(--light, #ecf0f1); border-radius: 5px; }
+        .upgrades-panel::-webkit-scrollbar-thumb { background: var(--primary, #063c8c); border-radius: 5px; }
 
         .upgrade-item {
             display: flex;
             align-items: center;
             background: #fff;
             border: 2px solid #eee;
-            border-radius: 10px;
+            border-radius: 12px;
             padding: 15px;
             margin-bottom: 15px;
             cursor: pointer;
             transition: all 0.2s ease;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.03);
         }
 
         .upgrade-item:hover {
-            border-color: var(--secondary);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border-color: var(--secondary, #fbcd37);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
         }
 
         .upgrade-item.disabled {
@@ -182,171 +186,259 @@
         .upgrade-item.disabled:hover {
             border-color: #eee;
             transform: none;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.03);
         }
 
         .upgrade-img {
-            width: 60px;
-            height: 60px;
+            width: 70px;
+            height: 70px;
             object-fit: cover;
             border-radius: 8px;
-            background-color: var(--light);
-            margin-right: 15px;
+            background-color: var(--light, #ecf0f1);
+            margin-right: 18px;
             border: 1px solid #ddd;
         }
 
-        .upgrade-info {
-            flex-grow: 1;
-        }
+        .upgrade-info { flex-grow: 1; }
 
         .upgrade-name {
             font-weight: bold;
-            color: var(--dark);
-            margin: 0 0 5px 0;
-            font-size: 1.1rem;
+            color: var(--dark, #2c3e50);
+            margin: 0 0 4px 0;
+            font-size: 1.15rem;
         }
 
         .upgrade-cost {
-            color: var(--accent);
-            margin: 0 0 5px 0;
+            color: var(--accent, #e74c3c);
+            margin: 0 0 3px 0;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
         }
         
-        .upgrade-pps {
-            color: #777;
-            font-size: 0.8rem;
-            margin: 0;
-        }
+        .upgrade-pps { color: #666; font-size: 0.8rem; margin: 0; }
 
         .upgrade-count {
-            font-size: 2rem;
+            font-size: 2.3rem;
             font-weight: bold;
-            color: var(--primary);
+            color: var(--primary, #063c8c);
             font-family: 'Montserrat', sans-serif;
-            min-width: 50px;
+            min-width: 60px;
             text-align: right;
+            margin-left: 10px;
         }
+
+        /* Full-screen Overlays für LevelUp & Unlock */
+        .game-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.85);
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            z-index: 1000; color: white;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .game-overlay.active {
+            opacity: 1; pointer-events: auto;
+        }
+
+        .overlay-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 3rem; border-radius: 20px;
+            border: 2px solid rgba(255,255,255,0.2);
+            text-align: center; max-width: 90%;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        .level-up-title {
+            font-size: 4rem; color: var(--success, #27ae60);
+            margin: 0 0 1rem 0; text-shadow: 0 0 20px rgba(39, 174, 96, 0.8);
+        }
+
+        .unlock-img {
+            max-width: 250px; max-height: 250px;
+            object-fit: cover; border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 0 30px rgba(255,255,255,0.3);
+        }
+
+        .unlock-text-large { color: var(--warning, #f39c12); font-size: 2rem; margin: 0; }
+        .unlock-device-name { font-size: 2.5rem; font-weight: bold; margin: 1rem 0; }
+
+        .btn-overlay-close {
+            margin-top: 2rem; padding: 0.8rem 2.5rem;
+            font-size: 1.2rem; background-color: var(--primary, #063c8c);
+            color: white; border: none; border-radius: 5px;
+            cursor: pointer; transition: background 0.2s;
+        }
+
+        .btn-overlay-close:hover { background-color: var(--dark, #2c3e50); }
     </style>
 </head>
 <body>
 
-    <nav class="navbar">
-        <ul>
-            <li><a href="#">Zurück zur Startseite</a></li>
-            <li><a href="#">Michi Clicker</a></li>
-        </ul>
-    </nav>
-
-    <main class="container">
-        <h2 style="text-align: center; color: var(--primary);">Michi Clicker</h2>
+    <main class="container" style="max-width: 1200px; margin: 0 auto; padding: 20px;">
+        <h1 style="text-align: center; color: var(--primary); font-size: 3rem;">Michi Clicker</h1>
         
         <div class="game-layout">
-            
-            <div class="card clicker-panel">
-                <p class="score-display"><span id="score">0</span></p>
-                <p class="pps-display">Pakete pro Sekunde: <span id="pps">0</span></p>
+            <div class="clicker-panel">
+                <div class="score-display-container">
+                    <p class="score-display" id="score-text"><span id="score">0</span></p>
+                    <p class="pps-display">Pakete pro Sekunde: <span id="pps">0</span></p>
+                </div>
 
-                <img src="/MP.org/assets/img/MICHI.png" id="michi-button" class="michi-target" alt="Michi klick mich!" onerror="this.src='https://via.placeholder.com/250/063c8c/ffffff?text=Michi+Bild'">
+                <div class="michi-target-container">
+                    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Choc-Chip-Cookie.jpg?width=400" id="michi-button" class="michi-target" alt="Cookie" draggable="false">
+                </div>
 
-                <div class="level-container">
+                <div class="level-card">
                     <div class="level-title">Level: <span id="level">1</span></div>
                     <div class="xp-bar-bg">
                         <div class="xp-bar-fill" id="xp-fill"></div>
                     </div>
-                    <div style="text-align: right; font-size: 0.8rem; margin-top: 5px; color: #666;">
-                        XP: <span id="xp-current">0</span> / <span id="xp-needed">100</span>
+                    <div style="text-align: right; font-size: 0.8rem; margin-top: 8px; color: #777;">
+                        XP: <span id="xp-current">0</span> / <span id="xp-needed">30</span>
                     </div>
-
-                    <div id="level-up-msg" class="level-up-popup">LEVEL UP!</div>
                 </div>
             </div>
 
-            <div class="card upgrades-panel" id="upgrades-container">
+            <div class="upgrades-panel" id="upgrades-container">
+                <h3 style="margin-top: 0; color: var(--primary); border-bottom: 2px solid #eee; padding-bottom: 10px;">Netzwerk-Infrastruktur</h3>
                 </div>
-
         </div>
     </main>
 
+    <div class="game-overlay" id="overlay-levelup">
+        <div class="overlay-card">
+            <h1 class="level-up-title">LEVEL UP!</h1>
+            <p style="font-size: 1.8rem; margin: 0;">Du bist jetzt Level <span id="overlay-levelup-level">X</span></p>
+            <p style="color: #aaa; margin-top: 1rem;">Deine Klickkraft wurde erhöht.</p>
+            <button class="btn-overlay-close" onclick="closeOverlay('overlay-levelup')">Weiter</button>
+        </div>
+    </div>
+
+    <div class="game-overlay" id="overlay-unlock">
+        <div class="overlay-card">
+            <p class="unlock-text-large">NEUES GERÄT FREIGESCHALTET!</p>
+            <img src="" class="unlock-img" id="overlay-unlock-img" alt="Unlocked Device">
+            <h2 class="unlock-device-name" id="overlay-unlock-name">Nexus 9000</h2>
+            <button class="btn-overlay-close" onclick="closeOverlay('overlay-unlock')">Super!</button>
+        </div>
+    </div>
+
     <script>
+        // --- UPGRADES CONFIG (Bilder direkt aus dem Internet / Wikipedia) ---
+        const upgradesConfig = [
+            { id: 'cable', name: 'RJ45 Patchkabel', baseCost: 15, pps: 0.5, count: 0, image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Ethernet_Cable.jpg?width=300' },
+            { id: 'switch2960', name: 'Catalyst Switch', baseCost: 100, pps: 2, count: 0, image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Network_switch.jpg?width=300' },
+            { id: 'ap_meraki', name: 'Wireless Access Point', baseCost: 500, pps: 8, count: 0, image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Wireless_router.jpg?width=300' },
+            { id: 'router4000', name: 'Cisco Router', baseCost: 3000, pps: 30, count: 0, image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Cisco_1841.jpg?width=300' },
+            { id: 'firewall', name: 'Hardware Firewall', baseCost: 10000, pps: 120, count: 0, image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Hardware_firewall.jpg?width=300' },
+            { id: 'switch9300', name: 'Core Switch', baseCost: 40000, pps: 500, count: 0, image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Cisco_Catalyst_2960_Series_PoE_Switch.jpg?width=300' },
+            { id: 'nexus', name: 'Nexus Datacenter', baseCost: 200000, pps: 2500, count: 0, image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Datacenter.jpg?width=300' },
+            { id: 'asr', name: 'ASR Edge Router', baseCost: 1000000, pps: 15000, count: 0, image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Server_rack.jpg?width=300' }
+        ];
+
         // --- SPIEL VARIABLEN ---
         let score = 0;
         let packetsPerSecond = 0;
         let clickPower = 1;
-
-        // Level & XP Variablen
         let level = 1;
         let currentXP = 0;
-        let xpRequired = 100;
+        const mainCookieImgSrc = document.getElementById('michi-button').src;
 
-        // --- CISCO UPGRADES ---
-        // Hier deine Bilder-Pfade bei 'image' eintragen!
-        const upgrades = [
-            { id: 'cable', name: 'RJ45 Patchkabel', baseCost: 15, pps: 1, count: 0, image: 'assets/img/kabel.png' },
-            { id: 'switch2960', name: 'Cisco Catalyst 2960', baseCost: 100, pps: 5, count: 0, image: 'assets/img/2960.png' },
-            { id: 'ap_meraki', name: 'Cisco Meraki MR46 AP', baseCost: 500, pps: 25, count: 0, image: 'assets/img/meraki.png' },
-            { id: 'router4000', name: 'Cisco ISR 4000 Router', baseCost: 3000, pps: 120, count: 0, image: 'assets/img/isr4000.png' },
-            { id: 'firewall', name: 'Cisco ASA 5500 Firewall', baseCost: 10000, pps: 400, count: 0, image: 'assets/img/asa.png' },
-            { id: 'switch9300', name: 'Cisco Catalyst 9300', baseCost: 40000, pps: 1500, count: 0, image: 'assets/img/9300.png' },
-            { id: 'nexus', name: 'Cisco Nexus 9000 Core', baseCost: 200000, pps: 7500, count: 0, image: 'assets/img/nexus.png' },
-            { id: 'asr', name: 'Cisco ASR 9000 Edge', baseCost: 1000000, pps: 45000, count: 0, image: 'assets/img/asr.png' }
-        ];
+        // Dynamische XP Skalierung (z.B. 30, 50, 80, 120...)
+        function getRequiredXP(lvl) {
+            const predefined = { 1: 30, 2: 50, 3: 80, 4: 120, 5: 170 };
+            if (predefined[lvl]) return predefined[lvl];
+            return Math.floor(170 * Math.pow(1.4, lvl - 5)); // Skaliert danach stetig weiter
+        }
+        let xpRequired = getRequiredXP(level);
 
         // --- DOM ELEMENTE ---
         const uiScore = document.getElementById('score');
+        const uiScoreText = document.getElementById('score-text');
         const uiPPS = document.getElementById('pps');
-        const michiBtn = document.getElementById('michi-button');
+        const uiMichiBtn = document.getElementById('michi-button');
         const upgradesContainer = document.getElementById('upgrades-container');
         
         const uiLevel = document.getElementById('level');
         const uiXpCurrent = document.getElementById('xp-current');
         const uiXpNeeded = document.getElementById('xp-needed');
         const uiXpFill = document.getElementById('xp-fill');
-        const levelUpMsg = document.getElementById('level-up-msg');
 
-        // --- KLICK LOGIK ---
-        michiBtn.addEventListener('click', (e) => {
+        // --- EVENTS ---
+        uiMichiBtn.addEventListener('click', (e) => {
             score += clickPower;
-            addXP(clickPower); // Jeder Klick gibt XP
+            addXP(clickPower);
             createFloatingText(e, `+${clickPower}`);
             updateUI();
         });
 
-        // Fliegende Zahlen Animation (Klick)
+        // Visueller Klick-Effekt
         function createFloatingText(e, text) {
             const floater = document.createElement('div');
             floater.classList.add('floating-text');
             floater.innerText = text;
-            
-            // Zufällige leichte Abweichung um den Mauszeiger
-            const offsetX = (Math.random() - 0.5) * 40;
+            const offsetX = (Math.random() - 0.5) * 60;
             floater.style.left = `${e.clientX + offsetX}px`;
-            floater.style.top = `${e.clientY - 20}px`;
-            
+            floater.style.top = `${e.clientY - 30}px`;
             document.body.appendChild(floater);
-            setTimeout(() => floater.remove(), 1000);
+            setTimeout(() => floater.remove(), 1200);
         }
 
-        // --- LEVEL & XP LOGIK ---
+        // --- FLIEGENDE COOKIES (Passiv) ---
+        function triggerPassiveCookie() {
+            if (packetsPerSecond === 0) return;
+
+            const cookie = document.createElement('img');
+            cookie.src = mainCookieImgSrc;
+            cookie.classList.add('flying-passive-cookie');
+
+            const michiPos = uiMichiBtn.getBoundingClientRect();
+            const scorePos = uiScoreText.getBoundingClientRect();
+
+            // Startpunkt: Mitte des großen Cookies
+            cookie.style.left = `${michiPos.left + michiPos.width / 2 - 20}px`;
+            cookie.style.top = `${michiPos.top + michiPos.height / 2 - 20}px`;
+
+            // Endpunkt berechnen (Vektor zum Score-Text)
+            const dx = (scorePos.left + scorePos.width / 2) - (michiPos.left + michiPos.width / 2);
+            const dy = (scorePos.top + scorePos.height / 2) - (michiPos.top + michiPos.height / 2);
+
+            cookie.style.setProperty('--dx', `${dx}px`);
+            cookie.style.setProperty('--dy', `${dy}px`);
+
+            document.body.appendChild(cookie);
+            
+            // Score aufploppen lassen, wenn der Cookie ankommt
+            setTimeout(() => {
+                cookie.remove();
+                uiScoreText.classList.add('pulse');
+                setTimeout(() => uiScoreText.classList.remove('pulse'), 100);
+            }, 1000);
+        }
+
+        // --- XP & LEVEL SYSTEM ---
         function addXP(amount) {
             currentXP += amount;
             if (currentXP >= xpRequired) {
+                currentXP -= xpRequired; // Restliche XP übernehmen
                 levelUp();
             }
             updateXPBar();
         }
 
         function levelUp() {
-            currentXP -= xpRequired; // Restliche XP behalten
             level++;
-            xpRequired = Math.floor(xpRequired * 1.5); // Nächstes Level braucht 50% mehr XP
-            clickPower = Math.ceil(level * 1.2); // Klicks werden pro Level stärker
+            xpRequired = getRequiredXP(level);
+            clickPower = Math.ceil(level * 1.5); // Jeder Klick bringt nun mehr
 
-            // Animation auslösen
-            levelUpMsg.classList.remove('level-up-anim');
-            void levelUpMsg.offsetWidth; // Trigger Reflow um Animation neu zu starten
-            levelUpMsg.classList.add('level-up-anim');
-
+            // LevelUp Overlay anzeigen
+            document.getElementById('overlay-levelup-level').innerText = level;
+            document.getElementById('overlay-levelup').classList.add('active');
             uiLevel.innerText = level;
         }
 
@@ -357,17 +449,25 @@
             uiXpFill.style.width = `${percent}%`;
         }
 
-        // --- UPGRADE LOGIK ---
+        // --- UPGRADE SYSTEM ---
         function getCost(upgrade) {
             return Math.floor(upgrade.baseCost * Math.pow(1.15, upgrade.count));
         }
 
         function buyUpgrade(index) {
-            const upgrade = upgrades[index];
+            const upgrade = upgradesConfig[index];
             const cost = getCost(upgrade);
 
             if (score >= cost) {
                 score -= cost;
+                
+                // Overlay anzeigen, wenn das erste Mal gekauft
+                if (upgrade.count === 0) {
+                    document.getElementById('overlay-unlock-img').src = upgrade.image;
+                    document.getElementById('overlay-unlock-name').innerText = upgrade.name;
+                    document.getElementById('overlay-unlock').classList.add('active');
+                }
+                
                 upgrade.count++;
                 recalculatePPS();
                 renderUpgrades();
@@ -377,15 +477,18 @@
 
         function recalculatePPS() {
             packetsPerSecond = 0;
-            upgrades.forEach(u => packetsPerSecond += u.count * u.pps);
+            upgradesConfig.forEach(u => packetsPerSecond += u.count * u.pps);
             uiPPS.innerText = packetsPerSecond.toLocaleString('de-DE');
         }
 
-        // --- RENDER LOGIK ---
+        // --- RENDERING ---
         function renderUpgrades() {
-            upgradesContainer.innerHTML = ''; 
+            // Alte Elemente löschen, aber die Überschrift behalten
+            const title = upgradesContainer.querySelector('h3');
+            upgradesContainer.innerHTML = '';
+            upgradesContainer.appendChild(title);
 
-            upgrades.forEach((upgrade, index) => {
+            upgradesConfig.forEach((upgrade, index) => {
                 const cost = getCost(upgrade);
                 const canAfford = score >= cost;
 
@@ -393,11 +496,8 @@
                 item.className = `upgrade-item ${canAfford ? '' : 'disabled'}`;
                 item.onclick = () => buyUpgrade(index);
 
-                // Fallback Image falls Pfad noch leer ist
-                const imgSrc = upgrade.image ? upgrade.image : `https://via.placeholder.com/60?text=${upgrade.name.charAt(0)}`;
-
                 item.innerHTML = `
-                    <img src="${imgSrc}" class="upgrade-img" alt="${upgrade.name}" onerror="this.src='https://via.placeholder.com/60?text=?'">
+                    <img src="${upgrade.image}" class="upgrade-img" alt="${upgrade.name}" onerror="this.src='https://loremflickr.com/70/70/hardware'">
                     <div class="upgrade-info">
                         <h4 class="upgrade-name">${upgrade.name}</h4>
                         <p class="upgrade-cost">${cost.toLocaleString('de-DE')} Pakete</p>
@@ -413,10 +513,10 @@
         function updateUI() {
             uiScore.innerText = Math.floor(score).toLocaleString('de-DE');
             
-            // Button-Status live aktualisieren ohne komplett neu zu rendern (bessere Performance)
-            const items = upgradesContainer.children;
-            upgrades.forEach((upgrade, index) => {
-                if(items[index]) {
+            // Buttons live updaten (grau färben oder aktivieren)
+            const items = upgradesContainer.querySelectorAll('.upgrade-item');
+            upgradesConfig.forEach((upgrade, index) => {
+                if (items[index]) {
                     if (score >= getCost(upgrade)) {
                         items[index].classList.remove('disabled');
                     } else {
@@ -426,18 +526,34 @@
             });
         }
 
+        // --- OVERLAYS SCHLIESSEN ---
+        function closeOverlay(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
         // --- GAME LOOP ---
-        // Läuft 10x pro Sekunde
+        // Generiert 10x pro Sekunde PPS (für flüssiges Hochzählen)
         setInterval(() => {
             if (packetsPerSecond > 0) {
                 const amount = packetsPerSecond / 10;
                 score += amount;
-                addXP(amount * 0.1); // Passive PPS geben auch ein bisschen XP (10% der PPS)
+                addXP(amount * 0.05); // Passive Generation gibt ein klein wenig XP
                 updateUI();
             }
         }, 100);
 
-        // Initialisierung
+        // Fliegende Cookie Animation Loop (Je mehr PPS, desto öfter fliegen Cookies)
+        setInterval(() => {
+            if (packetsPerSecond > 0) {
+                // Bei 100 PPS fliegen mehr Cookies als bei 1 PPS, gecapped auf max. 5 pro Sekunde
+                let chance = Math.min(packetsPerSecond / 50, 5); 
+                if (Math.random() < chance) {
+                    triggerPassiveCookie();
+                }
+            }
+        }, 500);
+
+        // Init
         renderUpgrades();
         updateUI();
         updateXPBar();
