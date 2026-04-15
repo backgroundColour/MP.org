@@ -35,17 +35,14 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
             max-height: 85vh;
             overflow-y: auto;
+            position: relative;
         }
 
         .leaderboard-panel::-webkit-scrollbar { width: 8px; }
         .leaderboard-panel::-webkit-scrollbar-track { background: var(--light, #ecf0f1); border-radius: 5px; }
         .leaderboard-panel::-webkit-scrollbar-thumb { background: var(--primary, #063c8c); border-radius: 5px; }
 
-        .leaderboard-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
+        .leaderboard-list { list-style: none; padding: 0; margin: 0; }
 
         .leaderboard-item {
             display: grid;
@@ -72,301 +69,84 @@
 
         .lb-rank { font-weight: bold; color: #888; }
         .leaderboard-item.is-me .lb-rank { color: var(--dark, #2c3e50); }
+        .lb-score { font-family: 'Montserrat', sans-serif; color: var(--primary, #063c8c); font-weight: bold; }
         
-        .lb-score {
-            font-family: 'Montserrat', sans-serif;
-            color: var(--primary, #063c8c);
-            font-weight: bold;
+        .live-indicator {
+            position: absolute;
+            top: 20px; right: 20px;
+            font-size: 0.7rem; color: var(--success);
+            font-weight: bold; display: flex; align-items: center; gap: 5px;
         }
+        .live-dot {
+            width: 8px; height: 8px; background: var(--success);
+            border-radius: 50%; animation: blink 1.5s infinite;
+        }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
 
         /* --- MITTE (Klicker & Save-System) --- */
         .clicker-panel {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            background: white;
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            position: relative;
+            display: flex; flex-direction: column; align-items: center; text-align: center;
+            background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative;
         }
 
         .player-info {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            font-size: 0.9rem;
-            color: var(--dark);
-            background: var(--light);
-            padding: 5px 10px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            cursor: pointer;
-            transition: background 0.2s;
+            position: absolute; top: 15px; left: 15px; font-size: 0.9rem; color: var(--dark);
+            background: var(--light); padding: 5px 10px; border-radius: 5px; border: 1px solid #ddd;
+            cursor: pointer; transition: background 0.2s;
         }
         .player-info:hover { background: #e0e0e0; }
 
         .score-display-container { margin-bottom: 1.5rem; margin-top: 1rem; }
-        
-        .score-display {
-            font-size: 3.5rem;
-            font-weight: 700;
-            color: var(--primary, #063c8c);
-            font-family: 'Montserrat', sans-serif;
-            margin: 0;
-            transition: transform 0.05s ease;
-        }
-
+        .score-display { font-size: 3.5rem; font-weight: 700; color: var(--primary, #063c8c); font-family: 'Montserrat', sans-serif; margin: 0; transition: transform 0.05s ease; }
         .score-display.pulse { transform: scale(1.05); }
+        .pps-display { font-size: 1.2rem; color: var(--dark, #2c3e50); margin: 0; }
 
-        .pps-display {
-            font-size: 1.2rem;
-            color: var(--dark, #2c3e50);
-            margin: 0;
-        }
-
-        .save-controls {
-            display: flex;
-            gap: 10px;
-            margin-top: 1.5rem;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-        }
-
-        .btn-action {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: opacity 0.2s;
-        }
+        .save-controls { display: flex; gap: 10px; margin-top: 1.5rem; align-items: center; justify-content: center; width: 100%; }
+        .btn-action { padding: 8px 15px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; transition: opacity 0.2s; }
         .btn-action:hover { opacity: 0.8; }
         .btn-save { background: var(--success, #27ae60); color: white; }
         .btn-reset { background: var(--accent, #e74c3c); color: white; }
-        
-        #save-indicator {
-            font-size: 0.9rem;
-            color: var(--success, #27ae60);
-            font-weight: bold;
-            min-width: 90px;
-            text-align: left;
-        }
+        #save-indicator { font-size: 0.9rem; color: var(--success, #27ae60); font-weight: bold; min-width: 90px; text-align: left; }
 
-        .michi-target-container {
-            position: relative;
-            margin-bottom: 2rem;
-            width: 250px;
-            height: 250px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+        .michi-target-container { position: relative; margin-bottom: 2rem; width: 250px; height: 250px; display: flex; align-items: center; justify-content: center; }
+        .michi-target { max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.3)); cursor: pointer; transition: transform 0.05s ease, filter 0.05s ease; user-select: none; z-index: 10; }
+        .michi-target:active { transform: scale(0.92); filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.5)); }
 
-        .michi-target {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.3));
-            cursor: pointer;
-            transition: transform 0.05s ease, filter 0.05s ease;
-            user-select: none;
-            z-index: 10;
-        }
+        .level-card { width: 100%; padding: 1.2rem; background: var(--light, #ecf0f1); border-radius: 10px; }
+        .level-title { font-weight: bold; color: var(--dark, #2c3e50); margin: 0 0 0.8rem 0; font-size: 1.3rem; }
+        .xp-bar-bg { width: 100%; height: 25px; background-color: #ddd; border-radius: 12.5px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); }
+        .xp-bar-fill { height: 100%; background: linear-gradient(90deg, var(--secondary, #fbcd37), #f39c12); width: 0%; transition: width 0.3s ease, background 0.3s ease; }
 
-        .michi-target:active {
-            transform: scale(0.92);
-            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.5));
-        }
+        .floating-text { position: absolute; color: var(--accent, #e74c3c); font-size: 1.5rem; font-weight: bold; pointer-events: none; animation: floatUpAndFade 1.2s ease-out forwards; z-index: 50; }
+        @keyframes floatUpAndFade { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-100px) scale(1.6); } }
 
-        .level-card {
-            width: 100%;
-            padding: 1.2rem;
-            background: var(--light, #ecf0f1);
-            border-radius: 10px;
-        }
-
-        .level-title {
-            font-weight: bold;
-            color: var(--dark, #2c3e50);
-            margin: 0 0 0.8rem 0;
-            font-size: 1.3rem;
-        }
-
-        .xp-bar-bg {
-            width: 100%;
-            height: 25px;
-            background-color: #ddd;
-            border-radius: 12.5px;
-            overflow: hidden;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .xp-bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--secondary, #fbcd37), #f39c12);
-            width: 0%;
-            transition: width 0.3s ease, background 0.3s ease;
-        }
-
-        .floating-text {
-            position: absolute;
-            color: var(--accent, #e74c3c);
-            font-size: 1.5rem;
-            font-weight: bold;
-            pointer-events: none;
-            animation: floatUpAndFade 1.2s ease-out forwards;
-            z-index: 50;
-        }
-
-        @keyframes floatUpAndFade {
-            0% { opacity: 1; transform: translateY(0) scale(1); }
-            100% { opacity: 0; transform: translateY(-100px) scale(1.6); }
-        }
-
-        .flying-passive-cookie {
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            object-fit: contain;
-            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2));
-            pointer-events: none;
-            animation: flyToScore 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-            z-index: 40;
-        }
-
-        @keyframes flyToScore {
-            0% { opacity: 0; transform: translate(0, 0) scale(0.2) rotate(0deg); }
-            10% { opacity: 1; transform: translate(0, -20px) scale(1) rotate(45deg); }
-            100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.5) rotate(360deg); }
-        }
+        .flying-passive-cookie { position: absolute; width: 40px; height: 40px; object-fit: contain; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2)); pointer-events: none; animation: flyToScore 1s cubic-bezier(0.25, 1, 0.5, 1) forwards; z-index: 40; }
+        @keyframes flyToScore { 0% { opacity: 0; transform: translate(0, 0) scale(0.2) rotate(0deg); } 10% { opacity: 1; transform: translate(0, -20px) scale(1) rotate(45deg); } 100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.5) rotate(360deg); } }
 
         /* --- RECHTE SEITE (Upgrades) --- */
-        .upgrades-panel {
-            max-height: 85vh;
-            overflow-y: auto;
-            padding: 1rem;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
-
+        .upgrades-panel { max-height: 85vh; overflow-y: auto; padding: 1rem; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         .upgrades-panel::-webkit-scrollbar { width: 10px; }
         .upgrades-panel::-webkit-scrollbar-track { background: var(--light, #ecf0f1); border-radius: 5px; }
         .upgrades-panel::-webkit-scrollbar-thumb { background: var(--primary, #063c8c); border-radius: 5px; }
 
-        .upgrade-item {
-            display: flex;
-            align-items: center;
-            background: #fff;
-            border: 2px solid #eee;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 15px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.03);
-        }
-
-        .upgrade-item:hover {
-            border-color: var(--secondary, #fbcd37);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-        }
-
-        .upgrade-item.locked {
-            opacity: 0.6;
-            cursor: not-allowed;
-            background-color: #f8f9fa;
-        }
-        
-        .upgrade-item.locked:hover {
-            border-color: #eee;
-            transform: none;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.03);
-        }
-
-        .upgrade-item.disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .upgrade-img {
-            width: 70px;
-            height: 70px;
-            object-fit: contain;
-            border-radius: 8px;
-            background-color: white;
-            margin-right: 18px;
-            border: 1px solid #ddd;
-            padding: 5px;
-        }
-
+        .upgrade-item { display: flex; align-items: center; background: #fff; border: 2px solid #eee; border-radius: 12px; padding: 15px; margin-bottom: 15px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 3px 6px rgba(0,0,0,0.03); }
+        .upgrade-item:hover { border-color: var(--secondary, #fbcd37); transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .upgrade-item.locked { opacity: 0.6; cursor: not-allowed; background-color: #f8f9fa; }
+        .upgrade-item.locked:hover { border-color: #eee; transform: none; box-shadow: 0 3px 6px rgba(0,0,0,0.03); }
+        .upgrade-item.disabled { opacity: 0.5; cursor: not-allowed; }
+        .upgrade-img { width: 70px; height: 70px; object-fit: contain; border-radius: 8px; background-color: white; margin-right: 18px; border: 1px solid #ddd; padding: 5px; }
         .upgrade-info { flex-grow: 1; }
-
-        .upgrade-name {
-            font-weight: bold;
-            color: var(--dark, #2c3e50);
-            margin: 0 0 4px 0;
-            font-size: 1.15rem;
-        }
-
-        .upgrade-cost {
-            color: var(--accent, #e74c3c);
-            margin: 0 0 3px 0;
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-        
+        .upgrade-name { font-weight: bold; color: var(--dark, #2c3e50); margin: 0 0 4px 0; font-size: 1.15rem; }
+        .upgrade-cost { color: var(--accent, #e74c3c); margin: 0 0 3px 0; font-weight: 600; font-size: 0.95rem; }
         .upgrade-pps { color: #666; font-size: 0.8rem; margin: 0; }
+        .upgrade-count { font-size: 2.3rem; font-weight: bold; color: var(--primary, #063c8c); font-family: 'Montserrat', sans-serif; min-width: 60px; text-align: right; margin-left: 10px; }
 
-        .upgrade-count {
-            font-size: 2.3rem;
-            font-weight: bold;
-            color: var(--primary, #063c8c);
-            font-family: 'Montserrat', sans-serif;
-            min-width: 60px;
-            text-align: right;
-            margin-left: 10px;
-        }
-
-        /* --- FULL SCREEN OVERLAY --- */
-        .game-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.85);
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            z-index: 1000; color: white;
-            opacity: 0; pointer-events: none;
-            transition: opacity 0.5s ease;
-        }
-
+        /* --- OVERLAYS --- */
+        .game-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; color: white; opacity: 0; pointer-events: none; transition: opacity 0.5s ease; }
         .game-overlay.active { opacity: 1; pointer-events: auto; }
-
-        .overlay-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 3rem; border-radius: 20px;
-            border: 2px solid rgba(255,255,255,0.2);
-            text-align: center; max-width: 90%;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-        }
-
-        .level-up-title {
-            font-size: 4rem; color: var(--success, #27ae60);
-            margin: 0 0 1rem 0; text-shadow: 0 0 20px rgba(39, 174, 96, 0.8);
-        }
-
-        .btn-overlay-close {
-            margin-top: 2rem; padding: 0.8rem 2.5rem;
-            font-size: 1.2rem; background-color: var(--primary, #063c8c);
-            color: white; border: none; border-radius: 5px;
-            cursor: pointer; transition: background 0.2s;
-        }
-
+        .overlay-card { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); padding: 3rem; border-radius: 20px; border: 2px solid rgba(255,255,255,0.2); text-align: center; max-width: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .level-up-title { font-size: 4rem; color: var(--success, #27ae60); margin: 0 0 1rem 0; text-shadow: 0 0 20px rgba(39, 174, 96, 0.8); }
+        .btn-overlay-close { margin-top: 2rem; padding: 0.8rem 2.5rem; font-size: 1.2rem; background-color: var(--primary, #063c8c); color: white; border: none; border-radius: 5px; cursor: pointer; transition: background 0.2s; }
         .btn-overlay-close:hover { background-color: var(--dark, #2c3e50); }
     </style>
 </head>
@@ -378,9 +158,11 @@
         <div class="game-layout">
             
             <div class="leaderboard-panel">
-                <h3 style="margin-top: 0; color: var(--primary); border-bottom: 2px solid #eee; padding-bottom: 10px;">Rangliste</h3>
+                <div class="live-indicator"><div class="live-dot"></div> LIVE</div>
+                <h3 style="margin-top: 0; color: var(--primary); border-bottom: 2px solid #eee; padding-bottom: 10px;">Weltweite Rangliste</h3>
                 <ul class="leaderboard-list" id="leaderboard-list">
-                    </ul>
+                    <li style="text-align:center; padding: 20px; color:#888;">Lade Daten...</li>
+                </ul>
             </div>
 
             <div class="clicker-panel">
@@ -416,7 +198,7 @@
 
             <div class="upgrades-panel" id="upgrades-container">
                 <h3 style="margin-top: 0; color: var(--primary); border-bottom: 2px solid #eee; padding-bottom: 10px;">Netzwerk-Infrastruktur</h3>
-                </div>
+            </div>
         </div>
     </main>
 
@@ -458,7 +240,7 @@
         const mainCookieImgSrc = document.getElementById('michi-button').src;
         
         let playerName = "Gast";
-        let globalLeaderboard = []; // Die echte gespeicherte Rangliste
+        let globalLeaderboard = []; 
 
         function getRequiredXP(lvl) {
             return Math.floor(100 * Math.pow(2.2, lvl - 1));
@@ -479,13 +261,41 @@
         const saveIndicator = document.getElementById('save-indicator');
         const displayPlayerName = document.getElementById('display-player-name');
 
-        // --- INITIALISIERUNG & NAMENSGEBUNG ---
-        function initPlayer() {
-            // Lade zuerst das Leaderboard, um Namen vergleichen zu können
-            let storedList = localStorage.getItem('michiRealLeaderboard');
-            if (storedList) {
-                globalLeaderboard = JSON.parse(storedList);
+        // --- SERVER KOMMUNIKATION (Leaderboard) ---
+        
+        // Liste vom Server laden
+        async function fetchLeaderboard() {
+            try {
+                // Wir hängen einen Timestamp an, um Browser-Caching der JSON zu verhindern
+                const response = await fetch('leaderboard.json?t=' + new Date().getTime());
+                if (response.ok) {
+                    globalLeaderboard = await response.json();
+                }
+            } catch (error) {
+                console.log("Leaderboard konnte nicht geladen werden (vielleicht existiert die Datei noch nicht).");
             }
+            renderLeaderboardUI();
+        }
+
+        // Eigenen Score an den Server senden
+        async function submitScoreToServer() {
+            try {
+                await fetch('save_score.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: playerName, score: score })
+                });
+                // Direkt danach die neue Liste abrufen
+                fetchLeaderboard();
+            } catch (error) {
+                console.error("Fehler beim Senden des Scores:", error);
+            }
+        }
+
+        // --- INITIALISIERUNG & NAMENSGEBUNG ---
+        async function initPlayer() {
+            // Erstmal Server-Liste laden, damit wir prüfen können ob ein Name belegt ist
+            await fetchLeaderboard();
 
             let savedName = localStorage.getItem('michiPlayerName');
             
@@ -494,14 +304,13 @@
                 let inputName = "";
                 
                 while (!validName) {
-                    inputName = prompt("Willkommen beim Michi Clicker!\nBitte gib deinen Namen für die Rangliste ein:", "Spieler");
+                    inputName = prompt("Willkommen beim Michi Clicker!\nBitte gib deinen Namen für die weltweite Rangliste ein:", "Spieler");
                     
                     if (!inputName || inputName.trim() === "") {
                         inputName = "Gast_" + Math.floor(Math.random() * 10000);
                     }
                     inputName = inputName.trim().substring(0, 15);
                     
-                    // Prüfen, ob der Name (unabhängig von Groß-/Kleinschreibung) schon vergeben ist
                     const nameTaken = globalLeaderboard.some(p => p.name.toLowerCase() === inputName.toLowerCase());
                     
                     if (nameTaken) {
@@ -518,7 +327,9 @@
             
             displayPlayerName.innerText = playerName;
             loadGame();
-            updateGlobalLeaderboardEntry(); // Direkt am Anfang in die Liste eintragen
+            
+            // Einmal direkt den Score übertragen
+            submitScoreToServer();
         }
 
         function changeName() {
@@ -527,35 +338,24 @@
             if (newName && newName.trim() !== "") {
                 newName = newName.trim().substring(0, 15);
                 
-                // Wenn man genau denselben Namen wieder eingibt, passiert nichts
-                if (newName.toLowerCase() === playerName.toLowerCase()) {
-                    return; 
-                }
+                if (newName.toLowerCase() === playerName.toLowerCase()) return; 
                 
-                // Prüfen ob der neue Name vergeben ist
                 const nameTaken = globalLeaderboard.some(p => p.name.toLowerCase() === newName.toLowerCase());
                 if (nameTaken) {
                     alert("Dieser Name wird bereits von einem anderen Spieler verwendet! Bitte wähle einen anderen.");
                     return;
                 }
 
-                // Den alten Namen im Leaderboard mit dem neuen überschreiben
-                let playerIndex = globalLeaderboard.findIndex(p => p.name === playerName);
-                if (playerIndex !== -1) {
-                    globalLeaderboard[playerIndex].name = newName;
-                    localStorage.setItem('michiRealLeaderboard', JSON.stringify(globalLeaderboard));
-                }
-
                 playerName = newName;
                 localStorage.setItem('michiPlayerName', playerName);
                 displayPlayerName.innerText = playerName;
-                saveGame(false); 
-                renderLeaderboardUI();
+                submitScoreToServer(); // Direkt an den Server schicken
             }
         }
 
-        // --- SPEICHER SYSTEM & RANGLISTE ---
+        // --- SPEICHER SYSTEM ---
         function saveGame(manual = false) {
+            // Lokal Browser-Status speichern (Geld, Level, Upgrades)
             const saveState = {
                 score: score,
                 level: level,
@@ -565,32 +365,13 @@
             };
             localStorage.setItem('michiSave', JSON.stringify(saveState));
 
-            updateGlobalLeaderboardEntry();
+            // Weltweites Leaderboard updaten
+            submitScoreToServer();
 
             if (manual) {
                 saveIndicator.innerText = "Gespeichert!";
                 setTimeout(() => saveIndicator.innerText = "", 2000);
             }
-        }
-
-        function updateGlobalLeaderboardEntry() {
-            let storedList = localStorage.getItem('michiRealLeaderboard');
-            if (storedList) {
-                globalLeaderboard = JSON.parse(storedList);
-            }
-
-            let playerIndex = globalLeaderboard.findIndex(p => p.name === playerName);
-            
-            if (playerIndex !== -1) {
-                if (score > globalLeaderboard[playerIndex].score) {
-                    globalLeaderboard[playerIndex].score = score;
-                }
-            } else {
-                globalLeaderboard.push({ name: playerName, score: score });
-            }
-
-            localStorage.setItem('michiRealLeaderboard', JSON.stringify(globalLeaderboard));
-            renderLeaderboardUI();
         }
 
         function loadGame() {
@@ -615,28 +396,27 @@
         }
 
         function resetGame() {
-            if(confirm("Willst du von vorne beginnen? Dein Highscore in der Rangliste bleibt erhalten!")) {
+            if(confirm("Willst du von vorne beginnen? (Hinweis: Dein weltweiter Highscore bleibt in der Liste stehen!)")) {
                 localStorage.removeItem('michiSave');
                 location.reload();
             }
         }
 
         function renderLeaderboardUI() {
-            let sortedList = [...globalLeaderboard].sort((a, b) => b.score - a.score);
-            const top15 = sortedList.slice(0, 15);
-            
             leaderboardList.innerHTML = '';
             
-            if(top15.length === 0) {
-                leaderboardList.innerHTML = '<li style="padding: 10px; color: #888;">Noch keine Einträge. Klicke los!</li>';
+            if(globalLeaderboard.length === 0) {
+                leaderboardList.innerHTML = '<li style="padding: 10px; color: #888;">Noch keine Einträge. Sei der Erste!</li>';
                 return;
             }
 
-            top15.forEach((player, index) => {
+            // Da das PHP Skript uns die Liste schon sortiert und gekürzt gibt, können wir sie einfach rendern
+            globalLeaderboard.forEach((player, index) => {
                 const isMe = (player.name === playerName);
                 const li = document.createElement('li');
                 li.className = `leaderboard-item ${isMe ? 'is-me' : ''}`;
                 
+                // Live Score für den eigenen Spieler anzeigen, falls das Backend noch nicht das Neueste hat
                 let displayScore = player.score;
                 if (isMe && score > player.score) {
                     displayScore = score; 
@@ -727,7 +507,7 @@
             document.getElementById('overlay-levelup').classList.add('active');
             uiLevel.innerText = level;
             renderUpgrades();
-            saveGame(); 
+            saveGame(); // Speichern an Server bei Levelup
         }
 
         function updateXPBar() {
@@ -840,10 +620,10 @@
             }
         }, 100);
 
-        // Leaderboard UI regelmäßig mit dem aktuellen Score updaten
+        // Leaderboard alle 5 Sekunden frisch vom Server abfragen
         setInterval(() => {
-            renderLeaderboardUI();
-        }, 1000);
+            fetchLeaderboard();
+        }, 5000);
 
         setInterval(() => {
             if (packetsPerSecond > 0) {
@@ -852,10 +632,10 @@
             }
         }, 500);
 
-        // Auto-Save Loop
+        // Auto-Save Loop (Speichert Spielstand und updatet Server alle 15 Sekunden)
         setInterval(() => {
             saveGame(false);
-        }, 15000); // Alle 15 Sekunden
+        }, 15000); 
 
     </script>
 </body>
