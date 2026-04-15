@@ -99,11 +99,12 @@
         .score-display.pulse { transform: scale(1.05); }
         .pps-display { font-size: 1.2rem; color: var(--dark, #2c3e50); margin: 0; }
 
-        .save-controls { display: flex; gap: 10px; margin-top: 1.5rem; align-items: center; justify-content: center; width: 100%; }
+        .save-controls { display: flex; gap: 10px; margin-top: 1.5rem; align-items: center; justify-content: center; width: 100%; flex-wrap: wrap;}
         .btn-action { padding: 8px 15px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; transition: opacity 0.2s; }
         .btn-action:hover { opacity: 0.8; }
         .btn-save { background: var(--success, #27ae60); color: white; }
         .btn-reset { background: var(--accent, #e74c3c); color: white; }
+        .btn-admin { background: #8e44ad; color: white; } /* Admin Button */
         #save-indicator { font-size: 0.9rem; color: var(--success, #27ae60); font-weight: bold; min-width: 90px; text-align: left; }
 
         .michi-target-container { position: relative; margin-bottom: 2rem; width: 250px; height: 250px; display: flex; align-items: center; justify-content: center; }
@@ -190,8 +191,9 @@
                 <div class="save-controls">
                     <button class="btn-action btn-save" onclick="saveGame(true)">Speichern</button>
                     <button class="btn-action btn-reset" onclick="resetGame()">Neues Spiel</button>
-                    <span id="save-indicator"></span>
+                    <button class="btn-action btn-admin" onclick="clearLeaderboard()">Liste leeren</button>
                 </div>
+                <div style="margin-top: 10px;"><span id="save-indicator"></span></div>
             </div>
 
             <div class="upgrades-panel" id="upgrades-container">
@@ -266,7 +268,6 @@
         // --- API CALLS (DREAMLO via PROXY) ---
         async function fetchLeaderboard() {
             try {
-                // Die unverschlüsselte Dreamlo-URL
                 const dreamloUrl = `http://dreamlo.com/lb/${DREAMLO_PUBLIC_KEY}/json?cb=${Date.now()}`;
                 const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(dreamloUrl)}`;
                 
@@ -291,7 +292,7 @@
                     }
                 }
             } catch (error) {
-                console.log("Leaderboard konnte nicht geladen werden:", error);
+                console.log("Leaderboard konnte nicht geladen werden.");
             }
             renderLeaderboardUI();
         }
@@ -303,7 +304,6 @@
                 
                 const safeScore = Math.floor(score);
                 
-                // Wir speichern AUCH über den Proxy, um Mixed-Content Probleme zu verhindern
                 const dreamloAddUrl = `http://dreamlo.com/lb/${DREAMLO_PRIVATE_KEY}/add/${safeName}/${safeScore}`;
                 const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(dreamloAddUrl)}`;
                 
@@ -314,6 +314,24 @@
                 }, 1000);
             } catch (error) {
                 console.error("Fehler beim Speichern auf Dreamlo:", error);
+            }
+        }
+
+        async function clearLeaderboard() {
+            if(confirm("ACHTUNG ADMIN:\nWillst du wirklich die komplette weltweite Rangliste für ALLE Spieler unwiderruflich löschen?")) {
+                try {
+                    const dreamloClearUrl = `http://dreamlo.com/lb/${DREAMLO_PRIVATE_KEY}/clear`;
+                    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(dreamloClearUrl)}`;
+                    
+                    await fetch(proxyUrl);
+                    
+                    globalLeaderboard = [];
+                    renderLeaderboardUI();
+                    alert("Die weltweite Rangliste wurde erfolgreich geleert!");
+                } catch (error) {
+                    console.error("Fehler beim Löschen:", error);
+                    alert("Fehler beim Löschen der Rangliste.");
+                }
             }
         }
 
@@ -328,14 +346,24 @@
                 let inputName = "";
                 
                 while (!validName) {
-                    inputName = prompt("Willkommen beim Michi Clicker!\nBitte gib deinen Namen für die weltweite Rangliste ein (Keine Leerzeichen!):", "Spieler");
+                    inputName = prompt("Willkommen beim Michi Clicker!\nBitte wähle einen Namen für die Rangliste (Max. 15 Zeichen, keine Leerzeichen):", "");
                     
-                    if (!inputName || inputName.trim() === "") {
-                        inputName = "Gast_" + Math.floor(Math.random() * 10000);
+                    // Wenn der Nutzer abbrechen drückt oder nichts eingibt, muss er es nochmal versuchen
+                    if (inputName === null || inputName.trim() === "") {
+                        alert("Du musst einen Namen eingeben, um spielen zu können!");
+                        continue; // Schleife direkt von vorne starten
                     }
                     
+                    // Unerlaubte Zeichen durch Unterstriche ersetzen und auf 15 Zeichen kürzen
                     inputName = inputName.replace(/[^a-zA-Z0-9_-]/g, '_').substring(0, 15);
                     
+                    // Falls nach dem Filtern nichts mehr übrig ist (z.B. weil nur Sonderzeichen getippt wurden)
+                    if (inputName === "") {
+                        alert("Dein Name muss gültige Zeichen (Buchstaben, Zahlen) enthalten!");
+                        continue;
+                    }
+                    
+                    // Prüfen ob der bereinigte Name schon belegt ist
                     const nameTaken = globalLeaderboard.some(p => p.name.toLowerCase() === inputName.toLowerCase());
                     
                     if (nameTaken) {
@@ -352,7 +380,6 @@
             
             displayPlayerName.innerText = playerName;
             
-            // Erst Spiel laden, dann erst rendern! (Behebt den Bug mit den gesperrten Upgrades)
             loadGame();
             renderUpgrades();
             updateUI();
@@ -402,12 +429,10 @@
         }
 
         function resetGame() {
-            if(confirm("Willst du wirklich ein Neues Spiel starten?\n(Dein bisheriger Highscore bleibt unter deinem aktuellen Namen in der weltweiten Rangliste erhalten!)")) {
-                // Lösche den lokalen Spielstand UND den Namen!
+            if(confirm("Willst du wirklich ein Neues Spiel starten?\n(Dein bisheriger Highscore bleibt als Denkmal in der Liste erhalten!)")) {
                 localStorage.removeItem('michiSave');
                 localStorage.removeItem('michiPlayerName');
                 
-                // Seite neu laden (initPlayer wird dann einen neuen Namen abfragen)
                 location.reload();
             }
         }
@@ -426,7 +451,6 @@
                 li.className = `leaderboard-item ${isMe ? 'is-me' : ''}`;
                 
                 let displayScore = player.score;
-                // Live Update für eigene Punktzahl, bevor der Server antwortet
                 if (isMe && score > player.score) {
                     displayScore = score; 
                 }
