@@ -985,7 +985,7 @@
     <div class="game-overlay" id="overlay-battlepass">
         <div class="overlay-card" style="max-width: 680px; width: 95%;">
             <h1 class="level-up-title" style="color: #f39c12; font-size: 2.5rem;">🏆 Battle Pass</h1>
-            <p style="color: #ddd; font-size: 1rem;">Verdiene Battle-Pass-XP durch Klicken und passives Spielen.</p>
+            <p style="color: #ddd; font-size: 1rem;">Verdiene Battle Pass XP durch Klicken und passives Spielen.</p>
             <div class="bp-xp-display">
                 Battle Pass XP: <strong id="bp-xp-current">0</strong>
                 &nbsp;|&nbsp; Gesamt-XP bis Tier 10: <strong id="bp-xp-total">0</strong>
@@ -1092,8 +1092,8 @@
         const soundSkinsConfig = [
             { id: 'silent',  name: 'Kein Sound',    emoji: '🔇', cost: 0,       bpTier: 0,  description: 'Kein Klickgeräusch.' },
             { id: 'beep',    name: 'Classic Beep',  emoji: '🔔', cost: 0,       bpTier: 0,  description: 'Einfaches Klick-Geräusch.' },
-            { id: 'square',  name: 'Square Wave',   emoji: '🎮', cost: 0,       bpTier: 3,  description: 'Retro Square-Wave – freigeschaltet via Battle Pass Tier 3.' },
-            { id: 'retro',   name: 'Retro 8-Bit',   emoji: '👾', cost: 0,       bpTier: 6,  description: 'Chip-Tune Sound – freigeschaltet via Battle Pass Tier 6.' },
+            { id: 'square',  name: 'Square Wave',   emoji: '🎮', cost: 0,       bpTier: 3,  description: 'Retro Square Wave – freigeschaltet via Battle Pass Tier 3.' },
+            { id: 'retro',   name: 'Retro 8-Bit',   emoji: '👾', cost: 0,       bpTier: 6,  description: 'Chip Tune Sound – freigeschaltet via Battle Pass Tier 6.' },
             { id: 'bass',    name: 'Deep Bass',     emoji: '💥', cost: 0,       bpTier: 9,  description: 'Tiefer Bass-Klick – freigeschaltet via Battle Pass Tier 9.' },
         ];
 
@@ -1811,7 +1811,7 @@
                                     ${formatNumber(Math.min(tierXPEarned, tierXPNeeded))} / ${formatNumber(tierXPNeeded)} XP
                                 </div>` : ''}
                         </div>
-                        <div class="bp-tier-status">${statusEmoji}</div>
+                        <div class="bp-tier-status" aria-label="${isClaimed ? 'Abgeschlossen' : isCurrent ? 'Aktuell' : 'Gesperrt'}">${statusEmoji}</div>
                     </div>
                 `;
             });
