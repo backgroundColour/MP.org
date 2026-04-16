@@ -54,7 +54,7 @@
             color: #333;
             box-shadow: 2px 2px 6px rgba(0,0,0,0.15);
             border-style: solid;
-            border-width: 7px;
+            border-width: 4px; /* Geändert auf 4px */
             flex-shrink: 0;
             margin-right: 15px;
             margin-left: 5px;
@@ -642,7 +642,41 @@
             }
         }
 
-        // --- RANG AUFSTIEG SYSTEM (Live Reset, kein Neuladen mehr!) ---
+        // --- RANG AUFSTIEG SYSTEM (Ohne Boni, reines Prestige) ---
+        async function executeRankUpProcess() {
+            currentRankIndex++;
+            
+            // Geld und Skins bleiben erhalten, alles andere wird gelöscht!
+            score = 0;
+            level = 1;
+            currentXP = 0;
+            packetsPerSecond = 0;
+            
+            upgradesConfig.forEach(u => u.count = 0);
+            xpRequired = getRequiredXP(level);
+            clickPower = 1; 
+            
+            if(uiLevel) uiLevel.innerText = level;
+            if(playerRankDisplay) playerRankDisplay.innerHTML = getRankBadgeHTML(rankList[currentRankIndex].id);
+            
+            updateXPBar();
+            recalculatePPS();
+            renderUpgrades();
+            updateUI();
+            
+            try {
+                const safeName = playerName.replace(/[^a-zA-Z0-9_-]/g, '_');
+                const delScoreUrl = `http://dreamlo.com/lb/${DREAMLO_SCORE_PRIVATE}/delete/${safeName}`;
+                await fetch(`https://corsproxy.io/?${encodeURIComponent(delScoreUrl)}`);
+            } catch(e) {
+                console.error("Fehler beim Score-Löschen:", e);
+            }
+
+            saveGame(true);
+            closeOverlay('overlay-levelup');
+            closeOverlay('overlay-shop');
+        }
+
         async function doRankUp() {
             if (level < 19 || upgradesConfig[18].count === 0) return;
             
@@ -655,46 +689,50 @@
             const msg = `🌟 RANGAUFSTIEG! 🌟\n\nDu steigst auf in Rang: [ ${nextRank} ]\n\nDeine Pakete, dein Level und deine Upgrades werden zurückgesetzt.\nDein GELD und deine SKINS behältst du natürlich!\n\nWillst du jetzt aufsteigen?`;
             
             if(confirm(msg)) {
-                currentRankIndex++;
-                
-                // Wir resetten alles im laufenden Spiel
-                score = 0;
-                level = 1;
-                currentXP = 0;
-                packetsPerSecond = 0;
-                
-                upgradesConfig.forEach(u => u.count = 0);
-                xpRequired = getRequiredXP(level);
-                clickPower = 1; 
-                
-                // UI Aktualisieren
-                if(uiLevel) uiLevel.innerText = level;
-                if(playerRankDisplay) playerRankDisplay.innerHTML = getRankBadgeHTML(rankList[currentRankIndex].id);
-                
-                updateXPBar();
-                recalculatePPS();
-                renderUpgrades();
-                updateUI();
-                
-                // Dreamlo Update: Den alten Score ZWINGEND löschen, sonst weigert sich Dreamlo die "0" zu akzeptieren!
-                try {
-                    const safeName = playerName.replace(/[^a-zA-Z0-9_-]/g, '_');
-                    const delScoreUrl = `http://dreamlo.com/lb/${DREAMLO_SCORE_PRIVATE}/delete/${safeName}`;
-                    await fetch(`https://corsproxy.io/?${encodeURIComponent(delScoreUrl)}`);
-                } catch(e) {
-                    console.error("Fehler beim Score-Löschen:", e);
-                }
-
-                // Jetzt wo die DB sauber ist, speichern wir unseren neuen 0 Punkte Spielstand (inkl. neuem Rang)
-                saveGame(true);
-                
-                // Eventuell offene Menüs schließen
-                closeOverlay('overlay-levelup');
-                closeOverlay('overlay-shop');
-
+                await executeRankUpProcess();
                 alert("Erfolgreich aufgestiegen! Viel Erfolg im neuen Rang!");
             }
         }
+
+        // --- CHEAT CODE (Strg + B + R + C) ---
+        const keysPressed = { b: false, r: false, c: false };
+
+        window.addEventListener('keydown', (e) => {
+            let key = e.key.toLowerCase();
+            
+            // Verhindere den Reload der Seite durch Strg + R, falls man den Cheat eingibt!
+            if (e.ctrlKey && key === 'r') {
+                e.preventDefault();
+            }
+
+            if (keysPressed.hasOwnProperty(key)) {
+                keysPressed[key] = true;
+            }
+            
+            if (e.ctrlKey && keysPressed.b && keysPressed.r && keysPressed.c) {
+                // Tasten zurücksetzen, um versehentliches doppeltes Auslösen zu verhindern
+                keysPressed.b = false;
+                keysPressed.r = false;
+                keysPressed.c = false;
+                
+                if (currentRankIndex >= rankList.length - 1) {
+                    alert("Maximaler Rang S+ bereits erreicht!");
+                    return;
+                }
+
+                if(confirm("🛠️ CHEAT AKTIVIERT 🛠️\nWillst du einen Rangaufstieg erzwingen?")) {
+                    executeRankUpProcess();
+                }
+            }
+        });
+
+        window.addEventListener('keyup', (e) => {
+            let key = e.key.toLowerCase();
+            if (keysPressed.hasOwnProperty(key)) {
+                keysPressed[key] = false;
+            }
+        });
+
 
         // --- SHOP & SKINS ---
         function openShop() {
@@ -874,7 +912,6 @@
         function addXP(amount) {
             currentXP += amount;
             
-            // Loop, falls wir extrem viel XP auf einmal bekommen!
             let levelUpsThisTick = 0;
             while (currentXP >= xpRequired && levelUpsThisTick < 50) {
                 currentXP -= xpRequired;
