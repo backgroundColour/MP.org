@@ -24,7 +24,7 @@
         /* --- SPIEL LAYOUT --- */
         .game-layout {
             display: grid;
-            grid-template-columns: 300px 1.2fr 1fr; 
+            grid-template-columns: 320px 1.2fr 1fr; 
             gap: 2rem;
             margin-top: 2rem;
             position: relative;
@@ -38,6 +38,29 @@
         @media (max-width: 800px) {
             .game-layout { grid-template-columns: 1fr; }
             .leaderboard-panel { grid-column: span 1; }
+        }
+
+        /* --- RANG BADGES (Pastel, 45° gedreht, dicker Rahmen) --- */
+        .rank-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            transform: rotate(45deg);
+            font-weight: 900;
+            font-size: 1rem;
+            color: #333;
+            box-shadow: 2px 2px 6px rgba(0,0,0,0.15);
+            border-style: solid;
+            border-width: 7px;
+            flex-shrink: 0;
+            margin-right: 15px;
+            margin-left: 5px;
+        }
+        .rank-badge-text {
+            transform: rotate(-45deg); 
         }
 
         /* --- LINKE SEITE (Leaderboard) --- */
@@ -58,9 +81,8 @@
         .leaderboard-list { list-style: none; padding: 0; margin: 0; }
 
         .leaderboard-item {
-            display: grid;
-            grid-template-columns: 30px 1fr auto;
-            gap: 10px;
+            display: flex;
+            gap: 5px;
             padding: 12px 10px;
             border-bottom: 1px solid #eee;
             align-items: center;
@@ -80,9 +102,10 @@
             transform: scale(1.02);
         }
 
-        .lb-rank { font-weight: bold; color: #888; }
-        .leaderboard-item.is-me .lb-rank { color: var(--dark, #2c3e50); }
-        .lb-score { font-family: 'Montserrat', sans-serif; color: var(--primary, #063c8c); font-weight: bold; }
+        .lb-rank-num { font-weight: bold; color: #888; width: 25px; }
+        .leaderboard-item.is-me .lb-rank-num { color: var(--dark, #2c3e50); }
+        .lb-name { flex-grow: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .lb-score { font-family: 'Montserrat', sans-serif; color: var(--primary, #063c8c); font-weight: bold; text-align: right;}
         
         .live-indicator {
             position: absolute;
@@ -103,13 +126,13 @@
         }
 
         .player-info {
-            position: absolute; top: 15px; left: 15px; font-size: 0.9rem; color: var(--dark);
-            background: var(--light); padding: 5px 10px; border-radius: 5px; border: 1px solid #ddd;
-            cursor: pointer; transition: background 0.2s;
+            position: absolute; top: 15px; left: 15px; font-size: 1rem; color: var(--dark);
+            background: var(--light); padding: 10px 15px; border-radius: 8px; border: 1px solid #ddd;
+            cursor: pointer; transition: background 0.2s; display: flex; align-items: center;
         }
         .player-info:hover { background: #e0e0e0; }
 
-        .score-display-container { margin-bottom: 1.5rem; margin-top: 1rem; }
+        .score-display-container { margin-bottom: 1.5rem; margin-top: 3rem; }
         .score-display { font-size: 3.5rem; font-weight: 700; color: var(--primary, #063c8c); font-family: 'Montserrat', sans-serif; margin: 0; transition: transform 0.05s ease; }
         .score-display.pulse { transform: scale(1.05); }
         .pps-display { font-size: 1.2rem; color: var(--dark, #2c3e50); margin: 0; }
@@ -122,6 +145,17 @@
         .btn-save { background: var(--success, #27ae60); color: white; }
         .btn-reset { background: var(--accent, #e74c3c); color: white; }
         .btn-shop { background: var(--secondary, #fbcd37); color: var(--dark); font-size: 1.1rem; padding: 10px; width: 100%; margin-top: 10px; }
+        
+        #rankup-container { width: 100%; margin-top: 15px; display: none; }
+        .btn-rankup {
+            background: linear-gradient(45deg, #a18cd1, #fbc2eb); 
+            color: #fff; width: 100%; padding: 15px; font-size: 1.3rem; 
+            border: 4px solid #896ec2; border-radius: 10px; cursor: pointer; 
+            font-weight: 900; box-shadow: 0 5px 15px rgba(161,140,209,0.3);
+            text-transform: uppercase; animation: pulseGlow 2s infinite; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        @keyframes pulseGlow { 0% { box-shadow: 0 0 10px rgba(161,140,209,0.5); } 50% { box-shadow: 0 0 25px rgba(161,140,209,0.8); } 100% { box-shadow: 0 0 10px rgba(161,140,209,0.5); } }
+
         #save-indicator { font-size: 0.9rem; color: var(--success, #27ae60); font-weight: bold; min-width: 90px; text-align: left; }
 
         .michi-target-container { position: relative; margin-bottom: 2rem; width: 250px; height: 250px; display: flex; align-items: center; justify-content: center; }
@@ -195,8 +229,10 @@
             </div>
 
             <div class="clicker-panel">
+                
                 <div class="player-info" title="Dein Spielername">
-                    👤 <span id="display-player-name">Lade...</span>
+                    <div id="player-rank-display"></div>
+                    <div>👤 <span id="display-player-name">Lade...</span></div>
                 </div>
 
                 <div class="score-display-container">
@@ -217,6 +253,10 @@
                     <div style="text-align: right; font-size: 0.8rem; margin-top: 8px; color: #777;">
                         XP: <span id="xp-current">0</span> / <span id="xp-needed">100</span>
                     </div>
+                </div>
+
+                <div id="rankup-container">
+                    <button class="btn-rankup" onclick="doRankUp()">🌟 Rangaufstieg 🌟</button>
                 </div>
 
                 <div class="save-controls">
@@ -283,6 +323,43 @@
         const DREAMLO_PUBLIC_KEY = '69df899e8f40bc2f606c2109';
         const DREAMLO_PRIVATE_KEY = 'gx0LmtikcUiceklh41xVyAQEPyt0hxK024rxVHnezX-A';
 
+        // --- RÄNGE (Das gesamte Alphabet runter Z bis A, dann S und S+) mit bunten Pastellfarben ---
+        const rankList = [
+            { id: 'Z', bg: '#FFD1DC', border: '#D19EB0' },
+            { id: 'Y', bg: '#FFDFD3', border: '#D1B0A4' },
+            { id: 'X', bg: '#F4E2D8', border: '#C7B6AB' },
+            { id: 'W', bg: '#E2F0CB', border: '#B6C49E' },
+            { id: 'V', bg: '#B5EAD7', border: '#8ABFAD' },
+            { id: 'U', bg: '#C7CEEA', border: '#9CA3BF' },
+            { id: 'T', bg: '#E2A9F3', border: '#BA7CCB' },
+            { id: 'R', bg: '#FF9CEE', border: '#D96FC5' },
+            { id: 'Q', bg: '#FFB7B2', border: '#D98B86' },
+            { id: 'P', bg: '#FFDAC1', border: '#D9B098' },
+            { id: 'O', bg: '#FFFFD1', border: '#D9D9A3' },
+            { id: 'N', bg: '#E7FFAC', border: '#BBD980' },
+            { id: 'M', bg: '#C4FAF8', border: '#97CCCA' },
+            { id: 'L', bg: '#ACE7FF', border: '#80BBD9' },
+            { id: 'K', bg: '#85E3FF', border: '#5AA9D9' },
+            { id: 'J', bg: '#6EB5FF', border: '#488CD9' },
+            { id: 'I', bg: '#B28DFF', border: '#8A60D9' },
+            { id: 'H', bg: '#C5A3FF', border: '#9D75D9' },
+            { id: 'G', bg: '#D5AAFF', border: '#AD7CE6' },
+            { id: 'F', bg: '#FCC2FF', border: '#D496D9' },
+            { id: 'E', bg: '#FFCCF9', border: '#D9A1D1' },
+            { id: 'D', bg: '#FFC9DE', border: '#D99FBB' },
+            { id: 'C', bg: '#FFB5E8', border: '#D98CBF' },
+            { id: 'B', bg: '#FF9BAA', border: '#D96E7C' },
+            { id: 'A', bg: '#Baffc9', border: '#8ae6a0' },
+            { id: 'S', bg: '#bae1ff', border: '#80b3e6' },
+            { id: 'S+', bg: '#ffb3ba', border: '#ff808b' } 
+        ];
+        let currentRankIndex = 0; 
+
+        function getRankBadgeHTML(rankId) {
+            let r = rankList.find(x => x.id === rankId) || rankList[0];
+            return `<div class="rank-badge" style="background-color: ${r.bg}; border-color: ${r.border};"><span class="rank-badge-text">${r.id}</span></div>`;
+        }
+
         // --- UPGRADES CONFIG ---
         const upgradesConfig = [
             { id: 'cable', name: 'RJ45 Patchkabel', baseCost: 15, pps: 0.5, count: 0, reqLevel: 1, image: 'https://www.kabelscheune.de/out/pictures/generated/product/1/450_450_90/cat6-patchkabel-rj45-lan-kabel-s-ftp-pimf-weiss.jpg' },
@@ -329,7 +406,6 @@
         let globalLeaderboard = []; 
 
         function getRequiredXP(lvl) {
-            // Ein moderater, fester Multiplikator. Lategame skaliert jetzt fair, ohne ins Unendliche zu explodieren!
             return Math.floor(100 * Math.pow(2.6, lvl - 1));
         }
         let xpRequired = getRequiredXP(level);
@@ -348,6 +424,7 @@
         const leaderboardList = document.getElementById('leaderboard-list');
         const saveIndicator = document.getElementById('save-indicator');
         const displayPlayerName = document.getElementById('display-player-name');
+        const playerRankDisplay = document.getElementById('player-rank-display');
 
         // --- API CALLS (DREAMLO via PROXY) ---
         async function fetchLeaderboard() {
@@ -366,7 +443,8 @@
 
                         globalLeaderboard = entries.map(player => ({
                             name: player.name,
-                            score: parseFloat(player.score)
+                            score: parseFloat(player.score),
+                            rank: player.text || 'Z'
                         }));
                     } else {
                         globalLeaderboard = []; 
@@ -384,7 +462,8 @@
                 if (!safeName) safeName = "Spieler";
                 const safeScore = Math.floor(score);
                 
-                const dreamloAddUrl = `http://dreamlo.com/lb/${DREAMLO_PRIVATE_KEY}/add/${safeName}/${safeScore}`;
+                const safeRank = encodeURIComponent(rankList[currentRankIndex].id);
+                const dreamloAddUrl = `http://dreamlo.com/lb/${DREAMLO_PRIVATE_KEY}/add/${safeName}/${safeScore}/0/${safeRank}`;
                 const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(dreamloAddUrl)}`;
                 
                 await fetch(proxyUrl);
@@ -455,7 +534,8 @@
                 clickPower: clickPower,
                 upgrades: upgradesConfig.map(u => u.count),
                 ownedSkins: ownedSkins, 
-                currentSkin: currentSkin 
+                currentSkin: currentSkin,
+                rankIndex: currentRankIndex 
             };
             localStorage.setItem('michiSave', JSON.stringify(saveState));
 
@@ -478,6 +558,7 @@
                 clickPower = saveState.clickPower || 1;
                 ownedSkins = saveState.ownedSkins || ['default'];
                 currentSkin = saveState.currentSkin || 'default';
+                currentRankIndex = saveState.rankIndex || 0;
                 
                 if (saveState.upgrades) {
                     saveState.upgrades.forEach((count, i) => {
@@ -490,12 +571,45 @@
                 recalculatePPS();
                 applySkinImage();
             }
+            
+            if(playerRankDisplay) {
+                playerRankDisplay.innerHTML = getRankBadgeHTML(rankList[currentRankIndex].id);
+            }
         }
 
         function resetGame() {
             if(confirm("Willst du wirklich ein Neues Spiel starten?\n(Dein bisheriger Highscore bleibt als Denkmal in der Liste erhalten!)")) {
                 localStorage.removeItem('michiSave');
                 localStorage.removeItem('michiPlayerName');
+                location.reload();
+            }
+        }
+
+        // --- RANG AUFSTIEG SYSTEM ---
+        function doRankUp() {
+            if (level < 19 || upgradesConfig[18].count === 0) return;
+            
+            if (currentRankIndex >= rankList.length - 1) {
+                alert("Wahnsinn! Du hast bereits den maximalen S+ Rang erreicht!");
+                return;
+            }
+
+            const nextRank = rankList[currentRankIndex + 1].id;
+            const msg = `🌟 RANGAUFSTIEG! 🌟\n\nDu steigst auf in Rang: [ ${nextRank} ]\n\nDeine Pakete, dein Level und deine Upgrades werden zurückgesetzt.\nDein GELD und deine SKINS behältst du natürlich!\n\nWillst du jetzt aufsteigen?`;
+            
+            if(confirm(msg)) {
+                currentRankIndex++;
+                
+                // Geld bleibt erhalten!
+                score = 0;
+                level = 1;
+                currentXP = 0;
+                
+                upgradesConfig.forEach(u => u.count = 0);
+                xpRequired = getRequiredXP(level);
+                clickPower = Math.ceil(level * 1.5);
+                
+                saveGame();
                 location.reload();
             }
         }
@@ -606,11 +720,18 @@
                 const isMe = (player.name === playerName);
                 const li = document.createElement('li');
                 li.className = `leaderboard-item ${isMe ? 'is-me' : ''}`;
+                
                 let displayScore = player.score;
-                if (isMe && score > player.score) displayScore = score; 
+                let displayRank = player.rank || 'Z';
+
+                if (isMe && score > player.score) {
+                    displayScore = score; 
+                    displayRank = rankList[currentRankIndex].id; 
+                }
 
                 li.innerHTML = `
-                    <span class="lb-rank">#${index + 1}</span>
+                    <span class="lb-rank-num">#${index + 1}</span>
+                    ${getRankBadgeHTML(displayRank)}
                     <span class="lb-name">${player.name}</span>
                     <span class="lb-score">${formatNumber(displayScore)}</span>
                 `;
@@ -732,7 +853,9 @@
 
         function recalculatePPS() {
             packetsPerSecond = 0;
-            upgradesConfig.forEach(u => packetsPerSecond += u.count * u.pps);
+            upgradesConfig.forEach(u => {
+                packetsPerSecond += (u.count * u.pps);
+            });
             if(uiPPS) uiPPS.innerText = formatNumber(packetsPerSecond);
         }
 
@@ -795,6 +918,15 @@
                         }
                     }
                 });
+            }
+
+            const rankupContainer = document.getElementById('rankup-container');
+            if(rankupContainer) {
+                if (level >= 19 && upgradesConfig[18].count > 0 && currentRankIndex < rankList.length - 1) {
+                    rankupContainer.style.display = 'block';
+                } else {
+                    rankupContainer.style.display = 'none';
+                }
             }
         }
 
