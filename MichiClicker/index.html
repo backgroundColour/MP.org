@@ -8,15 +8,22 @@
     <link rel="stylesheet" href="../styles.css">
 
     <style>
-        /* --- SPIEL LAYOUT --- */
-
+        /* --- GLOBAHLE SPIEL-EINSTELLUNGEN --- */
         body {
-            -webkit-user-select:none;
-            -moz-user-select:none;
+            /* Verhindert das Markieren von Text beim schnellen/mehrfachen Klicken */
+            -webkit-user-select: none;
+            -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
         }
 
+        img {
+            /* Verhindert das versehentliche "Ziehen" (Drag & Drop) von Bildern */
+            -webkit-user-drag: none;
+            user-drag: none;
+        }
+
+        /* --- SPIEL LAYOUT --- */
         .game-layout {
             display: grid;
             grid-template-columns: 300px 1.2fr 1fr; 
@@ -100,16 +107,13 @@
         .player-info {
             position: absolute; top: 15px; left: 15px; font-size: 0.9rem; color: var(--dark);
             background: var(--light); padding: 5px 10px; border-radius: 5px; border: 1px solid #ddd;
-            cursor: pointer; transition: background 0.2s;
         }
-        .player-info:hover { background: #e0e0e0; }
 
         .score-display-container { margin-bottom: 1.5rem; margin-top: 1rem; }
         .score-display { font-size: 3.5rem; font-weight: 700; color: var(--primary, #063c8c); font-family: 'Montserrat', sans-serif; margin: 0; transition: transform 0.05s ease; }
         .score-display.pulse { transform: scale(1.05); }
         .pps-display { font-size: 1.2rem; color: var(--dark, #2c3e50); margin: 0; }
         
-        /* Neues Geld-Display */
         .money-display { font-size: 1.4rem; color: var(--success, #27ae60); font-weight: bold; margin-top: 10px; }
 
         .save-controls { display: flex; gap: 10px; margin-top: 1.5rem; align-items: center; justify-content: center; width: 100%; flex-wrap: wrap;}
@@ -198,10 +202,11 @@
                 <div class="score-display-container">
                     <p class="score-display" id="score-text"><span id="score">0</span></p>
                     <p class="pps-display">Pakete pro Sekunde: <span id="pps">0</span></p>
+                    <p class="money-display">Geld: <span id="money-text">0</span> €</p>
                 </div>
 
                 <div class="michi-target-container">
-                    <img src="img/DerMichi.png" id="michi-button" class="michi-target" alt="Cookie" draggable="false" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/b/b9/Chocolate_Chip_Cookie_-_NCI_Visuals_Online.png'">
+                    <img src="img/DerMichi.png" id="michi-button" class="michi-target" alt="Cookie" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/b/b9/Chocolate_Chip_Cookie_-_NCI_Visuals_Online.png'">
                 </div>
 
                 <div class="level-card">
@@ -260,6 +265,7 @@
     <script>
         // --- HILFSFUNKTION FÜR GROßE ZAHLEN (M, B, T...) ---
         function formatNumber(num) {
+            if (num === null || num === undefined || isNaN(num)) return "0";
             if (num < 1000000) return Math.floor(num).toLocaleString('de-DE');
             
             const suffixes = ["", "", " M", " B", " T", " Qa", " Qi", " Sx", " Sp", " Oc", " No", " Dc"];
@@ -270,7 +276,6 @@
             const scale = Math.pow(10, tier * 3);
             const scaled = num / scale;
             
-            // Formatieren auf 1 Nachkommastelle (z.B. 1,5 M)
             return scaled.toFixed(1).replace('.', ',') + suffixes[tier];
         }
 
@@ -303,10 +308,10 @@
 
         // --- SKINS CONFIG ---
         const skinsConfig = [
-            { id: 'default', name: 'Der Michi', cost: 0, image: 'img/DerMichi.png', fallback: '' },
-            { id: 'gold', name: 'Partei Michi', cost: 100000, image: 'img/PartieMichi.png', fallback: '' },
-            { id: 'dark', name: 'Codename Michiwehr', cost: 2500000, image: 'img/MichiWehr.png', fallback: '' },
-            { id: 'quantum', name: "Michi's the one!", cost: 50000000, image: 'img/MichisTheOne.png', fallback: '' }
+            { id: 'default', name: 'Der Michi (Standard)', cost: 0, image: 'img/DerMichi.png', fallback: 'https://upload.wikimedia.org/wikipedia/commons/b/b9/Chocolate_Chip_Cookie_-_NCI_Visuals_Online.png' },
+            { id: 'gold', name: 'Goldener Keks', cost: 10000, image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Chocolate_chip_cookie_isolated.jpg/300px-Chocolate_chip_cookie_isolated.jpg', fallback: '' },
+            { id: 'dark', name: 'Dark-Mode Cookie', cost: 250000, image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Oreo_cookie.jpg/300px-Oreo_cookie.jpg', fallback: '' },
+            { id: 'quantum', name: 'Quanten Macaron', cost: 5000000, image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Macaron_isolated.jpg/300px-Macaron_isolated.jpg', fallback: '' }
         ];
 
         // --- SPIEL VARIABLEN ---
@@ -426,7 +431,7 @@
                 playerName = savedName;
             }
             
-            displayPlayerName.innerText = playerName;
+            if(displayPlayerName) displayPlayerName.innerText = playerName;
             
             loadGame();
             renderUpgrades();
@@ -452,7 +457,7 @@
 
             submitScoreToServer();
 
-            if (manual) {
+            if (manual && saveIndicator) {
                 saveIndicator.innerText = "Gespeichert!";
                 setTimeout(() => saveIndicator.innerText = "", 2000);
             }
@@ -477,7 +482,7 @@
                 }
                 
                 xpRequired = getRequiredXP(level);
-                uiLevel.innerText = level;
+                if(uiLevel) uiLevel.innerText = level;
                 recalculatePPS();
                 applySkinImage();
             }
@@ -494,16 +499,22 @@
         // --- SHOP & SKINS ---
         function openShop() {
             renderShop();
-            document.getElementById('overlay-shop').classList.add('active');
+            const shopElem = document.getElementById('overlay-shop');
+            if(shopElem) shopElem.classList.add('active');
         }
 
         function closeShop() {
-            document.getElementById('overlay-shop').classList.remove('active');
+            const shopElem = document.getElementById('overlay-shop');
+            if(shopElem) shopElem.classList.remove('active');
         }
 
         function renderShop() {
-            document.getElementById('shop-money').innerText = formatNumber(money);
+            const shopMoneyDisplay = document.getElementById('shop-money');
+            if(shopMoneyDisplay) shopMoneyDisplay.innerText = formatNumber(money);
+            
             const container = document.getElementById('shop-items-container');
+            if(!container) return;
+            
             container.innerHTML = '';
 
             skinsConfig.forEach(skin => {
@@ -567,19 +578,21 @@
 
         function applySkinImage() {
             const skin = skinsConfig.find(s => s.id === currentSkin);
-            if (skin) {
+            if (skin && uiMichiBtn) {
                 uiMichiBtn.src = skin.image;
             }
         }
 
         function getCurrentSkinImage() {
             const skin = skinsConfig.find(s => s.id === currentSkin);
-            return skin ? skin.image : uiMichiBtn.src;
+            return skin ? skin.image : (uiMichiBtn ? uiMichiBtn.src : '');
         }
 
         // --- UI & LEADERBOARD RENDERING ---
         function renderLeaderboardUI() {
+            if(!leaderboardList) return;
             leaderboardList.innerHTML = '';
+            
             if(globalLeaderboard.length === 0) {
                 leaderboardList.innerHTML = '<li style="padding: 10px; color: #888;">Noch keine Einträge. Sei der Erste!</li>';
                 return;
@@ -602,13 +615,15 @@
         }
 
         // --- KLICK EVENTS ---
-        uiMichiBtn.addEventListener('click', (e) => {
-            score += clickPower;
-            money += clickPower / 3; 
-            addXP(clickPower);
-            createFloatingText(e, `+${clickPower}`);
-            updateUI();
-        });
+        if(uiMichiBtn) {
+            uiMichiBtn.addEventListener('click', (e) => {
+                score += clickPower;
+                money += clickPower / 3; 
+                addXP(clickPower);
+                createFloatingText(e, `+${clickPower}`);
+                updateUI();
+            });
+        }
 
         function createFloatingText(e, text) {
             const floater = document.createElement('div');
@@ -622,7 +637,7 @@
         }
 
         function triggerPassiveCookie() {
-            if (packetsPerSecond === 0) return;
+            if (packetsPerSecond === 0 || !uiMichiBtn || !uiScoreText) return;
             const cookie = document.createElement('img');
             cookie.src = getCurrentSkinImage(); 
             cookie.classList.add('flying-passive-cookie');
@@ -664,28 +679,32 @@
             clickPower = Math.ceil(level * 1.5); 
 
             const newlyUnlockedItem = upgradesConfig.find(u => u.reqLevel === level);
-            document.getElementById('overlay-levelup-level').innerText = level;
+            const lvlElem = document.getElementById('overlay-levelup-level');
+            if(lvlElem) lvlElem.innerText = level;
             
             const unlockContainer = document.getElementById('levelup-unlock-info');
-            if (newlyUnlockedItem) {
+            if (newlyUnlockedItem && unlockContainer) {
                 unlockContainer.style.display = 'block';
                 document.getElementById('levelup-unlock-img').src = newlyUnlockedItem.image;
                 document.getElementById('levelup-unlock-name').innerText = newlyUnlockedItem.name;
-            } else {
+            } else if (unlockContainer) {
                 unlockContainer.style.display = 'none';
             }
 
-            document.getElementById('overlay-levelup').classList.add('active');
-            uiLevel.innerText = level;
+            const overlayElem = document.getElementById('overlay-levelup');
+            if(overlayElem) overlayElem.classList.add('active');
+            if(uiLevel) uiLevel.innerText = level;
             renderUpgrades();
             saveGame(); 
         }
 
         function updateXPBar() {
-            uiXpCurrent.innerText = formatNumber(currentXP);
-            uiXpNeeded.innerText = formatNumber(xpRequired);
-            const percent = Math.min((currentXP / xpRequired) * 100, 100);
-            uiXpFill.style.width = `${percent}%`;
+            if(uiXpCurrent) uiXpCurrent.innerText = formatNumber(currentXP);
+            if(uiXpNeeded) uiXpNeeded.innerText = formatNumber(xpRequired);
+            if(uiXpFill) {
+                const percent = Math.min((currentXP / xpRequired) * 100, 100);
+                uiXpFill.style.width = `${percent}%`;
+            }
         }
 
         // --- UPGRADE SYSTEM ---
@@ -710,14 +729,15 @@
         function recalculatePPS() {
             packetsPerSecond = 0;
             upgradesConfig.forEach(u => packetsPerSecond += u.count * u.pps);
-            uiPPS.innerText = formatNumber(packetsPerSecond);
+            if(uiPPS) uiPPS.innerText = formatNumber(packetsPerSecond);
         }
 
         // --- UI RENDERING ---
         function renderUpgrades() {
+            if(!upgradesContainer) return;
             const title = upgradesContainer.querySelector('h3');
             upgradesContainer.innerHTML = '';
-            upgradesContainer.appendChild(title);
+            if(title) upgradesContainer.appendChild(title);
 
             upgradesConfig.forEach((upgrade, index) => {
                 const cost = getCost(upgrade);
@@ -754,26 +774,29 @@
         }
 
         function updateUI() {
-            uiScore.innerText = formatNumber(score);
-            uiMoney.innerText = formatNumber(money); 
+            if(uiScore) uiScore.innerText = formatNumber(score);
+            if(uiMoney) uiMoney.innerText = formatNumber(money); 
             
-            const items = upgradesContainer.querySelectorAll('.upgrade-item');
-            upgradesConfig.forEach((upgrade, index) => {
-                if (items[index]) {
-                    const isUnlocked = level >= upgrade.reqLevel;
-                    if (!isUnlocked) return; 
+            if(upgradesContainer) {
+                const items = upgradesContainer.querySelectorAll('.upgrade-item');
+                upgradesConfig.forEach((upgrade, index) => {
+                    if (items[index]) {
+                        const isUnlocked = level >= upgrade.reqLevel;
+                        if (!isUnlocked) return; 
 
-                    if (score >= getCost(upgrade)) {
-                        items[index].classList.remove('disabled');
-                    } else {
-                        items[index].classList.add('disabled');
+                        if (score >= getCost(upgrade)) {
+                            items[index].classList.remove('disabled');
+                        } else {
+                            items[index].classList.add('disabled');
+                        }
                     }
-                }
-            });
+                });
+            }
         }
 
         function closeOverlay(id) {
-            document.getElementById(id).classList.remove('active');
+            const elem = document.getElementById(id);
+            if(elem) elem.classList.remove('active');
         }
 
         // --- START ---
