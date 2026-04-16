@@ -682,6 +682,194 @@
             background: var(--primary);
             color: white;
         }
+
+        /* --- SHOP TABS --- */
+        .shop-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .shop-tab {
+            padding: 10px 22px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .shop-tab.active {
+            background: var(--primary, #063c8c);
+            border-color: var(--primary, #063c8c);
+        }
+
+        .shop-tab:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* --- SOUND SKIN ITEMS --- */
+        .sound-item {
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .sound-item.owned {
+            border-color: var(--success);
+        }
+
+        .sound-item.equipped {
+            border-color: var(--secondary);
+            background: rgba(251, 205, 55, 0.2);
+            transform: scale(1.05);
+        }
+
+        .sound-item.locked {
+            opacity: 0.6;
+        }
+
+        .sound-emoji {
+            font-size: 2.5rem;
+            display: block;
+            margin: 8px 0;
+        }
+
+        /* --- BATTLE PASS --- */
+        .bp-btn {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        .bp-btn:hover {
+            background: linear-gradient(135deg, #e67e22, #d35400);
+            transform: translateY(-2px);
+        }
+
+        .bp-container {
+            width: 100%;
+            max-height: 55vh;
+            overflow-y: auto;
+            padding: 5px;
+        }
+
+        .bp-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .bp-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+
+        .bp-container::-webkit-scrollbar-thumb {
+            background: rgba(243, 156, 18, 0.5);
+            border-radius: 4px;
+        }
+
+        .bp-tier {
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.12);
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin-bottom: 10px;
+            gap: 15px;
+            transition: border-color 0.3s;
+        }
+
+        .bp-tier.claimed {
+            border-color: var(--success, #27ae60);
+            background: rgba(39, 174, 96, 0.12);
+        }
+
+        .bp-tier.current {
+            border-color: var(--secondary, #fbcd37);
+            background: rgba(251, 205, 55, 0.1);
+        }
+
+        .bp-tier-num {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--secondary, #fbcd37);
+            min-width: 36px;
+            text-align: center;
+        }
+
+        .bp-tier-info {
+            flex: 1;
+        }
+
+        .bp-tier-reward {
+            font-weight: bold;
+            font-size: 1rem;
+            color: white;
+        }
+
+        .bp-tier-desc {
+            font-size: 0.82rem;
+            color: #aaa;
+            margin-top: 3px;
+        }
+
+        .bp-progress-bar-bg {
+            height: 7px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin-top: 8px;
+            width: 100%;
+        }
+
+        .bp-progress-bar-fill {
+            height: 100%;
+            background: var(--secondary, #fbcd37);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .bp-tier-status {
+            font-size: 1.4rem;
+            min-width: 32px;
+            text-align: center;
+        }
+
+        .bp-xp-display {
+            background: rgba(243, 156, 18, 0.12);
+            border: 1px solid rgba(243, 156, 18, 0.3);
+            border-radius: 8px;
+            padding: 10px 20px;
+            margin: 10px 0 15px;
+            color: #f5c85a;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        @keyframes bpNotifFade {
+            0%   { opacity: 0; transform: translate(-50%, -60%) scale(0.8); }
+            15%  { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            75%  { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
+        }
     </style>
 </head>
 
@@ -742,7 +930,8 @@
                 <div class="save-controls">
                     <button class="btn-action btn-save" onclick="saveGame(true)">Speichern</button>
                     <button class="btn-action btn-reset" onclick="resetGame()">Neues Spiel</button>
-                    <button class="btn-action btn-shop" onclick="openShop()">🛒 Skin Shop</button>
+                    <button class="btn-action btn-shop" onclick="openShop()">🛒 Shop</button>
+                    <button class="bp-btn" onclick="openBattlePass()">🏆 Battle Pass</button>
                 </div>
                 <div style="margin-top: 10px;"><span id="save-indicator"></span></div>
             </div>
@@ -775,13 +964,35 @@
 
     <div class="game-overlay" id="overlay-shop">
         <div class="overlay-card" style="max-width: 800px; width: 95%;">
-            <h1 class="level-up-title" style="color: var(--secondary, #fbcd37); font-size: 3rem;">🛒 Skin Shop</h1>
+            <h1 class="level-up-title" style="color: var(--secondary, #fbcd37); font-size: 3rem;">🛒 Shop</h1>
             <p style="color: #ddd; font-size: 1.1rem;">Verdiene 8 Bit für jede 3 Pakete, die du generierst. 8 Bit = 1 Byte; 1024 Byte = 1 KB …</p>
             <h3 style="color: var(--success); margin: 10px 0;">Dein Guthaben: <span id="shop-money">0</span></h3>
+
+            <div class="shop-tabs">
+                <button class="shop-tab active" id="tab-btn-skins" onclick="switchShopTab('skins')">🎨 Visual Skins</button>
+                <button class="shop-tab" id="tab-btn-sounds" onclick="switchShopTab('sounds')">🔊 Sound Skins</button>
+            </div>
+
             <div class="shop-items-container" id="shop-items-container">
+            </div>
+            <div class="shop-items-container" id="sound-items-container" style="display:none;">
             </div>
 
             <button class="btn-overlay-close" onclick="closeShop()">Schließen</button>
+        </div>
+    </div>
+
+    <div class="game-overlay" id="overlay-battlepass">
+        <div class="overlay-card" style="max-width: 680px; width: 95%;">
+            <h1 class="level-up-title" style="color: #f39c12; font-size: 2.5rem;">🏆 Battle Pass</h1>
+            <p style="color: #ddd; font-size: 1rem;">Verdiene Battle Pass XP durch Klicken und passives Spielen.</p>
+            <div class="bp-xp-display">
+                Battle Pass XP: <strong id="bp-xp-current">0</strong>
+                &nbsp;|&nbsp; Gesamt-XP bis Tier 10: <strong id="bp-xp-total">0</strong>
+            </div>
+            <div class="bp-container" id="bp-container">
+            </div>
+            <button class="btn-overlay-close" onclick="closeBattlePass()">Schließen</button>
         </div>
     </div>
 
@@ -895,6 +1106,29 @@
             { id: 'mega', name: "Osi-Mann Michi", cost: 100000000, image: 'img/MegaMichi.png', fallback: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Macaron_isolated.jpg/300px-Macaron_isolated.jpg' },
         ];
 
+        // --- SOUND SKINS CONFIG ---
+        const soundSkinsConfig = [
+            { id: 'silent',  name: 'Kein Sound',    emoji: '🔇', cost: 0,       bpTier: 0,  description: 'Kein Klickgeräusch.' },
+            { id: 'beep',    name: 'Classic Beep',  emoji: '🔔', cost: 0,       bpTier: 0,  description: 'Einfaches Klick-Geräusch.' },
+            { id: 'square',  name: 'Square Wave',   emoji: '🎮', cost: 0,       bpTier: 3,  description: 'Retro Square Wave – freigeschaltet via Battle Pass Tier 3.' },
+            { id: 'retro',   name: 'Retro 8-Bit',   emoji: '👾', cost: 0,       bpTier: 6,  description: 'Chip Tune Sound – freigeschaltet via Battle Pass Tier 6.' },
+            { id: 'bass',    name: 'Deep Bass',     emoji: '💥', cost: 0,       bpTier: 9,  description: 'Tiefer Bass-Klick – freigeschaltet via Battle Pass Tier 9.' },
+        ];
+
+        // --- BATTLE PASS TIERS ---
+        const battlePassTiers = [
+            { tier: 1,  xpRequired: 1000,     description: 'Erster Meilenstein!',         reward: { type: 'money', value: 5000,       label: '5.000 Bit Bonus' } },
+            { tier: 2,  xpRequired: 3000,     description: 'Fleißiger Klicker!',           reward: { type: 'click', value: 5,          label: '+5 Klickkraft' } },
+            { tier: 3,  xpRequired: 7500,     description: 'Retro-Freischaltung!',         reward: { type: 'sound', value: 'square',   label: '🎮 Square Wave Sound' } },
+            { tier: 4,  xpRequired: 15000,    description: 'Geldmaschine läuft!',          reward: { type: 'money', value: 50000,      label: '50.000 Bit Bonus' } },
+            { tier: 5,  xpRequired: 30000,    description: 'Halbzeit!',                    reward: { type: 'click', value: 10,         label: '+10 Klickkraft' } },
+            { tier: 6,  xpRequired: 60000,    description: 'Pixel-Meister!',               reward: { type: 'sound', value: 'retro',    label: '👾 Retro 8-Bit Sound' } },
+            { tier: 7,  xpRequired: 120000,   description: 'Netzwerk-Mogul!',              reward: { type: 'money', value: 500000,     label: '500.000 Bit Bonus' } },
+            { tier: 8,  xpRequired: 250000,   description: 'Unaufhaltsam!',                reward: { type: 'click', value: 25,         label: '+25 Klickkraft' } },
+            { tier: 9,  xpRequired: 500000,   description: 'Bass-Legende!',                reward: { type: 'sound', value: 'bass',     label: '💥 Deep Bass Sound' } },
+            { tier: 10, xpRequired: 1000000,  description: 'Battle Pass vollständig!',     reward: { type: 'money', value: 5000000,    label: '5.000.000 Bit Bonus' } },
+        ];
+
         // --- SPIEL VARIABLEN ---
         let score = 0;
         let money = 0;
@@ -905,6 +1139,13 @@
 
         let ownedSkins = ['default'];
         let currentSkin = 'default';
+
+        let ownedSoundSkins = ['silent', 'beep'];
+        let currentSoundSkin = 'beep';
+
+        let battlePassXP = 0;
+        let claimedBPTiers = [];
+        let bpClickBonus = 0; // Separate BP click bonus, survives rank-ups
 
         let playerName = "Gast";
         let globalLeaderboard = [];
@@ -1094,7 +1335,12 @@
                 upgrades: upgradesConfig.map(u => u.count),
                 ownedSkins: ownedSkins,
                 currentSkin: currentSkin,
-                rankIndex: currentRankIndex
+                rankIndex: currentRankIndex,
+                ownedSoundSkins: ownedSoundSkins,
+                currentSoundSkin: currentSoundSkin,
+                battlePassXP: battlePassXP,
+                claimedBPTiers: claimedBPTiers,
+                bpClickBonus: bpClickBonus
             };
             localStorage.setItem('michiSave', JSON.stringify(saveState));
 
@@ -1118,6 +1364,11 @@
                 ownedSkins = saveState.ownedSkins || ['default'];
                 currentSkin = saveState.currentSkin || 'default';
                 currentRankIndex = saveState.rankIndex || 0;
+                ownedSoundSkins = saveState.ownedSoundSkins || ['silent', 'beep'];
+                currentSoundSkin = saveState.currentSoundSkin || 'beep';
+                battlePassXP = saveState.battlePassXP || 0;
+                claimedBPTiers = saveState.claimedBPTiers || [];
+                bpClickBonus = saveState.bpClickBonus || 0;
 
                 if (saveState.upgrades) {
                     saveState.upgrades.forEach((count, i) => {
@@ -1127,6 +1378,14 @@
 
                 xpRequired = getRequiredXP(level);
                 if (uiLevel) uiLevel.innerText = level;
+                // Recompute bpClickBonus from claimed tiers in case it's missing (old saves)
+                if (!saveState.bpClickBonus) {
+                    bpClickBonus = claimedBPTiers.reduce((sum, tierNum) => {
+                        const t = battlePassTiers.find(bt => bt.tier === tierNum);
+                        return sum + (t && t.reward.type === 'click' ? t.reward.value : 0);
+                    }, 0);
+                    clickPower = Math.ceil(level * 1.5) + bpClickBonus;
+                }
                 recalculatePPS();
                 applySkinImage();
             }
@@ -1156,7 +1415,8 @@
 
             upgradesConfig.forEach(u => u.count = 0);
             xpRequired = getRequiredXP(level);
-            clickPower = 1;
+            // Base click power resets, but BP bonus is preserved and reapplied
+            clickPower = 1 + bpClickBonus;
 
             if (uiLevel) uiLevel.innerText = level;
             if (playerRankDisplay) playerRankDisplay.innerHTML = getRankBadgeHTML(rankList[currentRankIndex].id);
@@ -1237,10 +1497,26 @@
 
 
         // --- SHOP & SKINS ---
+        let currentShopTab = 'skins';
+
         function openShop() {
             renderShop();
+            switchShopTab('skins');
             const shopElem = document.getElementById('overlay-shop');
             if (shopElem) shopElem.classList.add('active');
+        }
+
+        function switchShopTab(tab) {
+            currentShopTab = tab;
+            const skinsContainer = document.getElementById('shop-items-container');
+            const soundsContainer = document.getElementById('sound-items-container');
+            const tabSkins = document.getElementById('tab-btn-skins');
+            const tabSounds = document.getElementById('tab-btn-sounds');
+            if (skinsContainer) skinsContainer.style.display = tab === 'skins' ? '' : 'none';
+            if (soundsContainer) soundsContainer.style.display = tab === 'sounds' ? '' : 'none';
+            if (tabSkins) tabSkins.classList.toggle('active', tab === 'skins');
+            if (tabSounds) tabSounds.classList.toggle('active', tab === 'sounds');
+            if (tab === 'sounds') renderSoundSkins();
         }
 
         function closeShop() {
@@ -1328,6 +1604,255 @@
             return skin ? skin.image : (uiMichiBtn ? uiMichiBtn.src : '');
         }
 
+        // --- SOUND SKINS ---
+        function renderSoundSkins() {
+            const shopMoneyDisplay = document.getElementById('shop-money');
+            if (shopMoneyDisplay) shopMoneyDisplay.innerText = formatBits(money);
+
+            const container = document.getElementById('sound-items-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            soundSkinsConfig.forEach(sound => {
+                const isOwned = ownedSoundSkins.includes(sound.id);
+                const isEquipped = currentSoundSkin === sound.id;
+                const canAfford = money >= sound.cost;
+                const bpLocked = sound.bpTier > 0 && !claimedBPTiers.includes(sound.bpTier);
+
+                let btnClass = 'btn-buy-skin';
+                let btnText = '';
+                let onClick = '';
+                let itemClass = 'sound-item';
+
+                if (isEquipped) {
+                    btnClass += ' equip';
+                    btnText = '✓ Aktiv';
+                    itemClass += ' equipped';
+                    onClick = '';
+                } else if (isOwned) {
+                    btnClass += ' equip';
+                    btnText = 'Aktivieren';
+                    itemClass += ' owned';
+                    onClick = `equipSoundSkin('${sound.id}')`;
+                } else if (bpLocked) {
+                    btnText = `🏆 Tier ${sound.bpTier}`;
+                    itemClass += ' locked';
+                } else if (sound.cost > 0) {
+                    btnText = `${formatBits(sound.cost)}`;
+                    if (canAfford) {
+                        btnClass += ' can-afford';
+                        onClick = `buySoundSkin('${sound.id}')`;
+                    } else {
+                        itemClass += ' locked';
+                    }
+                } else {
+                    btnText = 'Kostenlos';
+                    btnClass += ' can-afford';
+                    onClick = `buySoundSkin('${sound.id}')`;
+                }
+
+                container.innerHTML += `
+                    <div class="${itemClass}" onclick="${onClick}" title="${sound.description}">
+                        <h4 style="margin: 0 0 5px 0; color: white; font-size: 0.95rem;">${sound.name}</h4>
+                        <span class="sound-emoji">${sound.emoji}</span>
+                        <p style="color: #aaa; font-size: 0.78rem; margin: 0 0 5px 0;">${sound.description}</p>
+                        <button class="${btnClass}">${btnText}</button>
+                    </div>
+                `;
+            });
+        }
+
+        function buySoundSkin(id) {
+            const sound = soundSkinsConfig.find(s => s.id === id);
+            if (!sound) return;
+            const bpLocked = sound.bpTier > 0 && !claimedBPTiers.includes(sound.bpTier);
+            if (bpLocked) return;
+            if (!ownedSoundSkins.includes(id)) {
+                if (sound.cost > 0 && money < sound.cost) return;
+                money -= sound.cost;
+                ownedSoundSkins.push(id);
+                updateUI();
+            }
+            equipSoundSkin(id);
+        }
+
+        function equipSoundSkin(id) {
+            if (ownedSoundSkins.includes(id)) {
+                currentSoundSkin = id;
+                renderSoundSkins();
+                saveGame();
+            }
+        }
+
+        // --- WEB AUDIO API ---
+        let audioContext = null;
+
+        function getAudioContext() {
+            if (!audioContext) {
+                try {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                } catch (e) { /* Web Audio not available */ }
+            }
+            return audioContext;
+        }
+
+        function playClickSound() {
+            if (currentSoundSkin === 'silent') return;
+            const ctx = getAudioContext();
+            if (!ctx) return;
+
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+
+            const now = ctx.currentTime;
+
+            if (currentSoundSkin === 'beep') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(880, now);
+                gain.gain.setValueAtTime(0.25, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+                osc.start(now);
+                osc.stop(now + 0.1);
+            } else if (currentSoundSkin === 'square') {
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(440, now);
+                gain.gain.setValueAtTime(0.18, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+                osc.start(now);
+                osc.stop(now + 0.15);
+            } else if (currentSoundSkin === 'retro') {
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(880, now);
+                osc.frequency.exponentialRampToValueAtTime(440, now + 0.1);
+                gain.gain.setValueAtTime(0.18, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+                osc.start(now);
+                osc.stop(now + 0.12);
+            } else if (currentSoundSkin === 'bass') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(120, now);
+                osc.frequency.exponentialRampToValueAtTime(60, now + 0.18);
+                gain.gain.setValueAtTime(0.45, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+                osc.start(now);
+                osc.stop(now + 0.2);
+            }
+        }
+
+        // --- BATTLE PASS ---
+        function openBattlePass() {
+            renderBattlePass();
+            const elem = document.getElementById('overlay-battlepass');
+            if (elem) elem.classList.add('active');
+        }
+
+        function closeBattlePass() {
+            const elem = document.getElementById('overlay-battlepass');
+            if (elem) elem.classList.remove('active');
+        }
+
+        function addBPXP(amount) {
+            battlePassXP += amount;
+            let rewarded = false;
+            battlePassTiers.forEach((tier) => {
+                const tierNum = tier.tier;
+                if (battlePassXP >= tier.xpRequired && !claimedBPTiers.includes(tierNum)) {
+                    claimBPReward(tierNum, tier);
+                    rewarded = true;
+                }
+            });
+            // Re-render overlay if it's open (for live XP display)
+            const overlay = document.getElementById('overlay-battlepass');
+            if (overlay && overlay.classList.contains('active')) renderBattlePass();
+            if (rewarded) saveGame();
+        }
+
+        function claimBPReward(tierNum, tier) {
+            claimedBPTiers.push(tierNum);
+            if (tier.reward.type === 'money') {
+                money += tier.reward.value;
+            } else if (tier.reward.type === 'click') {
+                bpClickBonus += tier.reward.value;
+                clickPower += tier.reward.value;
+            } else if (tier.reward.type === 'sound') {
+                if (!ownedSoundSkins.includes(tier.reward.value)) {
+                    ownedSoundSkins.push(tier.reward.value);
+                }
+            }
+            showBPRewardNotification(tierNum, tier.reward.label);
+            // Re-render overlay if it's open
+            const overlay = document.getElementById('overlay-battlepass');
+            if (overlay && overlay.classList.contains('active')) renderBattlePass();
+            updateUI();
+        }
+
+        function showBPRewardNotification(tierNum, rewardLabel) {
+            const notif = document.createElement('div');
+            notif.style.cssText = [
+                'position:fixed', 'top:50%', 'left:50%',
+                'transform:translate(-50%,-50%)',
+                'background:linear-gradient(135deg,#f39c12,#e67e22)',
+                'color:white', 'padding:22px 32px', 'border-radius:14px',
+                'font-size:1.25rem', 'font-weight:bold', 'z-index:3000',
+                'text-align:center', 'box-shadow:0 10px 30px rgba(0,0,0,0.6)',
+                'pointer-events:none',
+                'animation:bpNotifFade 3s ease forwards'
+            ].join(';');
+            notif.innerHTML = `🏆 Battle Pass Tier ${tierNum} erreicht!<br><span style="font-size:0.95rem;font-weight:normal;">${rewardLabel} freigeschaltet!</span>`;
+            document.body.appendChild(notif);
+            setTimeout(() => notif.remove(), 3100);
+        }
+
+        function renderBattlePass() {
+            const bpXpCurrentEl = document.getElementById('bp-xp-current');
+            const bpXpTotalEl = document.getElementById('bp-xp-total');
+            const container = document.getElementById('bp-container');
+
+            if (bpXpCurrentEl) bpXpCurrentEl.innerText = formatNumber(battlePassXP);
+            if (bpXpTotalEl) bpXpTotalEl.innerText = formatNumber(battlePassTiers[battlePassTiers.length - 1].xpRequired);
+            if (!container) return;
+
+            container.innerHTML = '';
+            battlePassTiers.forEach((tier, index) => {
+                const tierNum = tier.tier;
+                const isClaimed = claimedBPTiers.includes(tierNum);
+                const prevClaimed = tierNum === 1 || claimedBPTiers.includes(tierNum - 1);
+                const isCurrent = !isClaimed && prevClaimed;
+
+                let tierClass = 'bp-tier';
+                let statusEmoji = '🔒';
+                if (isClaimed) { tierClass += ' claimed'; statusEmoji = '✅'; }
+                else if (isCurrent) { tierClass += ' current'; statusEmoji = '⭐'; }
+
+                // Only show progress bar for the current active tier
+                const showProgress = isCurrent;
+                const prevXP = index === 0 ? 0 : battlePassTiers[index - 1].xpRequired;
+                const tierXPEarned = Math.max(0, battlePassXP - prevXP);
+                const tierXPNeeded = tier.xpRequired - prevXP;
+                const progress = Math.min((tierXPEarned / tierXPNeeded) * 100, 100);
+
+                container.innerHTML += `
+                    <div class="${tierClass}">
+                        <div class="bp-tier-num">${tierNum}</div>
+                        <div class="bp-tier-info">
+                            <div class="bp-tier-reward">${tier.reward.label}</div>
+                            <div class="bp-tier-desc">${tier.description}</div>
+                            ${showProgress ? `
+                                <div class="bp-progress-bar-bg">
+                                    <div class="bp-progress-bar-fill" style="width:${progress.toFixed(1)}%"></div>
+                                </div>
+                                <div style="font-size:0.75rem;color:#888;margin-top:3px;">
+                                    ${formatNumber(Math.min(tierXPEarned, tierXPNeeded))} / ${formatNumber(tierXPNeeded)} XP
+                                </div>` : ''}
+                        </div>
+                        <div class="bp-tier-status" aria-label="${isClaimed ? 'Abgeschlossen' : isCurrent ? 'Aktuell' : 'Gesperrt'}">${statusEmoji}</div>
+                    </div>
+                `;
+            });
+        }
+
         // --- UI & LEADERBOARD RENDERING ---
         function renderLeaderboardUI() {
             if (!leaderboardList) return;
@@ -1367,6 +1892,8 @@
                 score += clickPower;
                 money += clickPower / 3;
                 addXP(clickPower);
+                addBPXP(clickPower * 2);
+                playClickSound();
                 createFloatingText(e, `+${clickPower}`);
                 updateUI();
             });
@@ -1440,7 +1967,7 @@
         function levelUp() {
             level++;
             xpRequired = getRequiredXP(level);
-            clickPower = Math.ceil(level * 1.5);
+            clickPower = Math.ceil(level * 1.5) + bpClickBonus;
 
             const newlyUnlockedItem = upgradesConfig.find(u => u.reqLevel === level);
             const lvlElem = document.getElementById('overlay-levelup-level');
@@ -1584,6 +2111,7 @@
                 score += amount;
                 money += amount / 3;
                 addXP(amount * 0.05);
+                addBPXP(amount * 0.1);
                 updateUI();
             }
         }, 100);
