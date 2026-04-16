@@ -238,7 +238,7 @@
                 <div class="score-display-container">
                     <p class="score-display" id="score-text"><span id="score">0</span></p>
                     <p class="pps-display">Pakete pro Sekunde: <span id="pps">0</span></p>
-                    <p class="money-display">Geld: <span id="money-text">0</span> €</p>
+                    <p class="money-display">Geld: <span id="money-text">0</span> Bit</p>
                 </div>
 
                 <div class="michi-target-container">
@@ -292,8 +292,8 @@
     <div class="game-overlay" id="overlay-shop">
         <div class="overlay-card" style="max-width: 800px; width: 95%;">
             <h1 class="level-up-title" style="color: var(--secondary, #fbcd37); font-size: 3rem;">🛒 Skin Shop</h1>
-            <p style="color: #ddd; font-size: 1.1rem;">Verdiene 1€ für jede 3 Pakete, die du generierst.</p>
-            <h3 style="color: var(--success); margin: 10px 0;">Dein Guthaben: <span id="shop-money">0</span> €</h3>
+            <p style="color: #ddd; font-size: 1.1rem;">Verdiene 8 Bit für jede 3 Pakete, die du generierst. 8 Bit = 1 Byte; 1024 Byte = 1 KB …</p>
+            <h3 style="color: var(--success); margin: 10px 0;">Dein Guthaben: <span id="shop-money">0</span></h3>
             
             <div class="shop-items-container" id="shop-items-container">
                 </div>
@@ -303,6 +303,24 @@
     </div>
 
     <script>
+        function formatBits(bits) {
+            if (bits < 8) return `${Math.floor(bits)} Bit`;
+            const bytes = bits / 8;
+            if (bytes < 1024) return `${bytes.toFixed(2)} Byte`;
+            const kb = bytes / 1024;
+            if (kb < 1024) return `${kb.toFixed(2)} KB`;
+            const mb = kb / 1024;
+            if (mb < 1024) return `${mb.toFixed(2)} MB`;
+            const gb = mb / 1024;
+            if (gb < 1024) return `${gb.toFixed(2)} GB`;
+            const tb = gb / 1024;
+            if (tb < 1024) return `${tb.toFixed(2)} TB`;
+            const pb = tb / 1024;
+            if (pb < 1024) return `${pb.toFixed(2)} PB`;
+            const eb = pb / 1024;
+            return `${eb.toFixed(2)} EB`;
+        }
+
         function formatNumber(num) {
             if (num === null || num === undefined || isNaN(num)) return "0";
             if (num < 1000000) return Math.floor(num).toLocaleString('de-DE');
@@ -749,7 +767,7 @@
 
         function renderShop() {
             const shopMoneyDisplay = document.getElementById('shop-money');
-            if(shopMoneyDisplay) shopMoneyDisplay.innerText = formatNumber(money);
+            if(shopMoneyDisplay) shopMoneyDisplay.innerText = formatBits(money);
             
             const container = document.getElementById('shop-items-container');
             if(!container) return;
@@ -776,7 +794,7 @@
                     itemClass += ' owned';
                     onClick = `equipSkin('${skin.id}')`;
                 } else {
-                    btnText = `${formatNumber(skin.cost)} €`;
+                    btnText = formatBits(skin.cost);
                     if (canAfford) {
                         btnClass += ' can-afford';
                         onClick = `buySkin('${skin.id}')`;
@@ -1040,7 +1058,7 @@
 
         function updateUI() {
             if(uiScore) uiScore.innerText = formatNumber(score);
-            if(uiMoney) uiMoney.innerText = formatNumber(money); 
+            if(uiMoney) uiMoney.innerText = formatBits(money); 
             
             if(upgradesContainer) {
                 const items = upgradesContainer.querySelectorAll('.upgrade-item');
