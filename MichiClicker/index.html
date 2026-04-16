@@ -107,7 +107,9 @@
         .player-info {
             position: absolute; top: 15px; left: 15px; font-size: 0.9rem; color: var(--dark);
             background: var(--light); padding: 5px 10px; border-radius: 5px; border: 1px solid #ddd;
+            cursor: pointer; transition: background 0.2s;
         }
+        .player-info:hover { background: #e0e0e0; }
 
         .score-display-container { margin-bottom: 1.5rem; margin-top: 1rem; }
         .score-display { font-size: 3.5rem; font-weight: 700; color: var(--primary, #063c8c); font-family: 'Montserrat', sans-serif; margin: 0; transition: transform 0.05s ease; }
@@ -196,7 +198,7 @@
 
             <div class="clicker-panel">
                 <div class="player-info" title="Dein Spielername">
-                    👤 <span id="display-player-name">Spieler</span>
+                    👤 <span id="display-player-name">Lade...</span>
                 </div>
 
                 <div class="score-display-container">
@@ -303,15 +305,15 @@
             { id: 'satellite', name: 'LEO Satelliten-Uplink', baseCost: 3000000000000, pps: 60000000000, count: 0, reqLevel: 16, image: 'https://heise.cloudimg.io/bound/1200x1200/q85.png-lossy-85.webp-lossy-85.foil1/_www-heise-de_/imgs/18/5/0/6/0/5/0/6/shutterstock_2376339171-cb339f5d81ab6f9b.jpg' },
             { id: 'quantum', name: 'Quanten-Netzwerk', baseCost: 25000000000000, pps: 500000000000, count: 0, reqLevel: 17, image: 'https://i.ytimg.com/vi/JZSDuBzw5Ow/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLCaMG-g1Qq-vXaW5rq4WkWTPceH3A' },
             { id: 'ai_core', name: 'KI-Routing Matrix', baseCost: 200000000000000, pps: 4000000000000, count: 0, reqLevel: 18, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSReInF7nslKfdKpLvKULCpT5L1BpUXTWJ6YA&s' },
-            { id: 'lambo_zuchini', name: 'Lambo Zuchini', baseCost: 500000000000000, pps: 10000000000000, count: 0, reqLevel: 19, image: '../assets/img/Zucchini.png' }
+            { id: 'lambo_zuchini', name: 'Lambo Zuchini', baseCost: 500000000000000, pps: 10000000000000, count: 0, reqLevel: 19, image: 'assets/img/Zucchini.png' }
         ];
 
-        // --- SKINS CONFIG ---
-         const skinsConfig = [
-            { id: 'default', name: 'Der Michi', cost: 0, image: 'img/DerMichi.png', fallback: '' },
-            { id: 'gold', name: 'Partei Michi', cost: 100000, image: 'img/PartieMichi.png', fallback: '' },
-            { id: 'dark', name: 'Codename Michiwehr', cost: 2500000, image: 'img/MichiWehr.png', fallback: '' },
-            { id: 'quantum', name: "Michi's the one!", cost: 50000000, image: 'img/MichisTheOne.png', fallback: '' }
+        // --- SKINS CONFIG (Neue Liste vom User) ---
+        const skinsConfig = [
+            { id: 'default', name: 'Der Michi', cost: 0, image: 'img/DerMichi.png', fallback: 'https://upload.wikimedia.org/wikipedia/commons/b/b9/Chocolate_Chip_Cookie_-_NCI_Visuals_Online.png' },
+            { id: 'gold', name: 'Partei Michi', cost: 100000, image: 'img/PartieMichi.png', fallback: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Chocolate_chip_cookie_isolated.jpg/300px-Chocolate_chip_cookie_isolated.jpg' },
+            { id: 'dark', name: 'Codename Michiwehr', cost: 2500000, image: 'img/MichiWehr.png', fallback: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Oreo_cookie.jpg/300px-Oreo_cookie.jpg' },
+            { id: 'quantum', name: "Michi's the one!", cost: 50000000, image: 'img/MichisTheOne.png', fallback: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Macaron_isolated.jpg/300px-Macaron_isolated.jpg' }
         ];
 
         // --- SPIEL VARIABLEN ---
@@ -329,7 +331,10 @@
         let globalLeaderboard = []; 
 
         function getRequiredXP(lvl) {
-            return Math.floor(100 * Math.pow(2.2, lvl - 1));
+            // Dynamische, immer steiler werdende XP-Kurve für das Lategame
+            // lvl 1: x2.15, lvl 10: x3.50, lvl 18: x4.70 -> Stoppt die XP-Explosion
+            const baseMultiplier = 2.0 + (lvl * 0.15); 
+            return Math.floor(100 * Math.pow(baseMultiplier, lvl - 1));
         }
         let xpRequired = getRequiredXP(level);
 
