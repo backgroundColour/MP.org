@@ -24,7 +24,7 @@
         /* --- SPIEL LAYOUT --- */
         .game-layout {
             display: grid;
-            grid-template-columns: 300px 1.2fr 1fr; 
+            grid-template-columns: 320px 1.2fr 1fr; 
             gap: 2rem;
             margin-top: 2rem;
             position: relative;
@@ -38,6 +38,31 @@
         @media (max-width: 800px) {
             .game-layout { grid-template-columns: 1fr; }
             .leaderboard-panel { grid-column: span 1; }
+        }
+
+        /* --- RANG BADGES (Pastel, 45° gedreht, dicker Rahmen) --- */
+        .rank-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            transform: rotate(45deg);
+            font-weight: 900;
+            font-size: 1rem;
+            color: #333;
+            box-shadow: 2px 2px 6px rgba(0,0,0,0.15);
+            border-style: solid;
+            /* 25% vom Durchmesser (ca. 28px) ist ~7px dicker Rahmen */
+            border-width: 7px;
+            flex-shrink: 0;
+            margin-right: 15px;
+            margin-left: 5px;
+        }
+        .rank-badge-text {
+            /* Text wieder gerade drehen */
+            transform: rotate(-45deg); 
         }
 
         /* --- LINKE SEITE (Leaderboard) --- */
@@ -58,9 +83,8 @@
         .leaderboard-list { list-style: none; padding: 0; margin: 0; }
 
         .leaderboard-item {
-            display: grid;
-            grid-template-columns: 30px 1fr auto;
-            gap: 10px;
+            display: flex;
+            gap: 5px;
             padding: 12px 10px;
             border-bottom: 1px solid #eee;
             align-items: center;
@@ -80,9 +104,10 @@
             transform: scale(1.02);
         }
 
-        .lb-rank { font-weight: bold; color: #888; }
-        .leaderboard-item.is-me .lb-rank { color: var(--dark, #2c3e50); }
-        .lb-score { font-family: 'Montserrat', sans-serif; color: var(--primary, #063c8c); font-weight: bold; }
+        .lb-rank-num { font-weight: bold; color: #888; width: 25px; }
+        .leaderboard-item.is-me .lb-rank-num { color: var(--dark, #2c3e50); }
+        .lb-name { flex-grow: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .lb-score { font-family: 'Montserrat', sans-serif; color: var(--primary, #063c8c); font-weight: bold; text-align: right;}
         
         .live-indicator {
             position: absolute;
@@ -103,13 +128,13 @@
         }
 
         .player-info {
-            position: absolute; top: 15px; left: 15px; font-size: 0.9rem; color: var(--dark);
-            background: var(--light); padding: 5px 10px; border-radius: 5px; border: 1px solid #ddd;
-            cursor: pointer; transition: background 0.2s;
+            position: absolute; top: 15px; left: 15px; font-size: 1rem; color: var(--dark);
+            background: var(--light); padding: 10px 15px; border-radius: 8px; border: 1px solid #ddd;
+            cursor: pointer; transition: background 0.2s; display: flex; align-items: center;
         }
         .player-info:hover { background: #e0e0e0; }
 
-        .score-display-container { margin-bottom: 1.5rem; margin-top: 1rem; }
+        .score-display-container { margin-bottom: 1.5rem; margin-top: 3rem; }
         .score-display { font-size: 3.5rem; font-weight: 700; color: var(--primary, #063c8c); font-family: 'Montserrat', sans-serif; margin: 0; transition: transform 0.05s ease; }
         .score-display.pulse { transform: scale(1.05); }
         .pps-display { font-size: 1.2rem; color: var(--dark, #2c3e50); margin: 0; }
@@ -122,6 +147,17 @@
         .btn-save { background: var(--success, #27ae60); color: white; }
         .btn-reset { background: var(--accent, #e74c3c); color: white; }
         .btn-shop { background: var(--secondary, #fbcd37); color: var(--dark); font-size: 1.1rem; padding: 10px; width: 100%; margin-top: 10px; }
+        
+        #rebirth-container { width: 100%; margin-top: 15px; display: none; }
+        .btn-rebirth {
+            background: linear-gradient(45deg, #ff9a9e, #fecfef); 
+            color: #d81b60; width: 100%; padding: 15px; font-size: 1.3rem; 
+            border: 4px solid #ff0844; border-radius: 10px; cursor: pointer; 
+            font-weight: 900; box-shadow: 0 5px 15px rgba(255,8,68,0.3);
+            text-transform: uppercase; animation: pulseGlow 2s infinite;
+        }
+        @keyframes pulseGlow { 0% { box-shadow: 0 0 10px rgba(255,8,68,0.5); } 50% { box-shadow: 0 0 25px rgba(255,8,68,0.8); } 100% { box-shadow: 0 0 10px rgba(255,8,68,0.5); } }
+
         #save-indicator { font-size: 0.9rem; color: var(--success, #27ae60); font-weight: bold; min-width: 90px; text-align: left; }
 
         .michi-target-container { position: relative; margin-bottom: 2rem; width: 250px; height: 250px; display: flex; align-items: center; justify-content: center; }
@@ -195,8 +231,10 @@
             </div>
 
             <div class="clicker-panel">
+                
                 <div class="player-info" title="Dein Spielername">
-                    👤 <span id="display-player-name">Lade...</span>
+                    <div id="player-rank-display"></div>
+                    <div>👤 <span id="display-player-name">Lade...</span></div>
                 </div>
 
                 <div class="score-display-container">
@@ -217,6 +255,10 @@
                     <div style="text-align: right; font-size: 0.8rem; margin-top: 8px; color: #777;">
                         XP: <span id="xp-current">0</span> / <span id="xp-needed">100</span>
                     </div>
+                </div>
+
+                <div id="rebirth-container">
+                    <button class="btn-rebirth" onclick="doRebirth()">🔥 Rebirth (Rang Aufstieg) 🔥</button>
                 </div>
 
                 <div class="save-controls">
@@ -283,6 +325,25 @@
         const DREAMLO_PUBLIC_KEY = '69df899e8f40bc2f606c2109';
         const DREAMLO_PRIVATE_KEY = 'gx0LmtikcUiceklh41xVyAQEPyt0hxK024rxVHnezX-A';
 
+        // --- REBIRTH RÄNGE (Z bis S+) ---
+        const rankList = [
+            { id: 'Z', bg: '#f2f2f2', border: '#b3b3b3' }, // Pastel Gray
+            { id: 'F', bg: '#ffdac1', border: '#cc8c66' }, // Pastel Orange
+            { id: 'E', bg: '#ffb7b2', border: '#cc6b66' }, // Pastel Red
+            { id: 'D', bg: '#e2f0cb', border: '#99b37a' }, // Pastel Lime
+            { id: 'C', bg: '#b5ead7', border: '#66997a' }, // Pastel Mint
+            { id: 'B', bg: '#c7ceea', border: '#7a85b3' }, // Pastel Blue
+            { id: 'A', bg: '#dac1ff', border: '#9966cc' }, // Pastel Purple
+            { id: 'S', bg: '#ffc1e3', border: '#cc6699' }, // Pastel Pink
+            { id: 'S+', bg: '#ffebcd', border: '#daa520' } // Pastel Gold
+        ];
+        let currentRankIndex = 0; // Startet bei Z
+
+        function getRankBadgeHTML(rankId) {
+            let r = rankList.find(x => x.id === rankId) || rankList[0];
+            return `<div class="rank-badge" style="background-color: ${r.bg}; border-color: ${r.border};"><span class="rank-badge-text">${r.id}</span></div>`;
+        }
+
         // --- UPGRADES CONFIG ---
         const upgradesConfig = [
             { id: 'cable', name: 'RJ45 Patchkabel', baseCost: 15, pps: 0.5, count: 0, reqLevel: 1, image: 'https://www.kabelscheune.de/out/pictures/generated/product/1/450_450_90/cat6-patchkabel-rj45-lan-kabel-s-ftp-pimf-weiss.jpg' },
@@ -308,10 +369,10 @@
 
         // --- SKINS CONFIG ---
         const skinsConfig = [
-            { id: 'default', name: 'Der Michi', cost: 0, image: 'img/DerMichi.png', fallback: '' },
-            { id: 'gold', name: 'Partei Michi', cost: 100000, image: 'img/PartieMichi.png', fallback: '' },
-            { id: 'dark', name: 'Codename Michiwehr', cost: 2500000, image: 'img/MichiWehr.png', fallback: '' },
-            { id: 'quantum', name: "Michi's the one!", cost: 50000000, image: 'img/MichisTheOne.png', fallback: '' }
+            { id: 'default', name: 'Der Michi', cost: 0, image: 'img/DerMichi.png', fallback: 'https://upload.wikimedia.org/wikipedia/commons/b/b9/Chocolate_Chip_Cookie_-_NCI_Visuals_Online.png' },
+            { id: 'gold', name: 'Partei Michi', cost: 100000, image: 'img/PartieMichi.png', fallback: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Chocolate_chip_cookie_isolated.jpg/300px-Chocolate_chip_cookie_isolated.jpg' },
+            { id: 'dark', name: 'Codename Michiwehr', cost: 2500000, image: 'img/MichiWehr.png', fallback: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Oreo_cookie.jpg/300px-Oreo_cookie.jpg' },
+            { id: 'quantum', name: "Michi's the one!", cost: 50000000, image: 'img/MichisTheOne.png', fallback: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Macaron_isolated.jpg/300px-Macaron_isolated.jpg' }
         ];
 
         // --- SPIEL VARIABLEN ---
@@ -329,7 +390,6 @@
         let globalLeaderboard = []; 
 
         function getRequiredXP(lvl) {
-            // Ein moderater, fester Multiplikator. Lategame skaliert jetzt fair, ohne ins Unendliche zu explodieren!
             return Math.floor(100 * Math.pow(2.6, lvl - 1));
         }
         let xpRequired = getRequiredXP(level);
@@ -348,6 +408,7 @@
         const leaderboardList = document.getElementById('leaderboard-list');
         const saveIndicator = document.getElementById('save-indicator');
         const displayPlayerName = document.getElementById('display-player-name');
+        const playerRankDisplay = document.getElementById('player-rank-display');
 
         // --- API CALLS (DREAMLO via PROXY) ---
         async function fetchLeaderboard() {
@@ -366,7 +427,8 @@
 
                         globalLeaderboard = entries.map(player => ({
                             name: player.name,
-                            score: parseFloat(player.score)
+                            score: parseFloat(player.score),
+                            rank: player.text || 'Z' // Das Text-Feld von Dreamlo speichert den Rang
                         }));
                     } else {
                         globalLeaderboard = []; 
@@ -384,7 +446,9 @@
                 if (!safeName) safeName = "Spieler";
                 const safeScore = Math.floor(score);
                 
-                const dreamloAddUrl = `http://dreamlo.com/lb/${DREAMLO_PRIVATE_KEY}/add/${safeName}/${safeScore}`;
+                // Wir speichern den aktuellen Rang-Namen im Text-Feld (0 ist Platzhalter für Sekunden)
+                const safeRank = encodeURIComponent(rankList[currentRankIndex].id);
+                const dreamloAddUrl = `http://dreamlo.com/lb/${DREAMLO_PRIVATE_KEY}/add/${safeName}/${safeScore}/0/${safeRank}`;
                 const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(dreamloAddUrl)}`;
                 
                 await fetch(proxyUrl);
@@ -455,7 +519,8 @@
                 clickPower: clickPower,
                 upgrades: upgradesConfig.map(u => u.count),
                 ownedSkins: ownedSkins, 
-                currentSkin: currentSkin 
+                currentSkin: currentSkin,
+                rankIndex: currentRankIndex // Neu: Rang speichern
             };
             localStorage.setItem('michiSave', JSON.stringify(saveState));
 
@@ -478,6 +543,7 @@
                 clickPower = saveState.clickPower || 1;
                 ownedSkins = saveState.ownedSkins || ['default'];
                 currentSkin = saveState.currentSkin || 'default';
+                currentRankIndex = saveState.rankIndex || 0;
                 
                 if (saveState.upgrades) {
                     saveState.upgrades.forEach((count, i) => {
@@ -490,12 +556,48 @@
                 recalculatePPS();
                 applySkinImage();
             }
+            
+            // Lade Rang Badge neben den Namen
+            if(playerRankDisplay) {
+                playerRankDisplay.innerHTML = getRankBadgeHTML(rankList[currentRankIndex].id);
+            }
         }
 
         function resetGame() {
             if(confirm("Willst du wirklich ein Neues Spiel starten?\n(Dein bisheriger Highscore bleibt als Denkmal in der Liste erhalten!)")) {
                 localStorage.removeItem('michiSave');
                 localStorage.removeItem('michiPlayerName');
+                location.reload();
+            }
+        }
+
+        // --- REBIRTH SYSTEM ---
+        function doRebirth() {
+            if (level < 19 || upgradesConfig[18].count === 0) return;
+            
+            if (currentRankIndex >= rankList.length - 1) {
+                alert("Wahnsinn! Du hast bereits den maximalen S+ Rang erreicht!");
+                return;
+            }
+
+            const nextRank = rankList[currentRankIndex + 1].id;
+            const msg = `🔥 BIST DU BEREIT FÜR DEN REBIRTH? 🔥\n\nDu verlierst deine aktuellen Pakete, dein Geld, dein Level und alle Upgrades!\n\nDAFÜR ERHÄLTST DU:\n1. Den exklusiven Rang: [ ${nextRank} ]\n2. Dauerhaft +100% Boost auf alle Klicks und passiven Einkommen!\n3. Deine Skins bleiben erhalten!\n\nWillst du jetzt rebirthen?`;
+            
+            if(confirm(msg)) {
+                currentRankIndex++;
+                score = 0;
+                money = 0;
+                level = 1;
+                currentXP = 0;
+                // Skins bleiben erhalten! (ownedSkins, currentSkin)
+                
+                upgradesConfig.forEach(u => u.count = 0);
+                xpRequired = getRequiredXP(level);
+                
+                // Basis Klickpower skalieren mit Rebirth (x1, x2, x3...)
+                clickPower = 1 * (currentRankIndex + 1);
+                
+                saveGame();
                 location.reload();
             }
         }
@@ -606,11 +708,18 @@
                 const isMe = (player.name === playerName);
                 const li = document.createElement('li');
                 li.className = `leaderboard-item ${isMe ? 'is-me' : ''}`;
+                
                 let displayScore = player.score;
-                if (isMe && score > player.score) displayScore = score; 
+                let displayRank = player.rank || 'Z';
+
+                if (isMe && score > player.score) {
+                    displayScore = score; 
+                    displayRank = rankList[currentRankIndex].id; // Live Rang überschreiben
+                }
 
                 li.innerHTML = `
-                    <span class="lb-rank">#${index + 1}</span>
+                    <span class="lb-rank-num">#${index + 1}</span>
+                    ${getRankBadgeHTML(displayRank)}
                     <span class="lb-name">${player.name}</span>
                     <span class="lb-score">${formatNumber(displayScore)}</span>
                 `;
@@ -680,7 +789,10 @@
         function levelUp() {
             level++;
             xpRequired = getRequiredXP(level);
-            clickPower = Math.ceil(level * 1.5); 
+            
+            // Rebirth-Multiplier auf die Klickkraft anwenden!
+            const rebirthMulti = currentRankIndex + 1;
+            clickPower = Math.ceil(level * 1.5) * rebirthMulti; 
 
             const newlyUnlockedItem = upgradesConfig.find(u => u.reqLevel === level);
             const lvlElem = document.getElementById('overlay-levelup-level');
@@ -732,7 +844,11 @@
 
         function recalculatePPS() {
             packetsPerSecond = 0;
-            upgradesConfig.forEach(u => packetsPerSecond += u.count * u.pps);
+            const rebirthMulti = currentRankIndex + 1; // +100% per Rank!
+            
+            upgradesConfig.forEach(u => {
+                packetsPerSecond += (u.count * u.pps) * rebirthMulti;
+            });
             if(uiPPS) uiPPS.innerText = formatNumber(packetsPerSecond);
         }
 
@@ -768,7 +884,7 @@
                     <div class="upgrade-info">
                         <h4 class="upgrade-name">${displayName}</h4>
                         <p class="upgrade-cost">${formatNumber(cost)} Pakete</p>
-                        <p class="upgrade-pps">+${isUnlocked ? formatNumber(upgrade.pps) : '?'} PPS</p>
+                        <p class="upgrade-pps">+${isUnlocked ? formatNumber(upgrade.pps * (currentRankIndex + 1)) : '?'} PPS</p>
                     </div>
                     <div class="upgrade-count">${upgrade.count}</div>
                 `;
@@ -795,6 +911,16 @@
                         }
                     }
                 });
+            }
+
+            // Prüfe auf Rebirth-Möglichkeit (Level >= 19 UND Lambo Zuchini gekauft)
+            const rebirthContainer = document.getElementById('rebirth-container');
+            if(rebirthContainer) {
+                if (level >= 19 && upgradesConfig[18].count > 0 && currentRankIndex < rankList.length - 1) {
+                    rebirthContainer.style.display = 'block';
+                } else {
+                    rebirthContainer.style.display = 'none';
+                }
             }
         }
 
