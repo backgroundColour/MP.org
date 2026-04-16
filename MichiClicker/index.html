@@ -870,6 +870,20 @@
             });
         }
 
+        const michiContainer = document.querySelector('.michi-target-container');
+        if (michiContainer && uiMichiBtn) {
+            michiContainer.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                const clickEvent = new MouseEvent('click', {
+                    bubbles: true,
+                    cancelable: true,
+                    clientX: e.clientX,
+                    clientY: e.clientY
+                });
+                uiMichiBtn.dispatchEvent(clickEvent);
+            });
+        }
+
         function createFloatingText(e, text) {
             const floater = document.createElement('div');
             floater.classList.add('floating-text');
