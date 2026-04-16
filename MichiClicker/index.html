@@ -54,7 +54,7 @@
             color: #333;
             box-shadow: 2px 2px 6px rgba(0,0,0,0.15);
             border-style: solid;
-            border-width: 4px;
+            border-width: 7px;
             flex-shrink: 0;
             margin-right: 15px;
             margin-left: 5px;
@@ -319,10 +319,9 @@
         }
 
         // --- 2 DATENBANKEN SYSTEM (SCORE & RANKS) ---
-        // Score DB
         const DREAMLO_SCORE_PUBLIC = '69df899e8f40bc2f606c2109';
         const DREAMLO_SCORE_PRIVATE = 'gx0LmtikcUiceklh41xVyAQEPyt0hxK024rxVHnezX-A';
-        // Rank DB
+
         const DREAMLO_RANK_PUBLIC = '69e07e998f40bb106819e811';
         const DREAMLO_RANK_PRIVATE = 'kCyUsosTV0ONJFWJzDtZsw2DgG1CmzkUKO55ap9snLIQ';
 
@@ -432,15 +431,12 @@
         // --- API CALLS (BEIDE DATENBANKEN) ---
         async function fetchLeaderboard() {
             try {
-                // Score DB abfragen
                 const urlScore = `http://dreamlo.com/lb/${DREAMLO_SCORE_PUBLIC}/json?cb=${Date.now()}`;
                 const proxyScore = `https://corsproxy.io/?${encodeURIComponent(urlScore)}`;
 
-                // Rank DB abfragen
                 const urlRank = `http://dreamlo.com/lb/${DREAMLO_RANK_PUBLIC}/json?cb=${Date.now()}`;
                 const proxyRank = `https://corsproxy.io/?${encodeURIComponent(urlRank)}`;
                 
-                // Wir laden beide gleichzeitig!
                 const [resScore, resRank] = await Promise.all([fetch(proxyScore), fetch(proxyRank)]);
                 
                 let scoreEntries = [];
@@ -462,16 +458,14 @@
                     }
                 }
 
-                // Ränge in ein einfaches Wörterbuch packen (Name -> RankIndex)
                 const rankMap = {};
                 rankEntries.forEach(r => {
-                    rankMap[r.name] = parseInt(r.score) || 0; // Wir haben den Index als Score gespeichert
+                    rankMap[r.name] = parseInt(r.score) || 0; 
                 });
 
-                // Beide Listen zusammenführen
                 globalLeaderboard = scoreEntries.map(player => {
                     let rIndex = rankMap[player.name] !== undefined ? rankMap[player.name] : 0;
-                    if (rIndex < 0 || rIndex >= rankList.length) rIndex = 0; // Sicherheit
+                    if (rIndex < 0 || rIndex >= rankList.length) rIndex = 0; 
                     
                     return {
                         name: player.name,
@@ -492,7 +486,7 @@
                 if (!safeName) safeName = "Spieler";
                 
                 const safeScore = Math.floor(score);
-                const safeRankIndex = currentRankIndex; // Der Index wandert als "Score" in die Rang-Datenbank
+                const safeRankIndex = currentRankIndex; 
                 
                 const addScoreUrl = `http://dreamlo.com/lb/${DREAMLO_SCORE_PRIVATE}/add/${safeName}/${safeScore}`;
                 const addRankUrl = `http://dreamlo.com/lb/${DREAMLO_RANK_PRIVATE}/add/${safeName}/${safeRankIndex}`;
@@ -500,7 +494,6 @@
                 const proxyScore = `https://corsproxy.io/?${encodeURIComponent(addScoreUrl)}`;
                 const proxyRank = `https://corsproxy.io/?${encodeURIComponent(addRankUrl)}`;
                 
-                // In BEIDE Datenbanken parallel speichern
                 await Promise.all([fetch(proxyScore), fetch(proxyRank)]);
                 
                 setTimeout(() => { fetchLeaderboard(); }, 1000);
@@ -574,7 +567,6 @@
                     return;
                 }
 
-                // Aus BEIDEN Datenbanken löschen!
                 const safeOldName = playerName.replace(/[^a-zA-Z0-9_-]/g, '_');
                 const delScoreUrl = `http://dreamlo.com/lb/${DREAMLO_SCORE_PRIVATE}/delete/${safeOldName}`;
                 const delRankUrl = `http://dreamlo.com/lb/${DREAMLO_RANK_PRIVATE}/delete/${safeOldName}`;
@@ -650,8 +642,8 @@
             }
         }
 
-        // --- RANG AUFSTIEG SYSTEM ---
-        function doRankUp() {
+        // --- RANG AUFSTIEG SYSTEM (Live Reset, kein Neuladen mehr!) ---
+        async function doRankUp() {
             if (level < 19 || upgradesConfig[18].count === 0) return;
             
             if (currentRankIndex >= rankList.length - 1) {
@@ -665,17 +657,42 @@
             if(confirm(msg)) {
                 currentRankIndex++;
                 
-                // Geld, Skins & Rang bleiben, Rest auf 0!
+                // Wir resetten alles im laufenden Spiel
                 score = 0;
                 level = 1;
                 currentXP = 0;
+                packetsPerSecond = 0;
                 
                 upgradesConfig.forEach(u => u.count = 0);
                 xpRequired = getRequiredXP(level);
-                clickPower = Math.ceil(level * 1.5);
+                clickPower = 1; 
                 
-                saveGame();
-                location.reload();
+                // UI Aktualisieren
+                if(uiLevel) uiLevel.innerText = level;
+                if(playerRankDisplay) playerRankDisplay.innerHTML = getRankBadgeHTML(rankList[currentRankIndex].id);
+                
+                updateXPBar();
+                recalculatePPS();
+                renderUpgrades();
+                updateUI();
+                
+                // Dreamlo Update: Den alten Score ZWINGEND löschen, sonst weigert sich Dreamlo die "0" zu akzeptieren!
+                try {
+                    const safeName = playerName.replace(/[^a-zA-Z0-9_-]/g, '_');
+                    const delScoreUrl = `http://dreamlo.com/lb/${DREAMLO_SCORE_PRIVATE}/delete/${safeName}`;
+                    await fetch(`https://corsproxy.io/?${encodeURIComponent(delScoreUrl)}`);
+                } catch(e) {
+                    console.error("Fehler beim Score-Löschen:", e);
+                }
+
+                // Jetzt wo die DB sauber ist, speichern wir unseren neuen 0 Punkte Spielstand (inkl. neuem Rang)
+                saveGame(true);
+                
+                // Eventuell offene Menüs schließen
+                closeOverlay('overlay-levelup');
+                closeOverlay('overlay-shop');
+
+                alert("Erfolgreich aufgestiegen! Viel Erfolg im neuen Rang!");
             }
         }
 
@@ -856,9 +873,13 @@
         // --- XP & LEVEL SYSTEM ---
         function addXP(amount) {
             currentXP += amount;
-            if (currentXP >= xpRequired) {
+            
+            // Loop, falls wir extrem viel XP auf einmal bekommen!
+            let levelUpsThisTick = 0;
+            while (currentXP >= xpRequired && levelUpsThisTick < 50) {
                 currentXP -= xpRequired;
                 levelUp();
+                levelUpsThisTick++;
             }
             updateXPBar();
         }
