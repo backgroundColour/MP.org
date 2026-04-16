@@ -98,13 +98,16 @@
         .score-display { font-size: 3.5rem; font-weight: 700; color: var(--primary, #063c8c); font-family: 'Montserrat', sans-serif; margin: 0; transition: transform 0.05s ease; }
         .score-display.pulse { transform: scale(1.05); }
         .pps-display { font-size: 1.2rem; color: var(--dark, #2c3e50); margin: 0; }
+        
+        /* Neues Geld-Display */
+        .money-display { font-size: 1.4rem; color: var(--success, #27ae60); font-weight: bold; margin-top: 10px; }
 
         .save-controls { display: flex; gap: 10px; margin-top: 1.5rem; align-items: center; justify-content: center; width: 100%; flex-wrap: wrap;}
         .btn-action { padding: 8px 15px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; transition: opacity 0.2s; }
         .btn-action:hover { opacity: 0.8; }
         .btn-save { background: var(--success, #27ae60); color: white; }
         .btn-reset { background: var(--accent, #e74c3c); color: white; }
-        .btn-admin { background: #8e44ad; color: white; } /* Admin Button */
+        .btn-shop { background: var(--secondary, #fbcd37); color: var(--dark); font-size: 1.1rem; padding: 10px; width: 100%; margin-top: 10px; }
         #save-indicator { font-size: 0.9rem; color: var(--success, #27ae60); font-weight: bold; min-width: 90px; text-align: left; }
 
         .michi-target-container { position: relative; margin-bottom: 2rem; width: 250px; height: 250px; display: flex; align-items: center; justify-content: center; }
@@ -140,13 +143,26 @@
         .upgrade-pps { color: #666; font-size: 0.8rem; margin: 0; }
         .upgrade-count { font-size: 2.3rem; font-weight: bold; color: var(--primary, #063c8c); font-family: 'Montserrat', sans-serif; min-width: 60px; text-align: right; margin-left: 10px; }
 
-        /* --- OVERLAYS --- */
+        /* --- OVERLAYS & SHOP --- */
         .game-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; color: white; opacity: 0; pointer-events: none; transition: opacity 0.5s ease; }
         .game-overlay.active { opacity: 1; pointer-events: auto; }
         .overlay-card { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); padding: 3rem; border-radius: 20px; border: 2px solid rgba(255,255,255,0.2); text-align: center; max-width: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
         .level-up-title { font-size: 4rem; color: var(--success, #27ae60); margin: 0 0 1rem 0; text-shadow: 0 0 20px rgba(39, 174, 96, 0.8); }
         .btn-overlay-close { margin-top: 2rem; padding: 0.8rem 2.5rem; font-size: 1.2rem; background-color: var(--primary, #063c8c); color: white; border: none; border-radius: 5px; cursor: pointer; transition: background 0.2s; }
         .btn-overlay-close:hover { background-color: var(--dark, #2c3e50); }
+
+        /* Shop Styling */
+        .shop-items-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; width: 100%; margin-top: 20px; }
+        .skin-item { background: rgba(0,0,0,0.4); border: 2px solid rgba(255,255,255,0.2); border-radius: 10px; padding: 15px; text-align: center; transition: all 0.2s; display: flex; flex-direction: column; justify-content: space-between; }
+        .skin-item img { width: 100px; height: 100px; object-fit: contain; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5)); margin: 0 auto 10px; }
+        .skin-item.owned { border-color: var(--success); }
+        .skin-item.equipped { border-color: var(--secondary); background: rgba(251, 205, 55, 0.2); transform: scale(1.05); }
+        .skin-item.locked { opacity: 0.6; }
+        .btn-buy-skin { padding: 8px; border-radius: 5px; border: none; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; background: var(--light); color: var(--dark); transition: background 0.2s;}
+        .btn-buy-skin:hover { background: #ddd; }
+        .btn-buy-skin.can-afford { background: var(--success); color: white; }
+        .btn-buy-skin.can-afford:hover { background: #219653; }
+        .btn-buy-skin.equip { background: var(--primary); color: white; }
     </style>
 </head>
 <body>
@@ -172,6 +188,7 @@
                 <div class="score-display-container">
                     <p class="score-display" id="score-text"><span id="score">0</span></p>
                     <p class="pps-display">Pakete pro Sekunde: <span id="pps">0</span></p>
+                    <p class="money-display">Geld: <span id="money-text">0</span> €</p>
                 </div>
 
                 <div class="michi-target-container">
@@ -191,6 +208,7 @@
                 <div class="save-controls">
                     <button class="btn-action btn-save" onclick="saveGame(true)">Speichern</button>
                     <button class="btn-action btn-reset" onclick="resetGame()">Neues Spiel</button>
+                    <button class="btn-action btn-shop" onclick="openShop()">🛒 Skin Shop</button>
                 </div>
                 <div style="margin-top: 10px;"><span id="save-indicator"></span></div>
             </div>
@@ -217,15 +235,26 @@
         </div>
     </div>
 
+    <div class="game-overlay" id="overlay-shop">
+        <div class="overlay-card" style="max-width: 800px; width: 95%;">
+            <h1 class="level-up-title" style="color: var(--secondary, #fbcd37); font-size: 3rem;">🛒 Skin Shop</h1>
+            <p style="color: #ddd; font-size: 1.1rem;">Verdiene 1€ für jede 3 Pakete, die du generierst.</p>
+            <h3 style="color: var(--success); margin: 10px 0;">Dein Guthaben: <span id="shop-money">0</span> €</h3>
+            
+            <div class="shop-items-container" id="shop-items-container">
+                </div>
+
+            <button class="btn-overlay-close" onclick="closeShop()">Schließen</button>
+        </div>
+    </div>
+
     <script>
         // --- SERVER KOMMUNIKATION (Dreamlo) ---
         const DREAMLO_PUBLIC_KEY = '69df899e8f40bc2f606c2109';
         const DREAMLO_PRIVATE_KEY = 'gx0LmtikcUiceklh41xVyAQEPyt0hxK024rxVHnezX-A';
 
         // --- UPGRADES CONFIG ---
-        // --- UPGRADES CONFIG ---
         const upgradesConfig = [
-            // Bisherige Upgrades (Level 1 - 8)
             { id: 'cable', name: 'RJ45 Patchkabel', baseCost: 15, pps: 0.5, count: 0, reqLevel: 1, image: 'https://www.kabelscheune.de/out/pictures/generated/product/1/450_450_90/cat6-patchkabel-rj45-lan-kabel-s-ftp-pimf-weiss.jpg' },
             { id: 'switch2960', name: 'Catalyst Switch', baseCost: 100, pps: 2, count: 0, reqLevel: 2, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9S6zATrWKjk07KfrVYbvhxSC5ATVYAblFDg&s' },
             { id: 'ap_meraki', name: 'Wireless Access Point', baseCost: 500, pps: 8, count: 0, reqLevel: 3, image: 'https://m.media-amazon.com/images/I/51zZgBaEx4L._AC_UF1000,1000_QL80_.jpg' },
@@ -234,8 +263,6 @@
             { id: 'switch9300', name: 'Core Switch', baseCost: 40000, pps: 500, count: 0, reqLevel: 6, image: 'https://www.fibermall.com/blog/wp-content/uploads/2025/03/d-1.png' },
             { id: 'nexus', name: 'Nexus Datacenter', baseCost: 200000, pps: 2500, count: 0, reqLevel: 7, image: 'https://ghelamco.com/site/assets/files/26862/gabari_nexus_cgi02_02.jpg' },
             { id: 'asr', name: 'ASR Edge Router', baseCost: 1000000, pps: 15000, count: 0, reqLevel: 8, image: 'https://www.connect-professional.de/bilder/797879/landscapex1200-c0/110912CiscoISR819.png' },
-            
-            // NEUE UPGRADES (Level 9 - 18)
             { id: 'aci', name: 'Cisco ACI Controller', baseCost: 5000000, pps: 75000, count: 0, reqLevel: 9, image: 'https://www.networklife.net/wp-content/uploads/2021/02/networklife-building-cisco-aci-apic-lab-data-center-2.jpg' },
             { id: 'fiber', name: 'Glasfaser Backbone', baseCost: 25000000, pps: 400000, count: 0, reqLevel: 10, image: 'https://mnd-assets.mynewsdesk.com/image/upload/ar_16:9,c_fill,dpr_auto,f_auto,g_auto,q_auto:good,w_746/cqi3bxtxlocvovfzajdg' },
             { id: 'sdwan', name: 'SD-WAN Edge Cluster', baseCost: 150000000, pps: 2500000, count: 0, reqLevel: 11, image: 'https://www.paloaltonetworks.de/content/dam/pan/en_US/images/cyberpedia/sd-wan-pillar-architecture.png?imwidth=480' },
@@ -249,13 +276,24 @@
             { id: 'lambo_zuchini', name: 'Lambo Zuchini', baseCost: 500000000000000, pps: 10000000000000, count: 0, reqLevel: 19, image: 'assets/img/Zucchini.png' }
         ];
 
+        // --- SKINS CONFIG ---
+        const skinsConfig = [
+            { id: 'default', name: 'Der Michi (Standard)', cost: 0, image: 'img/DerMichi.png', fallback: 'https://upload.wikimedia.org/wikipedia/commons/b/b9/Chocolate_Chip_Cookie_-_NCI_Visuals_Online.png' },
+            { id: 'gold', name: 'Goldener Keks', cost: 10000, image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Chocolate_chip_cookie_isolated.jpg/300px-Chocolate_chip_cookie_isolated.jpg', fallback: '' },
+            { id: 'dark', name: 'Dark-Mode Cookie', cost: 250000, image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Oreo_cookie.jpg/300px-Oreo_cookie.jpg', fallback: '' },
+            { id: 'quantum', name: 'Quanten Macaron', cost: 5000000, image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Macaron_isolated.jpg/300px-Macaron_isolated.jpg', fallback: '' }
+        ];
+
         // --- SPIEL VARIABLEN ---
         let score = 0;
+        let money = 0; // Neu: Die Geld-Währung
         let packetsPerSecond = 0;
         let clickPower = 1;
         let level = 1;
         let currentXP = 0;
-        const mainCookieImgSrc = document.getElementById('michi-button').src;
+        
+        let ownedSkins = ['default'];
+        let currentSkin = 'default';
         
         let playerName = "Gast";
         let globalLeaderboard = []; 
@@ -267,6 +305,7 @@
 
         // --- DOM ELEMENTE ---
         const uiScore = document.getElementById('score');
+        const uiMoney = document.getElementById('money-text');
         const uiScoreText = document.getElementById('score-text');
         const uiPPS = document.getElementById('pps');
         const uiMichiBtn = document.getElementById('michi-button');
@@ -292,10 +331,7 @@
                     
                     if (data.dreamlo && data.dreamlo.leaderboard && data.dreamlo.leaderboard.entry) {
                         let entries = data.dreamlo.leaderboard.entry;
-                        
-                        if (!Array.isArray(entries)) {
-                            entries = [entries];
-                        }
+                        if (!Array.isArray(entries)) entries = [entries];
 
                         globalLeaderboard = entries.map(player => ({
                             name: player.name,
@@ -315,41 +351,19 @@
             try {
                 let safeName = playerName.replace(/[^a-zA-Z0-9_-]/g, '_');
                 if (!safeName) safeName = "Spieler";
-                
                 const safeScore = Math.floor(score);
                 
                 const dreamloAddUrl = `http://dreamlo.com/lb/${DREAMLO_PRIVATE_KEY}/add/${safeName}/${safeScore}`;
                 const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(dreamloAddUrl)}`;
                 
                 await fetch(proxyUrl);
-                
-                setTimeout(() => {
-                    fetchLeaderboard();
-                }, 1000);
+                setTimeout(() => { fetchLeaderboard(); }, 1000);
             } catch (error) {
                 console.error("Fehler beim Speichern auf Dreamlo:", error);
             }
         }
 
-        async function clearLeaderboard() {
-            if(confirm("ACHTUNG ADMIN:\nWillst du wirklich die komplette weltweite Rangliste für ALLE Spieler unwiderruflich löschen?")) {
-                try {
-                    const dreamloClearUrl = `http://dreamlo.com/lb/${DREAMLO_PRIVATE_KEY}/clear`;
-                    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(dreamloClearUrl)}`;
-                    
-                    await fetch(proxyUrl);
-                    
-                    globalLeaderboard = [];
-                    renderLeaderboardUI();
-                    alert("Die weltweite Rangliste wurde erfolgreich geleert!");
-                } catch (error) {
-                    console.error("Fehler beim Löschen:", error);
-                    alert("Fehler beim Löschen der Rangliste.");
-                }
-            }
-        }
-
-        // --- INITIALISIERUNG & NAMENSGEBUNG ---
+        // --- INITIALISIERUNG ---
         async function initPlayer() {
             await fetchLeaderboard();
 
@@ -362,24 +376,19 @@
                 while (!validName) {
                     inputName = prompt("Willkommen beim Michi Clicker!\nBitte wähle einen Namen für die Rangliste (Max. 15 Zeichen, keine Leerzeichen):", "");
                     
-                    // Wenn der Nutzer abbrechen drückt oder nichts eingibt, muss er es nochmal versuchen
                     if (inputName === null || inputName.trim() === "") {
                         alert("Du musst einen Namen eingeben, um spielen zu können!");
-                        continue; // Schleife direkt von vorne starten
-                    }
-                    
-                    // Unerlaubte Zeichen durch Unterstriche ersetzen und auf 15 Zeichen kürzen
-                    inputName = inputName.replace(/[^a-zA-Z0-9_-]/g, '_').substring(0, 15);
-                    
-                    // Falls nach dem Filtern nichts mehr übrig ist (z.B. weil nur Sonderzeichen getippt wurden)
-                    if (inputName === "") {
-                        alert("Dein Name muss gültige Zeichen (Buchstaben, Zahlen) enthalten!");
                         continue;
                     }
                     
-                    // Prüfen ob der bereinigte Name schon belegt ist
-                    const nameTaken = globalLeaderboard.some(p => p.name.toLowerCase() === inputName.toLowerCase());
+                    inputName = inputName.replace(/[^a-zA-Z0-9_-]/g, '_').substring(0, 15);
                     
+                    if (inputName === "") {
+                        alert("Dein Name muss gültige Zeichen enthalten!");
+                        continue;
+                    }
+                    
+                    const nameTaken = globalLeaderboard.some(p => p.name.toLowerCase() === inputName.toLowerCase());
                     if (nameTaken) {
                         alert("Dieser Name ist leider schon vergeben! Bitte wähle einen anderen.");
                     } else {
@@ -402,14 +411,17 @@
             submitScoreToServer();
         }
 
-        // --- SPEICHER SYSTEM (Lokal & Online) ---
+        // --- SPEICHER SYSTEM ---
         function saveGame(manual = false) {
             const saveState = {
                 score: score,
+                money: money, // Neu
                 level: level,
                 currentXP: currentXP,
                 clickPower: clickPower,
-                upgrades: upgradesConfig.map(u => u.count)
+                upgrades: upgradesConfig.map(u => u.count),
+                ownedSkins: ownedSkins, // Neu
+                currentSkin: currentSkin // Neu
             };
             localStorage.setItem('michiSave', JSON.stringify(saveState));
 
@@ -426,9 +438,12 @@
             if (saved) {
                 const saveState = JSON.parse(saved);
                 score = saveState.score || 0;
+                money = saveState.money || 0;
                 level = saveState.level || 1;
                 currentXP = saveState.currentXP || 0;
                 clickPower = saveState.clickPower || 1;
+                ownedSkins = saveState.ownedSkins || ['default'];
+                currentSkin = saveState.currentSkin || 'default';
                 
                 if (saveState.upgrades) {
                     saveState.upgrades.forEach((count, i) => {
@@ -439,6 +454,7 @@
                 xpRequired = getRequiredXP(level);
                 uiLevel.innerText = level;
                 recalculatePPS();
+                applySkinImage();
             }
         }
 
@@ -446,14 +462,99 @@
             if(confirm("Willst du wirklich ein Neues Spiel starten?\n(Dein bisheriger Highscore bleibt als Denkmal in der Liste erhalten!)")) {
                 localStorage.removeItem('michiSave');
                 localStorage.removeItem('michiPlayerName');
-                
                 location.reload();
             }
         }
 
+        // --- SHOP & SKINS ---
+        function openShop() {
+            renderShop();
+            document.getElementById('overlay-shop').classList.add('active');
+        }
+
+        function closeShop() {
+            document.getElementById('overlay-shop').classList.remove('active');
+        }
+
+        function renderShop() {
+            document.getElementById('shop-money').innerText = Math.floor(money).toLocaleString('de-DE');
+            const container = document.getElementById('shop-items-container');
+            container.innerHTML = '';
+
+            skinsConfig.forEach(skin => {
+                const isOwned = ownedSkins.includes(skin.id);
+                const isEquipped = currentSkin === skin.id;
+                const canAfford = money >= skin.cost;
+                
+                let btnClass = 'btn-buy-skin';
+                let btnText = '';
+                let onClick = '';
+                let itemClass = 'skin-item';
+
+                if (isEquipped) {
+                    btnClass += ' equip';
+                    btnText = '✓ Ausgerüstet';
+                    itemClass += ' equipped';
+                } else if (isOwned) {
+                    btnClass += ' equip';
+                    btnText = 'Ausrüsten';
+                    itemClass += ' owned';
+                    onClick = `equipSkin('${skin.id}')`;
+                } else {
+                    btnText = `${skin.cost.toLocaleString('de-DE')} €`;
+                    if (canAfford) {
+                        btnClass += ' can-afford';
+                        onClick = `buySkin('${skin.id}')`;
+                    } else {
+                        itemClass += ' locked';
+                    }
+                }
+
+                container.innerHTML += `
+                    <div class="${itemClass}" onclick="${onClick}">
+                        <h4 style="margin: 0 0 10px 0; color: white;">${skin.name}</h4>
+                        <img src="${skin.image}" alt="${skin.name}" onerror="this.src='${skin.fallback}'">
+                        <button class="${btnClass}">${btnText}</button>
+                    </div>
+                `;
+            });
+        }
+
+        function buySkin(id) {
+            const skin = skinsConfig.find(s => s.id === id);
+            if (skin && money >= skin.cost && !ownedSkins.includes(id)) {
+                money -= skin.cost;
+                ownedSkins.push(id);
+                equipSkin(id);
+                updateUI();
+                saveGame();
+            }
+        }
+
+        function equipSkin(id) {
+            if (ownedSkins.includes(id)) {
+                currentSkin = id;
+                applySkinImage();
+                renderShop();
+                saveGame();
+            }
+        }
+
+        function applySkinImage() {
+            const skin = skinsConfig.find(s => s.id === currentSkin);
+            if (skin) {
+                uiMichiBtn.src = skin.image;
+            }
+        }
+
+        function getCurrentSkinImage() {
+            const skin = skinsConfig.find(s => s.id === currentSkin);
+            return skin ? skin.image : uiMichiBtn.src;
+        }
+
+        // --- UI & LEADERBOARD RENDERING ---
         function renderLeaderboardUI() {
             leaderboardList.innerHTML = '';
-            
             if(globalLeaderboard.length === 0) {
                 leaderboardList.innerHTML = '<li style="padding: 10px; color: #888;">Noch keine Einträge. Sei der Erste!</li>';
                 return;
@@ -463,11 +564,8 @@
                 const isMe = (player.name === playerName);
                 const li = document.createElement('li');
                 li.className = `leaderboard-item ${isMe ? 'is-me' : ''}`;
-                
                 let displayScore = player.score;
-                if (isMe && score > player.score) {
-                    displayScore = score; 
-                }
+                if (isMe && score > player.score) displayScore = score; 
 
                 li.innerHTML = `
                     <span class="lb-rank">#${index + 1}</span>
@@ -481,6 +579,7 @@
         // --- KLICK EVENTS ---
         uiMichiBtn.addEventListener('click', (e) => {
             score += clickPower;
+            money += clickPower / 3; // Geld verdienen beim Klicken
             addXP(clickPower);
             createFloatingText(e, `+${clickPower}`);
             updateUI();
@@ -497,12 +596,12 @@
             setTimeout(() => floater.remove(), 1200);
         }
 
-        // --- FLIEGENDE COOKIES ---
         function triggerPassiveCookie() {
             if (packetsPerSecond === 0) return;
             const cookie = document.createElement('img');
-            cookie.src = mainCookieImgSrc;
+            cookie.src = getCurrentSkinImage(); // Nutzt jetzt den aktuellen Skin
             cookie.classList.add('flying-passive-cookie');
+            
             const michiPos = uiMichiBtn.getBoundingClientRect();
             const scorePos = uiScoreText.getBoundingClientRect();
 
@@ -576,6 +675,7 @@
 
             if (score >= cost && isUnlocked) {
                 score -= cost;
+                // WICHTIG: Money sinkt NICHT, wenn man Upgrades kauft!
                 upgrade.count++;
                 recalculatePPS();
                 renderUpgrades();
@@ -631,6 +731,7 @@
 
         function updateUI() {
             uiScore.innerText = Math.floor(score).toLocaleString('de-DE');
+            uiMoney.innerText = Math.floor(money).toLocaleString('de-DE'); // Geld Update
             
             const items = upgradesContainer.querySelectorAll('.upgrade-item');
             upgradesConfig.forEach((upgrade, index) => {
@@ -659,12 +760,12 @@
             if (packetsPerSecond > 0) {
                 const amount = packetsPerSecond / 10;
                 score += amount;
+                money += amount / 3; // Passives Geld verdienen
                 addXP(amount * 0.05);
                 updateUI();
             }
         }, 100);
 
-        // Leaderboard alle 10 Sekunden abfragen
         setInterval(() => {
             fetchLeaderboard();
         }, 10000);
@@ -676,7 +777,6 @@
             }
         }, 500);
 
-        // Auto-Save Loop (Alle 15 Sekunden)
         setInterval(() => {
             saveGame(false);
         }, 15000);
