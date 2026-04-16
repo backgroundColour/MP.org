@@ -54,7 +54,7 @@
             color: #333;
             box-shadow: 2px 2px 6px rgba(0,0,0,0.15);
             border-style: solid;
-            border-width: 3.5px;
+            border-width: 7px;
             flex-shrink: 0;
             margin-right: 15px;
             margin-left: 5px;
@@ -230,7 +230,7 @@
 
             <div class="clicker-panel">
                 
-                <div class="player-info" title="Dein Spielername">
+                <div class="player-info" onclick="changeName()" title="Namen ändern (Alter Score wird gelöscht!)">
                     <div id="player-rank-display"></div>
                     <div>👤 <span id="display-player-name">Lade...</span></div>
                 </div>
@@ -303,7 +303,6 @@
     </div>
 
     <script>
-        // --- HILFSFUNKTION FÜR GROßE ZAHLEN (M, B, T...) ---
         function formatNumber(num) {
             if (num === null || num === undefined || isNaN(num)) return "0";
             if (num < 1000000) return Math.floor(num).toLocaleString('de-DE');
@@ -319,11 +318,15 @@
             return scaled.toFixed(1).replace('.', ',') + suffixes[tier];
         }
 
-        // --- SERVER KOMMUNIKATION (Dreamlo) ---
-        const DREAMLO_PUBLIC_KEY = '69df899e8f40bc2f606c2109';
-        const DREAMLO_PRIVATE_KEY = 'gx0LmtikcUiceklh41xVyAQEPyt0hxK024rxVHnezX-A';
+        // --- 2 DATENBANKEN SYSTEM (SCORE & RANKS) ---
+        // Score DB
+        const DREAMLO_SCORE_PUBLIC = '69df899e8f40bc2f606c2109';
+        const DREAMLO_SCORE_PRIVATE = 'gx0LmtikcUiceklh41xVyAQEPyt0hxK024rxVHnezX-A';
+        // Rank DB
+        const DREAMLO_RANK_PUBLIC = '69e07e998f40bb106819e811';
+        const DREAMLO_RANK_PRIVATE = 'kCyUsosTV0ONJFWJzDtZsw2DgG1CmzkUKO55ap9snLIQ';
 
-        // --- RÄNGE (Das gesamte Alphabet runter Z bis A, dann S und S+) mit bunten Pastellfarben ---
+        // --- RÄNGE ---
         const rankList = [
             { id: 'Z', bg: '#FFD1DC', border: '#D19EB0' },
             { id: 'Y', bg: '#FFDFD3', border: '#D1B0A4' },
@@ -365,30 +368,30 @@
             { id: 'cable', name: 'RJ45 Patchkabel', baseCost: 15, pps: 0.5, count: 0, reqLevel: 1, image: 'https://www.kabelscheune.de/out/pictures/generated/product/1/450_450_90/cat6-patchkabel-rj45-lan-kabel-s-ftp-pimf-weiss.jpg' },
             { id: 'switch2960', name: 'Catalyst Switch', baseCost: 100, pps: 2, count: 0, reqLevel: 2, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9S6zATrWKjk07KfrVYbvhxSC5ATVYAblFDg&s' },
             { id: 'ap_meraki', name: 'Wireless Access Point', baseCost: 500, pps: 8, count: 0, reqLevel: 3, image: 'https://m.media-amazon.com/images/I/51zZgBaEx4L._AC_UF1000,1000_QL80_.jpg' },
-            { id: 'router4000', name: 'Cisco Router', baseCost: 300, pps: 30, count: 0, reqLevel: 4, image: 'https://m.media-amazon.com/images/I/61rDNCq73AL.jpg' },
-            { id: 'firewall', name: 'Hardware Firewall', baseCost: 1000, pps: 120, count: 0, reqLevel: 5, image: 'https://www.enbitcon.de/media/2e/4f/fe/1692194537/FortiGate%2091G%20Front.PNG?ts=1736948084' },
-            { id: 'switch9300', name: 'Core Switch', baseCost: 4000, pps: 500, count: 0, reqLevel: 6, image: 'https://www.fibermall.com/blog/wp-content/uploads/2025/03/d-1.png' },
-            { id: 'nexus', name: 'Nexus Datacenter', baseCost: 20000, pps: 2500, count: 0, reqLevel: 7, image: 'https://ghelamco.com/site/assets/files/26862/gabari_nexus_cgi02_02.jpg' },
-            { id: 'asr', name: 'ASR Edge Router', baseCost: 100000, pps: 15000, count: 0, reqLevel: 8, image: 'https://www.connect-professional.de/bilder/797879/landscapex1200-c0/110912CiscoISR819.png' },
-            { id: 'aci', name: 'Cisco ACI Controller', baseCost: 500000, pps: 75000, count: 0, reqLevel: 9, image: 'https://www.networklife.net/wp-content/uploads/2021/02/networklife-building-cisco-aci-apic-lab-data-center-2.jpg' },
-            { id: 'fiber', name: 'Glasfaser Backbone', baseCost: 2500000, pps: 400000, count: 0, reqLevel: 10, image: 'https://mnd-assets.mynewsdesk.com/image/upload/ar_16:9,c_fill,dpr_auto,f_auto,g_auto,q_auto:good,w_746/cqi3bxtxlocvovfzajdg' },
-            { id: 'sdwan', name: 'SD-WAN Edge Cluster', baseCost: 15000000, pps: 2500000, count: 0, reqLevel: 11, image: 'https://www.paloaltonetworks.de/content/dam/pan/en_US/images/cyberpedia/sd-wan-pillar-architecture.png?imwidth=480' },
-            { id: 'cisco8000', name: 'Cisco 8000 Series', baseCost: 100000000, pps: 15000000, count: 0, reqLevel: 12, image: 'https://www.cisco.com/c/dam/assets/support/product-images/series/routers-8000-series-routers.jpg' },
+            { id: 'router4000', name: 'Cisco Router', baseCost: 3000, pps: 30, count: 0, reqLevel: 4, image: 'https://m.media-amazon.com/images/I/61rDNCq73AL.jpg' },
+            { id: 'firewall', name: 'Hardware Firewall', baseCost: 10000, pps: 120, count: 0, reqLevel: 5, image: 'https://www.enbitcon.de/media/2e/4f/fe/1692194537/FortiGate%2091G%20Front.PNG?ts=1736948084' },
+            { id: 'switch9300', name: 'Core Switch', baseCost: 40000, pps: 500, count: 0, reqLevel: 6, image: 'https://www.fibermall.com/blog/wp-content/uploads/2025/03/d-1.png' },
+            { id: 'nexus', name: 'Nexus Datacenter', baseCost: 200000, pps: 2500, count: 0, reqLevel: 7, image: 'https://ghelamco.com/site/assets/files/26862/gabari_nexus_cgi02_02.jpg' },
+            { id: 'asr', name: 'ASR Edge Router', baseCost: 1000000, pps: 15000, count: 0, reqLevel: 8, image: 'https://www.connect-professional.de/bilder/797879/landscapex1200-c0/110912CiscoISR819.png' },
+            { id: 'aci', name: 'Cisco ACI Controller', baseCost: 5000000, pps: 75000, count: 0, reqLevel: 9, image: 'https://www.networklife.net/wp-content/uploads/2021/02/networklife-building-cisco-aci-apic-lab-data-center-2.jpg' },
+            { id: 'fiber', name: 'Glasfaser Backbone', baseCost: 25000000, pps: 400000, count: 0, reqLevel: 10, image: 'https://mnd-assets.mynewsdesk.com/image/upload/ar_16:9,c_fill,dpr_auto,f_auto,g_auto,q_auto:good,w_746/cqi3bxtxlocvovfzajdg' },
+            { id: 'sdwan', name: 'SD-WAN Edge Cluster', baseCost: 150000000, pps: 2500000, count: 0, reqLevel: 11, image: 'https://www.paloaltonetworks.de/content/dam/pan/en_US/images/cyberpedia/sd-wan-pillar-architecture.png?imwidth=480' },
+            { id: 'cisco8000', name: 'Cisco 8000 Series', baseCost: 1000000000, pps: 15000000, count: 0, reqLevel: 12, image: 'https://www.cisco.com/c/dam/assets/support/product-images/series/routers-8000-series-routers.jpg' },
             { id: 'tier1', name: 'Tier-1 Peering Node', baseCost: 7500000000, pps: 100000000, count: 0, reqLevel: 13, image: 'https://upload.wikimedia.org/wikipedia/commons/3/36/Internet_Connectivity_Distribution_%26_Core.svg' },
-            { id: 'transatlantic', name: 'Transatlantik-Kabel', baseCost: 5000000000, pps: 800000000, count: 0, reqLevel: 14, image: 'https://cdn.prod.www.spiegel.de/images/be36940e-0001-0004-0000-000000478148_w1200_r1.33_fpx68.66_fpy50.jpg' },
-            { id: 'cdn', name: 'Globales CDN Cluster', baseCost: 40000000000, pps: 7000000000, count: 0, reqLevel: 15, image: 'https://substackcdn.com/image/fetch/$s_!isyi!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F4db168fd-35eb-489a-b8f3-26d4734ed890_1600x1425.png' },
-            { id: 'satellite', name: 'LEO Satelliten-Uplink', baseCost: 300000000000, pps: 60000000000, count: 0, reqLevel: 16, image: 'https://heise.cloudimg.io/bound/1200x1200/q85.png-lossy-85.webp-lossy-85.foil1/_www-heise-de_/imgs/18/5/0/6/0/5/0/6/shutterstock_2376339171-cb339f5d81ab6f9b.jpg' },
-            { id: 'quantum', name: 'Quanten-Netzwerk', baseCost: 2500000000000, pps: 500000000000, count: 0, reqLevel: 17, image: 'https://i.ytimg.com/vi/JZSDuBzw5Ow/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLCaMG-g1Qq-vXaW5rq4WkWTPceH3A' },
-            { id: 'ai_core', name: 'KI-Routing Matrix', baseCost: 20000000000000, pps: 4000000000000, count: 0, reqLevel: 18, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSReInF7nslKfdKpLvKULCpT5L1BpUXTWJ6YA&s' },
-            { id: 'lambo_zuchini', name: 'Lambo Zuchini', baseCost: 50000000000000, pps: 10000000000000, count: 0, reqLevel: 19, image: '../assets/img/Zucchini.png' }
+            { id: 'transatlantic', name: 'Transatlantik-Kabel', baseCost: 50000000000, pps: 800000000, count: 0, reqLevel: 14, image: 'https://cdn.prod.www.spiegel.de/images/be36940e-0001-0004-0000-000000478148_w1200_r1.33_fpx68.66_fpy50.jpg' },
+            { id: 'cdn', name: 'Globales CDN Cluster', baseCost: 400000000000, pps: 7000000000, count: 0, reqLevel: 15, image: 'https://substackcdn.com/image/fetch/$s_!isyi!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F4db168fd-35eb-489a-b8f3-26d4734ed890_1600x1425.png' },
+            { id: 'satellite', name: 'LEO Satelliten-Uplink', baseCost: 3000000000000, pps: 60000000000, count: 0, reqLevel: 16, image: 'https://heise.cloudimg.io/bound/1200x1200/q85.png-lossy-85.webp-lossy-85.foil1/_www-heise-de_/imgs/18/5/0/6/0/5/0/6/shutterstock_2376339171-cb339f5d81ab6f9b.jpg' },
+            { id: 'quantum', name: 'Quanten-Netzwerk', baseCost: 25000000000000, pps: 500000000000, count: 0, reqLevel: 17, image: 'https://i.ytimg.com/vi/JZSDuBzw5Ow/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLCaMG-g1Qq-vXaW5rq4WkWTPceH3A' },
+            { id: 'ai_core', name: 'KI-Routing Matrix', baseCost: 200000000000000, pps: 4000000000000, count: 0, reqLevel: 18, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSReInF7nslKfdKpLvKULCpT5L1BpUXTWJ6YA&s' },
+            { id: 'lambo_zuchini', name: 'Lambo Zuchini', baseCost: 500000000000000, pps: 10000000000000, count: 0, reqLevel: 19, image: '../assets/img/Zucchini.png' }
         ];
 
         // --- SKINS CONFIG ---
         const skinsConfig = [
-            { id: 'default', name: 'Der Michi', cost: 0, image: 'img/DerMichi.png', fallback: '' },
-            { id: 'gold', name: 'Partei Michi', cost: 100000, image: 'img/PartieMichi.png', fallback: '' },
-            { id: 'dark', name: 'Codename Michiwehr', cost: 2500000, image: 'img/MichiWehr.png', fallback: '' },
-            { id: 'quantum', name: "Michi's the one!", cost: 50000000, image: 'img/MichisTheOne.png', fallback: '' }
+            { id: 'default', name: 'Der Michi', cost: 0, image: 'img/DerMichi.png', fallback: 'https://upload.wikimedia.org/wikipedia/commons/b/b9/Chocolate_Chip_Cookie_-_NCI_Visuals_Online.png' },
+            { id: 'gold', name: 'Partei Michi', cost: 100000, image: 'img/PartieMichi.png', fallback: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Chocolate_chip_cookie_isolated.jpg/300px-Chocolate_chip_cookie_isolated.jpg' },
+            { id: 'dark', name: 'Codename Michiwehr', cost: 2500000, image: 'img/MichiWehr.png', fallback: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Oreo_cookie.jpg/300px-Oreo_cookie.jpg' },
+            { id: 'quantum', name: "Michi's the one!", cost: 50000000, image: 'img/MichisTheOne.png', fallback: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Macaron_isolated.jpg/300px-Macaron_isolated.jpg' }
         ];
 
         // --- SPIEL VARIABLEN ---
@@ -426,32 +429,59 @@
         const displayPlayerName = document.getElementById('display-player-name');
         const playerRankDisplay = document.getElementById('player-rank-display');
 
-        // --- API CALLS (DREAMLO via PROXY) ---
+        // --- API CALLS (BEIDE DATENBANKEN) ---
         async function fetchLeaderboard() {
             try {
-                const dreamloUrl = `http://dreamlo.com/lb/${DREAMLO_PUBLIC_KEY}/json?cb=${Date.now()}`;
-                const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(dreamloUrl)}`;
-                
-                const response = await fetch(proxyUrl);
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    
-                    if (data.dreamlo && data.dreamlo.leaderboard && data.dreamlo.leaderboard.entry) {
-                        let entries = data.dreamlo.leaderboard.entry;
-                        if (!Array.isArray(entries)) entries = [entries];
+                // Score DB abfragen
+                const urlScore = `http://dreamlo.com/lb/${DREAMLO_SCORE_PUBLIC}/json?cb=${Date.now()}`;
+                const proxyScore = `https://corsproxy.io/?${encodeURIComponent(urlScore)}`;
 
-                        globalLeaderboard = entries.map(player => ({
-                            name: player.name,
-                            score: parseFloat(player.score),
-                            rank: player.text || 'Z'
-                        }));
-                    } else {
-                        globalLeaderboard = []; 
+                // Rank DB abfragen
+                const urlRank = `http://dreamlo.com/lb/${DREAMLO_RANK_PUBLIC}/json?cb=${Date.now()}`;
+                const proxyRank = `https://corsproxy.io/?${encodeURIComponent(urlRank)}`;
+                
+                // Wir laden beide gleichzeitig!
+                const [resScore, resRank] = await Promise.all([fetch(proxyScore), fetch(proxyRank)]);
+                
+                let scoreEntries = [];
+                let rankEntries = [];
+
+                if (resScore.ok) {
+                    const dataScore = await resScore.json();
+                    if (dataScore.dreamlo && dataScore.dreamlo.leaderboard && dataScore.dreamlo.leaderboard.entry) {
+                        scoreEntries = dataScore.dreamlo.leaderboard.entry;
+                        if (!Array.isArray(scoreEntries)) scoreEntries = [scoreEntries];
                     }
                 }
+
+                if (resRank.ok) {
+                    const dataRank = await resRank.json();
+                    if (dataRank.dreamlo && dataRank.dreamlo.leaderboard && dataRank.dreamlo.leaderboard.entry) {
+                        rankEntries = dataRank.dreamlo.leaderboard.entry;
+                        if (!Array.isArray(rankEntries)) rankEntries = [rankEntries];
+                    }
+                }
+
+                // Ränge in ein einfaches Wörterbuch packen (Name -> RankIndex)
+                const rankMap = {};
+                rankEntries.forEach(r => {
+                    rankMap[r.name] = parseInt(r.score) || 0; // Wir haben den Index als Score gespeichert
+                });
+
+                // Beide Listen zusammenführen
+                globalLeaderboard = scoreEntries.map(player => {
+                    let rIndex = rankMap[player.name] !== undefined ? rankMap[player.name] : 0;
+                    if (rIndex < 0 || rIndex >= rankList.length) rIndex = 0; // Sicherheit
+                    
+                    return {
+                        name: player.name,
+                        score: parseFloat(player.score),
+                        rank: rankList[rIndex].id
+                    };
+                });
+
             } catch (error) {
-                console.log("Leaderboard konnte nicht geladen werden.");
+                console.log("Leaderboard konnte nicht geladen werden.", error);
             }
             renderLeaderboardUI();
         }
@@ -460,13 +490,19 @@
             try {
                 let safeName = playerName.replace(/[^a-zA-Z0-9_-]/g, '_');
                 if (!safeName) safeName = "Spieler";
+                
                 const safeScore = Math.floor(score);
+                const safeRankIndex = currentRankIndex; // Der Index wandert als "Score" in die Rang-Datenbank
                 
-                const safeRank = encodeURIComponent(rankList[currentRankIndex].id);
-                const dreamloAddUrl = `http://dreamlo.com/lb/${DREAMLO_PRIVATE_KEY}/add/${safeName}/${safeScore}/0/${safeRank}`;
-                const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(dreamloAddUrl)}`;
+                const addScoreUrl = `http://dreamlo.com/lb/${DREAMLO_SCORE_PRIVATE}/add/${safeName}/${safeScore}`;
+                const addRankUrl = `http://dreamlo.com/lb/${DREAMLO_RANK_PRIVATE}/add/${safeName}/${safeRankIndex}`;
                 
-                await fetch(proxyUrl);
+                const proxyScore = `https://corsproxy.io/?${encodeURIComponent(addScoreUrl)}`;
+                const proxyRank = `https://corsproxy.io/?${encodeURIComponent(addRankUrl)}`;
+                
+                // In BEIDE Datenbanken parallel speichern
+                await Promise.all([fetch(proxyScore), fetch(proxyRank)]);
+                
                 setTimeout(() => { fetchLeaderboard(); }, 1000);
             } catch (error) {
                 console.error("Fehler beim Speichern auf Dreamlo:", error);
@@ -522,6 +558,35 @@
             updateXPBar();
             
             submitScoreToServer();
+        }
+        
+        function changeName() {
+            let newName = prompt("Wie möchtest du stattdessen heißen? (Keine Leerzeichen)", playerName);
+            
+            if (newName && newName.trim() !== "") {
+                newName = newName.replace(/[^a-zA-Z0-9_-]/g, '_').substring(0, 15);
+                
+                if (newName.toLowerCase() === playerName.toLowerCase()) return; 
+                
+                const nameTaken = globalLeaderboard.some(p => p.name.toLowerCase() === newName.toLowerCase());
+                if (nameTaken) {
+                    alert("Dieser Name wird bereits von einem anderen Spieler verwendet! Bitte wähle einen anderen.");
+                    return;
+                }
+
+                // Aus BEIDEN Datenbanken löschen!
+                const safeOldName = playerName.replace(/[^a-zA-Z0-9_-]/g, '_');
+                const delScoreUrl = `http://dreamlo.com/lb/${DREAMLO_SCORE_PRIVATE}/delete/${safeOldName}`;
+                const delRankUrl = `http://dreamlo.com/lb/${DREAMLO_RANK_PRIVATE}/delete/${safeOldName}`;
+                fetch(`https://corsproxy.io/?${encodeURIComponent(delScoreUrl)}`);
+                fetch(`https://corsproxy.io/?${encodeURIComponent(delRankUrl)}`);
+
+                playerName = newName;
+                localStorage.setItem('michiPlayerName', playerName);
+                displayPlayerName.innerText = playerName;
+                
+                submitScoreToServer(); 
+            }
         }
 
         // --- SPEICHER SYSTEM ---
@@ -600,7 +665,7 @@
             if(confirm(msg)) {
                 currentRankIndex++;
                 
-                // Geld bleibt erhalten!
+                // Geld, Skins & Rang bleiben, Rest auf 0!
                 score = 0;
                 level = 1;
                 currentXP = 0;
