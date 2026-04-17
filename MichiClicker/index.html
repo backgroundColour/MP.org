@@ -531,13 +531,22 @@
         .overlay-card {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            padding: 3rem;
+            padding: 2.5rem;
             border-radius: 20px;
             border: 2px solid rgba(255, 255, 255, 0.2);
             text-align: center;
             max-width: 90%;
+            max-height: 90vh; /* Macht die Karte auf kleinen Bildschirmen passend */
+            overflow-y: auto; /* Erlaubt das Scrollen innerhalb der Karte */
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
         }
+
+        /* Custom Scrollbar für Overlay-Karten */
+        .overlay-card::-webkit-scrollbar { width: 8px; }
+        .overlay-card::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 5px; }
+        .overlay-card::-webkit-scrollbar-thumb { background: var(--primary, #063c8c); border-radius: 5px; }
 
         .level-up-title {
             font-size: 4rem;
@@ -556,6 +565,7 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background 0.2s;
+            flex-shrink: 0; /* Verhindert, dass der Button gestaucht wird */
         }
 
         .btn-overlay-close:hover {
@@ -695,14 +705,10 @@
 
         .bp-container {
             width: 100%;
-            max-height: 55vh;
-            overflow-y: auto;
+            /* Flex-Grow füllt nun den freien Platz in der scrollbaren Parent-Card */
+            flex-grow: 1;
             padding: 5px;
         }
-
-        .bp-container::-webkit-scrollbar { width: 8px; }
-        .bp-container::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 4px; }
-        .bp-container::-webkit-scrollbar-thumb { background: rgba(243, 156, 18, 0.5); border-radius: 4px; }
 
         .bp-tier {
             display: flex;
@@ -734,7 +740,7 @@
             text-align: center;
         }
 
-        .bp-tier-info { flex: 1; }
+        .bp-tier-info { flex: 1; text-align: left; }
 
         .bp-tier-reward { font-weight: bold; font-size: 1rem; color: white; }
         .bp-tier-desc { font-size: 0.82rem; color: #aaa; margin-top: 3px; }
@@ -871,11 +877,11 @@
 
     <div class="game-overlay" id="overlay-shop">
         <div class="overlay-card" style="max-width: 800px; width: 95%;">
-            <h1 class="level-up-title" style="color: var(--secondary, #fbcd37); font-size: 3rem;">🛒 Shop</h1>
-            <p style="color: #ddd; font-size: 1.1rem;">Verdiene 8 Bit für jede 3 Pakete, die du generierst. 8 Bit = 1 Byte; 1024 Byte = 1 KB …</p>
-            <h3 style="color: var(--success); margin: 10px 0;">Dein Guthaben: <span id="shop-money">0</span></h3>
+            <h1 class="level-up-title" style="color: var(--secondary, #fbcd37); font-size: 3rem; flex-shrink: 0;">🛒 Shop</h1>
+            <p style="color: #ddd; font-size: 1.1rem; flex-shrink: 0;">Verdiene 8 Bit für jede 3 Pakete, die du generierst. 8 Bit = 1 Byte; 1024 Byte = 1 KB …</p>
+            <h3 style="color: var(--success); margin: 10px 0; flex-shrink: 0;">Dein Guthaben: <span id="shop-money">0</span></h3>
 
-            <div class="shop-tabs">
+            <div class="shop-tabs" style="flex-shrink: 0;">
                 <button class="shop-tab active" id="tab-btn-skins" onclick="switchShopTab('skins')">🎨 Visual Skins</button>
                 <button class="shop-tab" id="tab-btn-sounds" onclick="switchShopTab('sounds')">🔊 Sound Skins</button>
             </div>
@@ -889,11 +895,11 @@
 
     <div class="game-overlay" id="overlay-battlepass">
         <div class="overlay-card" style="max-width: 680px; width: 95%;">
-            <h1 class="level-up-title" style="color: #f39c12; font-size: 2.5rem;">🏆 Battle Pass</h1>
-            <p style="color: #ddd; font-size: 1rem;">Verdiene Battle Pass XP durch Klicken und passives Spielen.</p>
-            <div class="bp-xp-display">
+            <h1 class="level-up-title" style="color: #f39c12; font-size: 2.5rem; flex-shrink: 0;">🏆 Battle Pass</h1>
+            <p style="color: #ddd; font-size: 1rem; flex-shrink: 0;">Verdiene Battle Pass XP durch Klicken und passives Spielen.</p>
+            <div class="bp-xp-display" style="flex-shrink: 0;">
                 Battle Pass XP: <strong id="bp-xp-current">0</strong>
-                &nbsp;|&nbsp; Gesamt-XP bis Tier 10: <strong id="bp-xp-total">0</strong>
+                &nbsp;|&nbsp; Gesamt-XP (Max Tier): <strong id="bp-xp-total">0</strong>
             </div>
             <div class="bp-container" id="bp-container"></div>
             <button class="btn-overlay-close" onclick="closeBattlePass()">Schließen</button>
@@ -1013,7 +1019,7 @@
 
         // --- SOUND SKINS CONFIG ---
         const soundSkinsConfig = [
-            { id: 'silent',  name: 'Kein Sound',    emoji: '🔇', cost: 0,        bpTier: 0,  description: 'Kein Klickgeräusch.' },
+            { id: 'silent',  name: 'Kein Sound',   emoji: '🔇', cost: 0,        bpTier: 0,  description: 'Kein Klickgeräusch.' },
             { id: 'beep',    name: 'Classic Beep',  emoji: '🔔', cost: 0,        bpTier: 0,  description: 'Einfaches Klick-Geräusch.' },
             { id: 'square',  name: 'Square Wave',   emoji: '🎮', cost: 0,        bpTier: 3,  description: 'Retro Square Wave – freigeschaltet via Battle Pass Tier 3.' },
             { id: 'retro',   name: 'Retro 8-Bit',   emoji: '👾', cost: 0,        bpTier: 6,  description: 'Chip Tune Sound – freigeschaltet via Battle Pass Tier 6.' },
@@ -1031,7 +1037,10 @@
             { tier: 7,  xpRequired: 120000,   description: 'Netzwerk-Mogul!',             reward: { type: 'money', value: 500000,     label: '500.000 Bit Bonus' } },
             { tier: 8,  xpRequired: 250000,   description: 'Unaufhaltsam!',               reward: { type: 'click', value: 25,         label: '+25 Klickkraft' } },
             { tier: 9,  xpRequired: 500000,   description: 'Bass-Legende!',               reward: { type: 'sound', value: 'bass',     label: '💥 Deep Bass Sound' } },
-            { tier: 10, xpRequired: 1000000,  description: 'Battle Pass vollständig!',     reward: { type: 'money', value: 5000000,    label: '5.000.000 Bit Bonus' } },
+            { tier: 10, xpRequired: 1000000,  description: 'Battle Pass Legende!',        reward: { type: 'money', value: 5000000,    label: '5.000.000 Bit Bonus' } },
+            { tier: 11, xpRequired: 2500000,  description: 'Übermenschlich!',             reward: { type: 'click', value: 50,         label: '+50 Klickkraft' } },
+            { tier: 12, xpRequired: 6000000,  description: 'Geldregen!',                  reward: { type: 'money', value: 25000000,   label: '25.000.000 Bit Bonus' } },
+            { tier: 13, xpRequired: 15000000, description: 'Michi-Gott!',                 reward: { type: 'click', value: 150,        label: '+150 Klickkraft' } }
         ];
 
         // --- SPIEL VARIABLEN ---
@@ -1130,7 +1139,6 @@
                 const safeRankIndex = currentRankIndex;
 
                 const cb = Date.now();
-                // WIR MÜSSEN DEN PROXY NUTZEN (wegen GitHub HTTPS), aber mit Cache-Buster, damit es ankommt!
                 const addScoreUrl = `http://dreamlo.com/lb/${DREAMLO_SCORE_PRIVATE}/add/${safeName}/${safeScore}?cb=${cb}`;
                 const addRankUrl = `http://dreamlo.com/lb/${DREAMLO_RANK_PRIVATE}/add/${safeName}/${safeRankIndex}?cb=${cb}`;
 
@@ -1309,7 +1317,6 @@
         window.addEventListener('keydown', (e) => {
             let key = e.key.toLowerCase();
 
-            // Verhindere den Reload der Seite durch Strg + R, falls man den Cheat eingibt!
             if (e.ctrlKey && key === 'r') {
                 e.preventDefault();
             }
@@ -1319,7 +1326,6 @@
             }
 
             if (e.ctrlKey && keysPressed.b && keysPressed.r && keysPressed.c) {
-                // Tasten zurücksetzen, um versehentliches doppeltes Auslösen zu verhindern
                 keysPressed.b = false;
                 keysPressed.r = false;
                 keysPressed.c = false;
