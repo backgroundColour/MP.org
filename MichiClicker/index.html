@@ -276,6 +276,34 @@
 
         .michi-target:active { transform: scale(0.92); filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.5)); }
 
+        /* EFFEKTE VERBERGEN / BLUR */
+        .michi-target.blurred {
+            filter: blur(15px) drop-shadow(0 15px 25px rgba(0, 0, 0, 0.3));
+        }
+        
+        .michi-target.blurred:active {
+            filter: blur(15px) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.5));
+            transform: scale(0.92);
+        }
+
+        .btn-toggle-effects {
+            background: linear-gradient(135deg, #7f8c8d, #95a5a6);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.05rem;
+            transition: all 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .btn-toggle-effects:hover {
+            background: linear-gradient(135deg, #95a5a6, #bdc3c7);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(0,0,0,0.15);
+        }
+
         .level-card {
             width: 100%;
             padding: 1.2rem;
@@ -591,6 +619,10 @@
                     Netzwerk-Infrastruktur</h3>
             </div>
         </div>
+
+        <div style="text-align: center; margin-top: 3rem; padding-bottom: 2rem;">
+            <button id="toggle-effects-btn" class="btn-toggle-effects" onclick="toggleEffects()">👻 Effekte & Michi verbergen</button>
+        </div>
     </main>
 
     <div class="game-overlay" id="overlay-shop">
@@ -749,7 +781,6 @@
         ];
 
         // --- 4 BATTLE PASSES (Seasons) ---
-        // IDs von 1 bis 40 garantieren, dass alte Speicherstände (claimedBPTiers 1-10) weiterhin funktionieren.
         const battlePasses = [
             {
                 id: 1, name: "Pass 1: Startschuss",
@@ -813,7 +844,6 @@
             }
         ];
 
-        // Flache Liste aller Tiers zur einfacheren Abfrage
         const allBPTiers = battlePasses.flatMap(p => p.tiers);
 
         // --- SPIEL VARIABLEN ---
@@ -832,10 +862,12 @@
         let battlePassXP = 0;
         let claimedBPTiers = [];
         let bpClickBonus = 0;
-        let currentBPView = 1; // Welcher Pass gerade angezeigt wird
+        let currentBPView = 1;
 
         let playerName = "Gast";
         let globalLeaderboard = [];
+        
+        let hideEffects = false; // "Boss Mode" Toggle Variable
 
         function getRequiredXP(lvl) { return Math.floor(100 * Math.pow(2.6, lvl - 1)); }
         let xpRequired = getRequiredXP(level);
@@ -930,7 +962,8 @@
                 clickPower: clickPower, upgrades: upgradesConfig.map(u => u.count),
                 ownedSkins: ownedSkins, currentSkin: currentSkin, rankIndex: currentRankIndex,
                 ownedSoundSkins: ownedSoundSkins, currentSoundSkin: currentSoundSkin,
-                battlePassXP: battlePassXP, claimedBPTiers: claimedBPTiers, bpClickBonus: bpClickBonus
+                battlePassXP: battlePassXP, claimedBPTiers: claimedBPTiers, bpClickBonus: bpClickBonus,
+                hideEffects: hideEffects // Speichere den Boss-Mode Status
             };
             localStorage.setItem('michiSave', JSON.stringify(saveState)); submitScoreToServer();
             if (manual && saveIndicator) { saveIndicator.innerText = "Gespeichert!"; setTimeout(() => saveIndicator.innerText = "", 2000); }
@@ -948,13 +981,18 @@
                 if (saveState.upgrades) saveState.upgrades.forEach((count, i) => { if (upgradesConfig[i]) upgradesConfig[i].count = count; });
                 xpRequired = getRequiredXP(level); if (uiLevel) uiLevel.innerText = level;
 
-                // Setze BP Bonus immer frisch zusammen aus den Claimed Tiers, falls sich Konfigs ändern
                 bpClickBonus = 0;
                 claimedBPTiers.forEach(claimedId => {
                     const t = allBPTiers.find(bt => bt.id === claimedId);
                     if (t && t.reward.type === 'click') bpClickBonus += t.reward.value;
                 });
                 clickPower = Math.ceil(level * 1.5) + bpClickBonus;
+
+                hideEffects = saveState.hideEffects || false;
+                if(hideEffects) {
+                    document.getElementById('michi-button')?.classList.add('blurred');
+                    document.getElementById('toggle-effects-btn').innerText = "👁️ Effekte & Michi anzeigen";
+                }
 
                 recalculatePPS(); applySkinImage();
             }
@@ -965,6 +1003,22 @@
             if (confirm("Willst du wirklich ein Neues Spiel starten?\n(Dein bisheriger Highscore bleibt erhalten!)")) {
                 localStorage.removeItem('michiSave'); localStorage.removeItem('michiPlayerName'); location.reload();
             }
+        }
+
+        // --- BOSS MODE TOGGLE ---
+        function toggleEffects() {
+            hideEffects = !hideEffects;
+            const btn = document.getElementById('toggle-effects-btn');
+            const michi = document.getElementById('michi-button');
+            
+            if (hideEffects) {
+                michi.classList.add('blurred');
+                btn.innerText = "👁️ Effekte & Michi anzeigen";
+            } else {
+                michi.classList.remove('blurred');
+                btn.innerText = "👻 Effekte & Michi verbergen";
+            }
+            saveGame();
         }
 
         // --- SHOP & SOUNDS ---
@@ -1030,21 +1084,15 @@
 
         // --- BATTLE PASS SYSTEM ---
         function openBattlePass() { 
-            renderBPTabs();
-            renderBattlePass(); 
+            renderBPTabs(); renderBattlePass(); 
             document.getElementById('overlay-battlepass').classList.add('active'); 
         }
         function closeBattlePass() { document.getElementById('overlay-battlepass').classList.remove('active'); }
         
-        function switchBPTab(passId) {
-            currentBPView = passId;
-            renderBPTabs();
-            renderBattlePass();
-        }
+        function switchBPTab(passId) { currentBPView = passId; renderBPTabs(); renderBattlePass(); }
 
         function renderBPTabs() {
-            const tabsContainer = document.getElementById('bp-tabs-container');
-            tabsContainer.innerHTML = '';
+            const tabsContainer = document.getElementById('bp-tabs-container'); tabsContainer.innerHTML = '';
             battlePasses.forEach(pass => {
                 const btn = document.createElement('button');
                 btn.className = `shop-tab ${currentBPView === pass.id ? 'active' : ''}`;
@@ -1082,17 +1130,12 @@
 
         function renderBattlePass() {
             document.getElementById('bp-xp-current').innerText = formatNumber(battlePassXP);
-            
-            const container = document.getElementById('bp-container');
-            container.innerHTML = '';
-            
-            const pass = battlePasses.find(p => p.id === currentBPView);
-            if(!pass) return;
+            const container = document.getElementById('bp-container'); container.innerHTML = '';
+            const pass = battlePasses.find(p => p.id === currentBPView); if(!pass) return;
 
             pass.tiers.forEach((tier) => {
                 const globalIndex = allBPTiers.findIndex(t => t.id === tier.id);
                 const prevXP = globalIndex === 0 ? 0 : allBPTiers[globalIndex - 1].xpRequired;
-                
                 const isClaimed = claimedBPTiers.includes(tier.id);
                 const prevClaimed = globalIndex === 0 || claimedBPTiers.includes(allBPTiers[globalIndex - 1].id);
                 const isCurrent = !isClaimed && prevClaimed;
@@ -1122,13 +1165,14 @@
         if (document.querySelector('.michi-target-container') && uiMichiBtn) { document.querySelector('.michi-target-container').addEventListener('contextmenu', (e) => { e.preventDefault(); uiMichiBtn.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, clientX: e.clientX, clientY: e.clientY })); }); }
 
         function createFloatingText(e, text) {
+            if (hideEffects) return; // Boss mode check
             const f = document.createElement('div'); f.classList.add('floating-text'); f.innerText = text;
             f.style.left = `${e.clientX + (Math.random() - 0.5) * 60}px`; f.style.top = `${e.clientY - 30}px`;
             document.body.appendChild(f); setTimeout(() => f.remove(), 1200);
         }
 
         function triggerPassiveCookie() {
-            if (packetsPerSecond === 0 || !uiMichiBtn || !uiScoreText) return;
+            if (hideEffects || packetsPerSecond === 0 || !uiMichiBtn || !uiScoreText) return; // Boss mode check
             const c = document.createElement('img'); c.src = getCurrentSkinImage(); c.classList.add('flying-passive-cookie');
             const mPos = uiMichiBtn.getBoundingClientRect(); const sPos = uiScoreText.getBoundingClientRect();
             c.style.left = `${mPos.left + mPos.width / 2 - 20}px`; c.style.top = `${mPos.top + mPos.height / 2 - 20}px`;
