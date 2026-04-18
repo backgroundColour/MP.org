@@ -730,7 +730,7 @@
             { id: 'E', bg: '#FFCCF9', border: '#D9A1D1' }, { id: 'D', bg: '#FFC9DE', border: '#D99FBB' },
             { id: 'C', bg: '#FFB5E8', border: '#D98CBF' }, { id: 'B', bg: '#FF9BAA', border: '#D96E7C' },
             { id: 'A', bg: '#Baffc9', border: '#8ae6a0' }, { id: 'S', bg: '#bae1ff', border: '#80b3e6' },
-            { id: 'S+', bg: '#ffb3ba', border: '#ff808b' }
+            { id: 'A+', bg: '#ffb3ba', border: '#ff808b' }
         ];
         let currentRankIndex = 0;
 
@@ -1215,7 +1215,7 @@
         function updateUI() {
             if (uiScore) uiScore.innerText = formatNumber(score); if (uiMoney) uiMoney.innerText = formatBits(money);
             if (upgradesContainer) upgradesContainer.querySelectorAll('.upgrade-item').forEach((i, idx) => { if (level >= upgradesConfig[idx].reqLevel) { if (score >= getCost(upgradesConfig[idx])) i.classList.remove('disabled'); else i.classList.add('disabled'); } });
-            if (document.getElementById('rankup-container')) document.getElementById('rankup-container').style.display = (level >= 19 && upgradesConfig[18].count > 0 && currentRankIndex < rankList.length - 1) ? 'block' : 'none';
+            if (document.getElementById('rankup-container')) document.getElementById('rankup-container').style.display = (level >= 20 && upgradesConfig[19].count > 0 && currentRankIndex < rankList.length - 1) ? 'block' : 'none';
         }
         
         function closeOverlay(id) { document.getElementById(id).classList.remove('active'); }
@@ -1229,7 +1229,7 @@
         }
         
         async function doRankUp() {
-            if (level < 19 || upgradesConfig[18].count === 0) return;
+            if (level < 20 || upgradesConfig[19].count === 0) return;
             if (currentRankIndex >= rankList.length - 1) { alert("Maximaler Rang S+ bereits erreicht!"); return; }
             if (confirm(`🌟 RANGAUFSTIEG! 🌟\n\nDu steigst auf in Rang: [ ${rankList[currentRankIndex + 1].id} ]\n\nDeine Pakete, Level und Upgrades werden zurückgesetzt.\nDein GELD und deine SKINS behältst du!\n\nAufsteigen?`)) { await executeRankUpProcess(); alert("Erfolgreich aufgestiegen!"); }
         }
