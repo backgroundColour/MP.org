@@ -561,7 +561,7 @@ function getRandomHour() {
     ];
 
   // URL des Sternbildes von Wikipedia (breiteres Bild)
-  const sternBildUrl = 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/5_stars.svg/800px-5_stars.svg.png';
+  const sternBildUrl = 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/5_stars.svg/1280px-5_stars.svg.png';
 
   // Funktion, um eine zufällige Bewertung zu erstellen
   function generiereBewertung() {
