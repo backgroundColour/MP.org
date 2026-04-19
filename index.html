@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="keywords" content="Michi Partei, MP, Moin, Moin Löppt, Fitzner, Micheal Fitzner, BBK, Netzwerk, Sicherheit, Cisco Packet Tracer, Michi, Michi Partei Deutschland, Michi Partei Webseite, Michi Partei Homepage, Michi Partei Online, Michi Partei Politik, Michi Partei Mitglieder, Michi Partei Spenden, Michi Partei Projekte, Michi Partei Innovation, Michi Partei Technologie">
+    <meta name="keywords"
+        content="Michi Partei, MP, Moin, Moin Löppt, Fitzner, Micheal Fitzner, BBK, Netzwerk, Sicherheit, Cisco Packet Tracer, Michi, Michi Partei Deutschland, Michi Partei Webseite, Michi Partei Homepage, Michi Partei Online, Michi Partei Politik, Michi Partei Mitglieder, Michi Partei Spenden, Michi Partei Projekte, Michi Partei Innovation, Michi Partei Technologie">
     <meta name="author" content="Michi Partei Team">
-    <meta name="description" content="Die Michi Partei (MP) setzt sich für eine moderne, gerechte und nachhaltige Gesellschaft ein. Erfahren Sie mehr über unsere Werte und Projekte.">
+    <meta name="description"
+        content="Die Michi Partei (MP) setzt sich für eine moderne, gerechte und nachhaltige Gesellschaft ein. Erfahren Sie mehr über unsere Werte und Projekte.">
     <title>Michi Partei (MP) - Zukunft Gestalten</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Open+Sans:wght@400;600&display=swap">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Open+Sans:wght@400;600&display=swap">
     <!-- Add FlipDown.js CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flipdown/dist/flipdown.min.css">
     <!-- Leaflet CSS -->
@@ -15,12 +19,13 @@
     <link rel="stylesheet" href="styles.css">
 
     <!--Open Graph Protocol-->
-      <meta property="og:title" content="Die Michi Partei" />
-      <meta property="og:description" content="Gemeinsam für eine bessere Zukunft!" />
-      <meta property="og:image" content="/MP.org/assets/img/MICHI.png" />
-      <meta property="og:url" content="https://backgroundcolour.github.io/MP.org/" />
-      <meta property="og:type" content="website" />
+    <meta property="og:title" content="Die Michi Partei" />
+    <meta property="og:description" content="Gemeinsam für eine bessere Zukunft!" />
+    <meta property="og:image" content="/MP.org/assets/img/MICHI.png" />
+    <meta property="og:url" content="https://backgroundcolour.github.io/MP.org/" />
+    <meta property="og:type" content="website" />
 </head>
+
 <body>
     <header class="header">
         <div class="header-content">
@@ -29,7 +34,7 @@
             <p class="tagline">Gemeinsam für eine bessere Zukunft!</p>
         </div>
     </header>
-    
+
     <nav class="navbar">
         <ul>
             <li><a href="/MP.org/">Startseite</a></li>
@@ -43,21 +48,23 @@
         </ul>
     </nav>
 
-    <div id="card bewertung"></div>
+
 
     <div class="container">
-    <h2>Besucherstatistik</h2>
-    <p>Anzahl der bisherigen Unterstützer der Michi Partei!:</p>
-    <div style="font-size: 3rem; font-weight: bold; color: #0056b3; text-align: center; margin: 1rem 0;">
-        <span id="visitor-count">Lädt...</span>
-    </div>
-</div>
-    
-    <div class="container">
+        <div id="card bewertung"></div>
+
+        <div class="ard">
+            <h2>Besucherstatistik</h2>
+            <p>Anzahl der bisherigen Unterstützer der Michi Partei!:</p>
+            <div style="font-size: 3rem; font-weight: bold; color: #0056b3; text-align: center; margin: 1rem 0;">
+                <span id="visitor-count">Lädt...</span>
+            </div>
+        </div>
         <div class="card">
-            <img src="assets/img/SSW.png" alt="MP Logo" style="max-width: 200px; display: block; margin: 0 auto 1.5rem;">
+            <img src="assets/img/SSW.png" alt="MP Logo"
+                style="max-width: 200px; display: block; margin: 0 auto 1.5rem;">
             <p>Die Michi Partei setzt sich für eine moderne, gerechte und nachhaltige Gesellschaft ein.</p>
-            
+
             <h2 style="text-align: center; margin-top: 2rem;">Unsere Werte:</h2>
             <div class="values-list">
                 <div class="value-item" onclick="alert('Gerechtigkeit für alle!')">
@@ -78,19 +85,19 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="quote">
             <p>"Ey Mann, diese Scheibe. Teams ist das schlechteste Produkt, das von Microsoft erstellt wurde."</p>
             <p class="quote-author">- M. Fitzner</p>
         </div>
-        
+
         <!-- Parteitreffen Section -->
         <div class="card party-meeting">
             <h2>Unser nächstes Parteitreffen!</h2>
             <p id="next-meeting-date"></p>
             <div id="map"></div>
         </div>
-        
+
         <!-- M.I.C.H.I. Section -->
         <div class="card michi-section">
             <div class="michi-image-container">
@@ -98,7 +105,8 @@
             </div>
             <h2>Ministerium für Innovation, Cybersicherheit, Hochtechnologie und Infrastruktur</h2>
             <p>
-                Das M.I.C.H.I. ist unser Ministerium, das sich mit den neuesten Technologien und Innovationen beschäftigt. 
+                Das M.I.C.H.I. ist unser Ministerium, das sich mit den neuesten Technologien und Innovationen
+                beschäftigt.
                 Wir setzen uns für eine sichere und fortschrittliche digitale Zukunft ein.
                 <br>Unser Ziel ist es, Deutschland zu einem Vorreiter in der digitalen Welt zu machen.
             </p>
@@ -127,12 +135,12 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- BBK-Seite -->
         <div class="card">
             <h2>BBK Netzwerk & IT-Sicherheit</h2>
             <p>
-                Entdecken Sie die Welt der Netzwerktechnologie und Cybersicherheit am BBK. 
+                Entdecken Sie die Welt der Netzwerktechnologie und Cybersicherheit am BBK.
                 Erfahren Sie mehr über IT-Projekte und innovative Lösungen.
             </p>
             <a href="https://jonny1coder.github.io/BBK-Seite/" target="_blank" rel="noopener noreferrer">
@@ -141,19 +149,20 @@
                 </button>
             </a>
         </div>
-        
+
         <!-- Zeitenrechner -->
         <div class="card">
             <h2>Zeitenrechner</h2>
-            <iframe src="https://backgroundcolour.github.io/Zeitrechner/" width="100%" height="500" style="border:none; border-radius: 8px;"></iframe>
+            <iframe src="https://backgroundcolour.github.io/Zeitrechner/" width="100%" height="500"
+                style="border:none; border-radius: 8px;"></iframe>
         </div>
-        
+
         <!-- Countdown -->
         <div class="card countdown-card">
             <h2>Nächster Kaffeetag Countdown</h2>
             <div id="flipdown" class="flipdown"></div>
         </div>
-        
+
         <!-- Themen -->
         <div class="card">
             <h2>Unsere Schwerpunktthemen</h2>
@@ -161,26 +170,30 @@
                 <div class="theme">
                     <div class="theme-image" style="background-image: url('assets/img/Jens.png');"></div>
                     <h3>Nachhaltigkeit</h3>
-                    <p>Wir setzen uns für den Schutz unserer Umwelt und nachhaltige Entwicklung in allen Bereichen der Gesellschaft ein.</p>
+                    <p>Wir setzen uns für den Schutz unserer Umwelt und nachhaltige Entwicklung in allen Bereichen der
+                        Gesellschaft ein.</p>
                 </div>
                 <div class="theme">
                     <div class="theme-image" style="background-image: url('assets/img/Laufs.png');"></div>
                     <h3>Bildung für alle</h3>
-                    <p>Jeder Mensch sollte Zugang zu hochwertiger Bildung haben, um sich bestmöglich zu entfalten und die Zukunft zu gestalten.</p>
+                    <p>Jeder Mensch sollte Zugang zu hochwertiger Bildung haben, um sich bestmöglich zu entfalten und
+                        die Zukunft zu gestalten.</p>
                 </div>
                 <div class="theme">
                     <div class="theme-image" style="background-image: url('assets/img/Micha2.png');"></div>
                     <h3>Innovation und Technologie</h3>
-                    <p>Technologische Innovationen sind der Schlüssel zu einer besseren Zukunft – wir fördern Forschung und Entwicklung.</p>
+                    <p>Technologische Innovationen sind der Schlüssel zu einer besseren Zukunft – wir fördern Forschung
+                        und Entwicklung.</p>
                 </div>
                 <div class="theme">
                     <div class="theme-image" style="background-image: url('assets/img/michiwehr.webp');"></div>
                     <h3>Innere Sicherheit</h3>
-                    <p>Wir sichern Deutschland durch das Bereitstellen der 'Sicherheitsbehörde zur Sicherung der Bevölkerung', Codename: 'MICHIWEHR'</p>
+                    <p>Wir sichern Deutschland durch das Bereitstellen der 'Sicherheitsbehörde zur Sicherung der
+                        Bevölkerung', Codename: 'MICHIWEHR'</p>
                 </div>
             </div>
         </div>
-        
+
         <!-- Mitglied werden -->
         <div class="card login-section">
             <div class="login-left">
@@ -196,12 +209,14 @@
                     <label for="zitat">Zitat der Woche:</label>
                     <input type="text" id="zitat" name="zitat" placeholder="Zitat der Woche eingeben" required>
                     <label for="headcircumfrence">Ihr Kopfumfang in Lichtnanosekunden:</label>
-                    <input type="number" step="0.01" id="headcircumfrence" name="Kopfumfang" placeholder="Ihr Kopfumfang in Lichtnanosekunden" title="Jedes Mitglied erhält einen obligatorischen zeremoniellen Michipartei-Hut" required>
+                    <input type="number" step="0.01" id="headcircumfrence" name="Kopfumfang"
+                        placeholder="Ihr Kopfumfang in Lichtnanosekunden"
+                        title="Jedes Mitglied erhält einen obligatorischen zeremoniellen Michipartei-Hut" required>
                     <button class="cta-button" id="make-new-member">Beitreten</button>
                 </div>
             </div>
         </div>
-        
+
         <!-- Spenden -->
         <div class="card donation-card">
             <h2>Danke an unsere großartigen Spender!</h2>
@@ -212,7 +227,7 @@
                     <p class="donation-amount" id="donation-amount"></p>
                 </div>
             </div>
-            
+
             <div style="margin-top: 3rem;">
                 <h2>Unterstützen Sie uns!</h2>
                 <p>Ihre Spende hilft uns, unsere Ziele zu erreichen und eine bessere Zukunft zu gestalten.</p>
@@ -224,14 +239,14 @@
                 </a>
             </div>
         </div>
-        
+
         <div class="card stock-container">
             <div class="stock-title">
-              <div><span id="emoji">📈</span> MCHI</div>
-              <div class="stock-price" id="price">€0.00</div>
+                <div><span id="emoji">📈</span> MCHI</div>
+                <div class="stock-price" id="price">€0.00</div>
             </div>
             <canvas id="chart" width="600" height="300"></canvas>
-          </div>
+        </div>
 
         <!-- Sponsor -->
         <div class="card sponsor">
@@ -239,29 +254,29 @@
             <p><a href="https://schwanzkopf.de/">Schwanzkopf.de</a></p>
             <div class="spin-container">
                 <img src="assets/img/ChickenJockey.png" alt="ChickenJockey" class="spin-object">
-            </div> 
+            </div>
         </div>
     </div>
     <div class="card story-container">
         <div class="story">
-          <div class="story-header">
-            <div class="profile-pic">
-              <!-- Profilbild -->
-              <img src="assets/img/Fritzner.png" alt="Profilbild" class="profile-img">
+            <div class="story-header">
+                <div class="profile-pic">
+                    <!-- Profilbild -->
+                    <img src="assets/img/Fritzner.png" alt="Profilbild" class="profile-img">
+                </div>
+                <div class="username">Michael Fitzner</div>
             </div>
-            <div class="username">Michael Fitzner</div>
-          </div>
-          <div class="story-content">
-            <!-- Story-Bild, das den gesamten Div ausfüllt -->
-            <img id="storyTime" alt="Story Bild" class="story-img">
-          </div>
-          <div class="story-footer">
-            <div class="time-ago" id="time-ago"></div>
-          </div>
+            <div class="story-content">
+                <!-- Story-Bild, das den gesamten Div ausfüllt -->
+                <img id="storyTime" alt="Story Bild" class="story-img">
+            </div>
+            <div class="story-footer">
+                <div class="time-ago" id="time-ago"></div>
+            </div>
         </div>
-      </div>
+    </div>
 
-    
+
     <footer>
         <p id="imprint">© 2025 Michi Partei | Kontakt: info@michipartei.de</p>
     </footer>
@@ -273,7 +288,7 @@
 
     <script>
         // Member form
-        document.getElementById("make-new-member").addEventListener("click", function() {
+        document.getElementById("make-new-member").addEventListener("click", function () {
             const newMemberName = document.getElementById('email').value;
             const newMemberQuote = document.getElementById('zitat').value;
             const newMemberHeadCircumference = document.getElementById('headcircumfrence').value;
@@ -281,7 +296,7 @@
             alert(`Willkommen, ${newMemberName}!\n\nIhr Zitat: "${newMemberQuote}"\n\nIhr Michi-Hut in Größe ${newMemberHeadCircumference} Lichtnanosekunden wird bestellt!`);
         });
         // Initialize everything when DOM is loaded
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Set random donation amount
             const donationAmount = (Math.random() * 500 + 50).toFixed(2);
             document.getElementById('donation-amount').textContent = `${donationAmount} €`;
@@ -291,14 +306,15 @@
     <div id="quote" class="quote"></div>
     <script src="script.js"></script>
 </body>
+
 </html>
 
 <script>
-    document.addEventListener('DOMContentLoaded', async function() {
+    document.addEventListener('DOMContentLoaded', async function () {
         // Deine Dreamlo Keys
         const privateKey = 'n6ciyBAyoE2dwaRuqw4u1QgEs-9IZ4Hkq78oI7twFLTQ';
         const publicKey = '69e508608f40bb10683e9cfa';
-        
+
         const counterName = 'BesucherGesamt';
         const counterElement = document.getElementById('visitor-count');
 
@@ -311,10 +327,10 @@
             // 1. Aktuellen Stand abrufen (über Proxy an HTTP geleitet)
             const getUrl = proxyBase + encodeURIComponent(`http://dreamlo.com/lb/${publicKey}/json` + cacheBuster);
             let response = await fetch(getUrl);
-            
+
             // Erst als Text lesen, um JSON-Crashes bei Fehlermeldungen zu vermeiden
             let textData = await response.text();
-            
+
             if (textData.startsWith("ERROR")) {
                 throw new Error("Dreamlo Server meldet: " + textData);
             }
@@ -327,7 +343,7 @@
             if (leaderboard && leaderboard.entry) {
                 let entries = Array.isArray(leaderboard.entry) ? leaderboard.entry : [leaderboard.entry];
                 let visitorEntry = entries.find(e => e.name === counterName);
-                
+
                 if (visitorEntry) {
                     currentCount = parseInt(visitorEntry.score);
                 }
@@ -336,11 +352,11 @@
             // 2. Prüfen, ob der Nutzer die Seite schon besucht hat
             if (!localStorage.getItem('mp_has_visited')) {
                 currentCount++;
-                
+
                 // Neuen Stand über den Proxy an Dreamlo senden
                 const addUrl = proxyBase + encodeURIComponent(`http://dreamlo.com/lb/${privateKey}/add/${counterName}/${currentCount}` + cacheBuster);
                 await fetch(addUrl);
-                
+
                 localStorage.setItem('mp_has_visited', 'true');
             }
 
