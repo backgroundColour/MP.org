@@ -310,53 +310,63 @@
 </html>
 
 <script>
-    document.addEventListener('DOMContentLoaded', async function () {
+    document.addEventListener('DOMContentLoaded', async function() {
         // Deine Dreamlo Keys
         const privateKey = 'n6ciyBAyoE2dwaRuqw4u1QgEs-9IZ4Hkq78oI7twFLTQ';
         const publicKey = '69e508608f40bb10683e9cfa';
-
+        
         const counterName = 'BesucherGesamt';
         const counterElement = document.getElementById('visitor-count');
 
-        // Wir nutzen einen Proxy, um das SSL-Problem von Dreamlo zu umgehen
-        // Der Zufallswert (Cache-Buster) verhindert, dass der Proxy alte Daten zwischenspeichert
-        const proxyBase = 'https://api.allorigins.win/raw?url=';
+        // Wir nutzen corsproxy.io als neue, stabilere Brücke
+        const proxyBase = 'https://corsproxy.io/?';
         const cacheBuster = `?nocache=${Math.random()}`;
 
         try {
-            // 1. Aktuellen Stand abrufen (über Proxy an HTTP geleitet)
-            const getUrl = proxyBase + encodeURIComponent(`http://dreamlo.com/lb/${publicKey}/json` + cacheBuster);
+            // 1. Aktuellen Stand abrufen
+            // Die URL wird encodiert an corsproxy.io angehängt
+            const targetUrl = `http://dreamlo.com/lb/${publicKey}/json${cacheBuster}`;
+            const getUrl = proxyBase + encodeURIComponent(targetUrl);
+            
             let response = await fetch(getUrl);
-
-            // Erst als Text lesen, um JSON-Crashes bei Fehlermeldungen zu vermeiden
+            
+            if (!response.ok) {
+                 throw new Error(`Netzwerkantwort war nicht ok: ${response.status}`);
+            }
+            
             let textData = await response.text();
-
+            
             if (textData.startsWith("ERROR")) {
                 throw new Error("Dreamlo Server meldet: " + textData);
             }
 
-            // Wenn kein Fehler vorliegt, wandeln wir den Text in JSON um
             let data = JSON.parse(textData);
             let currentCount = 0;
-            let leaderboard = data.dreamlo.leaderboard;
-
-            if (leaderboard && leaderboard.entry) {
-                let entries = Array.isArray(leaderboard.entry) ? leaderboard.entry : [leaderboard.entry];
-                let visitorEntry = entries.find(e => e.name === counterName);
-
-                if (visitorEntry) {
-                    currentCount = parseInt(visitorEntry.score);
+            
+            // Dreamlo JSON-Struktur absichern
+            if (data && data.dreamlo && data.dreamlo.leaderboard) {
+                let leaderboard = data.dreamlo.leaderboard;
+                if (leaderboard.entry) {
+                    let entries = Array.isArray(leaderboard.entry) ? leaderboard.entry : [leaderboard.entry];
+                    let visitorEntry = entries.find(e => e.name === counterName);
+                    
+                    if (visitorEntry) {
+                        currentCount = parseInt(visitorEntry.score);
+                    }
                 }
             }
 
             // 2. Prüfen, ob der Nutzer die Seite schon besucht hat
             if (!localStorage.getItem('mp_has_visited')) {
                 currentCount++;
-
+                
                 // Neuen Stand über den Proxy an Dreamlo senden
-                const addUrl = proxyBase + encodeURIComponent(`http://dreamlo.com/lb/${privateKey}/add/${counterName}/${currentCount}` + cacheBuster);
-                await fetch(addUrl);
-
+                const addTargetUrl = `http://dreamlo.com/lb/${privateKey}/add/${counterName}/${currentCount}${cacheBuster}`;
+                const addUrl = proxyBase + encodeURIComponent(addTargetUrl);
+                
+                // Wir warten hier nicht zwingend auf die Antwort, damit die Seite nicht blockiert
+                fetch(addUrl).catch(e => console.error("Fehler beim Hochzählen:", e));
+                
                 localStorage.setItem('mp_has_visited', 'true');
             }
 
@@ -368,7 +378,7 @@
         } catch (error) {
             console.error("Fehler beim Laden des Besucherzählers:", error);
             if (counterElement) {
-                counterElement.textContent = "Offline";
+                counterElement.textContent = "Derzeit nicht verfügbar";
             }
         }
     });
