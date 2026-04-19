@@ -45,7 +45,7 @@
 
     <div id="card bewertung"></div>
 
-    <div class="card">
+    <div class="card michi-section">
     <h2>Besucherstatistik</h2>
     <p>Anzahl der bisherigen Unterstützer auf dieser Seite:</p>
     <div style="font-size: 3rem; font-weight: bold; color: #0056b3; text-align: center; margin: 1rem 0;">
@@ -299,21 +299,32 @@
         const privateKey = 'n6ciyBAyoE2dwaRuqw4u1QgEs-9IZ4Hkq78oI7twFLTQ';
         const publicKey = '69e508608f40bb10683e9cfa';
         
-        // Name unseres "Highscore"-Eintrags, der als Zähler dient
         const counterName = 'BesucherGesamt';
         const counterElement = document.getElementById('visitor-count');
 
-        try {
-            // 1. Aktuellen Stand über den Public Key abrufen
-            let response = await fetch(`https://dreamlo.com/lb/${publicKey}/json`);
-            let data = await response.json();
+        // Wir nutzen einen Proxy, um das SSL-Problem von Dreamlo zu umgehen
+        // Der Zufallswert (Cache-Buster) verhindert, dass der Proxy alte Daten zwischenspeichert
+        const proxyBase = 'https://api.allorigins.win/raw?url=';
+        const cacheBuster = `?nocache=${Math.random()}`;
 
+        try {
+            // 1. Aktuellen Stand abrufen (über Proxy an HTTP geleitet)
+            const getUrl = proxyBase + encodeURIComponent(`http://dreamlo.com/lb/${publicKey}/json` + cacheBuster);
+            let response = await fetch(getUrl);
+            
+            // Erst als Text lesen, um JSON-Crashes bei Fehlermeldungen zu vermeiden
+            let textData = await response.text();
+            
+            if (textData.startsWith("ERROR")) {
+                throw new Error("Dreamlo Server meldet: " + textData);
+            }
+
+            // Wenn kein Fehler vorliegt, wandeln wir den Text in JSON um
+            let data = JSON.parse(textData);
             let currentCount = 0;
             let leaderboard = data.dreamlo.leaderboard;
 
             if (leaderboard && leaderboard.entry) {
-                // Dreamlo gibt ein einzelnes Objekt zurück, wenn es nur einen Eintrag gibt, 
-                // oder ein Array bei mehreren Einträgen.
                 let entries = Array.isArray(leaderboard.entry) ? leaderboard.entry : [leaderboard.entry];
                 let visitorEntry = entries.find(e => e.name === counterName);
                 
@@ -322,15 +333,14 @@
                 }
             }
 
-            // 2. Prüfen, ob der Nutzer die Seite schon besucht hat (via LocalStorage)
+            // 2. Prüfen, ob der Nutzer die Seite schon besucht hat
             if (!localStorage.getItem('mp_has_visited')) {
-                // Neuer Besucher! Zähler um 1 erhöhen
                 currentCount++;
                 
-                // Neuen Stand über den Private Key heimlich an Dreamlo senden
-                await fetch(`https://dreamlo.com/lb/${privateKey}/add/${counterName}/${currentCount}`);
+                // Neuen Stand über den Proxy an Dreamlo senden
+                const addUrl = proxyBase + encodeURIComponent(`http://dreamlo.com/lb/${privateKey}/add/${counterName}/${currentCount}` + cacheBuster);
+                await fetch(addUrl);
                 
-                // Im Browser speichern, dass dieser Nutzer da war
                 localStorage.setItem('mp_has_visited', 'true');
             }
 
