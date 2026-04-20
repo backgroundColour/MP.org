@@ -1236,15 +1236,7 @@
         }
 
         const keysPressed = { b: false, r: false, c: false };
-        window.addEventListener('keydown', (e) => {
-            let key = e.key.toLowerCase(); if (e.ctrlKey && key === 'r') e.preventDefault();
-            if (keysPressed.hasOwnProperty(key)) keysPressed[key] = true;
-            if (e.ctrlKey && keysPressed.b && keysPressed.r && keysPressed.c) {
-                keysPressed.b = keysPressed.r = keysPressed.c = false;
-                if (currentRankIndex >= rankList.length - 1) return alert("Maximaler Rang S+ bereits erreicht!");
-                if (confirm("🛠️ CHEAT AKTIVIERT 🛠️\nRangaufstieg erzwingen?")) executeRankUpProcess();
-            }
-        });
+       
         window.addEventListener('keyup', (e) => { let key = e.key.toLowerCase(); if (keysPressed.hasOwnProperty(key)) keysPressed[key] = false; });
 
         function renderLeaderboardUI() {
