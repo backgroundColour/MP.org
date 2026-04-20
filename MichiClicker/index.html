@@ -704,7 +704,8 @@
             if (num < 1000000) return Math.floor(num).toLocaleString('de-DE');
             const suffixes = ["", "", " M", " B", " T", " Qa", " Qi", " Sx", " Sp", " Oc", " No", " Dc"];
             const tier = Math.floor(Math.log10(Math.max(1, num)) / 3);
-            if (tier < 2 || tier >= suffixes.length) return Math.floor(num).toLocaleString('de-DE');
+            if (tier < 2) return Math.floor(num).toLocaleString('de-DE');
+            if (tier >= suffixes.length) return num.toExponential(2);
             const scale = Math.pow(10, tier * 3);
             return (num / scale).toFixed(1).replace('.', ',') + suffixes[tier];
         }
