@@ -1674,15 +1674,19 @@
             if (!leaderboardList) return;
             leaderboardList.innerHTML = globalLeaderboard.length === 0 ? '<li style="padding: 10px; color: #888;">Noch keine Einträge. Sei der Erste!</li>' : '';
 
-            globalLeaderboard = scoreEntries.map(player => {
-                let rIndex = rankMap[player.name] !== undefined ? rankMap[player.name] : 0;
-                if (rIndex < 0 || rIndex >= rankList.length) rIndex = 0;
+            globalLeaderboard.forEach((player, index) => {
+                const isMe = (player.name === playerName);
+                const li = document.createElement('li');
+                li.className = `leaderboard-item ${isMe ? 'is-me' : ''}`;
 
-                // NEU: Wir prüfen, ob im "text"-Feld ein Wert steht. 
-                // Wenn ja, nehmen wir den gigantischen Text-Score. Wenn nein, den alten normalen Score.
-                let realScore = player.text ? parseFloat(player.text) : parseFloat(player.score);
+                // Garantiert, dass bei dir sofort der echte, lokale Rang aus deinem Savegame angezeigt wird
+                const displayRank = isMe ? rankList[currentRankIndex].id : (player.rank || 'Z');
 
-                return { name: player.name, score: realScore, rank: rankList[rIndex].id, rIndex: rIndex };
+                // Das >= behebt Synchronisationsfehler beim lokalen Aktualisieren
+                const displayScore = (isMe && score >= player.score) ? score : player.score;
+
+                li.innerHTML = `<span class="lb-rank-num">#${index + 1}</span>${getRankBadgeHTML(displayRank)}<span class="lb-name">${player.name}</span><span class="lb-score">${formatNumber(displayScore)}</span>`;
+                leaderboardList.appendChild(li);
             });
         }
 
