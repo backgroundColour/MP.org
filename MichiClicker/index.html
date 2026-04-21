@@ -1004,11 +1004,13 @@
             return (num / scale).toFixed(1).replace('.', ',') + suffixes[tier];
         }
 
-        // --- 2 DATENBANKEN SYSTEM (SCORE & RANKS) ---
+        // --- 3 DATENBANKEN SYSTEM (SCORE, RANKS & EXTREME SCORE MULTIPLIER) ---
         const DREAMLO_SCORE_PUBLIC = '69df899e8f40bc2f606c2109';
         const DREAMLO_SCORE_PRIVATE = 'gx0LmtikcUiceklh41xVyAQEPyt0hxK024rxVHnezX-A';
         const DREAMLO_RANK_PUBLIC = '69e07e998f40bb106819e811';
         const DREAMLO_RANK_PRIVATE = 'kCyUsosTV0ONJFWJzDtZsw2DgG1CmzkUKO55ap9snLIQ';
+        const DREAMLO_MULTI_PUBLIC = '69e7b7028f40bb10685797f1';
+        const DREAMLO_MULTI_PRIVATE = '78ukb5ZWM0y-zOaMPScQQwZo2L1fx7l0KbwATMK8_AJQ';
 
         // --- RÄNGE ---
         const rankList = [
@@ -1189,48 +1191,59 @@
         // --- API CALLS & INIT ---
         async function fetchLeaderboard() {
             try {
+                // Hole alle 3 Datenbanken ab
                 const proxyScore = `https://corsproxy.io/?${encodeURIComponent(`http://dreamlo.com/lb/${DREAMLO_SCORE_PUBLIC}/json?cb=${Date.now()}`)}`;
                 const proxyRank = `https://corsproxy.io/?${encodeURIComponent(`http://dreamlo.com/lb/${DREAMLO_RANK_PUBLIC}/json?cb=${Date.now()}`)}`;
-                const [resScore, resRank] = await Promise.all([fetch(proxyScore), fetch(proxyRank)]);
+                const proxyMulti = `https://corsproxy.io/?${encodeURIComponent(`http://dreamlo.com/lb/${DREAMLO_MULTI_PUBLIC}/json?cb=${Date.now()}`)}`;
 
-                let scoreEntries = []; let rankEntries = [];
+                const [resScore, resRank, resMulti] = await Promise.all([fetch(proxyScore), fetch(proxyRank), fetch(proxyMulti)]);
+
+                let scoreEntries = []; let rankEntries = []; let multiEntries = [];
+                
                 if (resScore.ok) { 
                     const dataScore = await resScore.json(); 
-                    if (dataScore.dreamlo?.leaderboard?.entry) {
-                        scoreEntries = Array.isArray(dataScore.dreamlo.leaderboard.entry) ? dataScore.dreamlo.leaderboard.entry : [dataScore.dreamlo.leaderboard.entry]; 
-                    }
+                    if (dataScore.dreamlo?.leaderboard?.entry) scoreEntries = Array.isArray(dataScore.dreamlo.leaderboard.entry) ? dataScore.dreamlo.leaderboard.entry : [dataScore.dreamlo.leaderboard.entry]; 
                 }
                 if (resRank.ok) { 
                     const dataRank = await resRank.json(); 
-                    if (dataRank.dreamlo?.leaderboard?.entry) {
-                        rankEntries = Array.isArray(dataRank.dreamlo.leaderboard.entry) ? dataRank.dreamlo.leaderboard.entry : [dataRank.dreamlo.leaderboard.entry]; 
-                    }
+                    if (dataRank.dreamlo?.leaderboard?.entry) rankEntries = Array.isArray(dataRank.dreamlo.leaderboard.entry) ? dataRank.dreamlo.leaderboard.entry : [dataRank.dreamlo.leaderboard.entry]; 
+                }
+                if (resMulti.ok) {
+                    const dataMulti = await resMulti.json(); 
+                    if (dataMulti.dreamlo?.leaderboard?.entry) multiEntries = Array.isArray(dataMulti.dreamlo.leaderboard.entry) ? dataMulti.dreamlo.leaderboard.entry : [dataMulti.dreamlo.leaderboard.entry]; 
                 }
 
+                // Mappe die Zweit- und Dritt-Datenbanken an die Spielernamen
                 const rankMap = {}; 
                 rankEntries.forEach(r => { rankMap[r.name] = parseInt(r.score) || 0; });
+                
+                const multiMap = {}; 
+                multiEntries.forEach(m => { multiMap[m.name] = parseInt(m.score) || 0; });
 
                 globalLeaderboard = scoreEntries.map(player => {
                     let rIndex = rankMap[player.name] !== undefined ? rankMap[player.name] : 0;
                     if (rIndex < 0 || rIndex >= rankList.length) rIndex = 0;
 
-                    // Text-Hack: Wenn Text existiert, nimm den riesigen Score, sonst den normalen
-                    let realScore = player.text ? parseFloat(player.text) : parseFloat(player.score);
-                    if (isNaN(realScore)) realScore = parseFloat(player.score) || 0;
+                    let exponent = multiMap[player.name] || 0;
+                    let baseScore = parseFloat(player.score) || 0;
+                    
+                    // REKONSTRUKTION DES RIESIGEN SCORES:
+                    // Wenn ein Exponent hinterlegt ist, multipliziere die Grundzahl wieder hoch.
+                    let realScore = exponent > 0 ? baseScore * Math.pow(10, exponent - 6) : baseScore;
 
                     return { name: player.name, score: realScore, rank: rankList[rIndex].id, rIndex: rIndex };
                 });
 
-                // Sortierung: Rang > Score
+                // --- NEU: Lokale Sortierung (Zuerst nach Score, dann nach Rang) ---
                 globalLeaderboard.sort((a, b) => {
-                    if (b.rIndex !== a.rIndex) {
-                        return b.rIndex - a.rIndex; 
+                    if (b.score !== a.score) {
+                        return b.score - a.score; // Der Höchste echte Score gewinnt
                     }
-                    return b.score - a.score; 
+                    return b.rIndex - a.rIndex; // Bei Gleichstand entscheidet der Rang
                 });
 
             } catch (error) { 
-                console.log("Leaderboard konnte nicht geladen werden.", error); 
+                console.log("Leaderboard konnte nicht geladen werden."); 
             }
             renderLeaderboardUI();
         }
@@ -1241,23 +1254,27 @@
             
             const cb = Date.now(); 
 
-            // Kappen bei 2.14 Milliarden für den offiziellen (Dummy) Dreamlo Score Parameter
-            let dummyScore = Math.min(2147000000, Math.floor(score));
+            // AUFSPALTUNG DES SCORES FÜR DREAMLO:
+            let exp = 0;
+            let base = Math.floor(score);
             
-            // Echter Score wird als Text verschickt!
-            let realScoreText = Math.floor(score).toString();
+            // Wenn der Score gigantisch wird (über 1 Million), spalten wir ihn auf:
+            if (score > 1000000) {
+                exp = Math.floor(Math.log10(score));
+                // Wir speichern immer die ersten ~7 Ziffern als Base, damit es präzise bleibt
+                base = Math.floor(score / Math.pow(10, exp - 6));
+            }
 
-            const urlScore = `https://dreamlo.com/lb/${DREAMLO_SCORE_PRIVATE}/add/${safeName}/${dummyScore}/0/${realScoreText}?cb=${cb}`;
+            const urlScore = `https://dreamlo.com/lb/${DREAMLO_SCORE_PRIVATE}/add/${safeName}/${base}?cb=${cb}`;
             const urlRank = `https://dreamlo.com/lb/${DREAMLO_RANK_PRIVATE}/add/${safeName}/${currentRankIndex}?cb=${cb}`;
+            const urlMulti = `https://dreamlo.com/lb/${DREAMLO_MULTI_PRIVATE}/add/${safeName}/${exp}?cb=${cb}`;
 
-            // Image-Beacon Hack zur sauberen CORS-Umgehung
-            let imgScore = new Image();
-            imgScore.src = urlScore;
+            // Image-Beacon Hack (garantiert sauberes Speichern ohne Blockade)
+            new Image().src = urlScore;
+            new Image().src = urlRank;
+            new Image().src = urlMulti;
 
-            let imgRank = new Image();
-            imgRank.src = urlRank;
-
-            // UI Update mit kurzer Verzögerung
+            // Kurz warten, dann das UI aktualisieren
             setTimeout(fetchLeaderboard, 1500);
         }
 
@@ -1291,9 +1308,9 @@
                 const safeOldName = playerName.replace(/[^a-zA-Z0-9_-]/g, '_'); 
                 const cb = Date.now();
                 
-                // Alten Namen löschen via Image Hack
                 new Image().src = `https://dreamlo.com/lb/${DREAMLO_SCORE_PRIVATE}/delete/${safeOldName}?cb=${cb}`;
                 new Image().src = `https://dreamlo.com/lb/${DREAMLO_RANK_PRIVATE}/delete/${safeOldName}?cb=${cb}`;
+                new Image().src = `https://dreamlo.com/lb/${DREAMLO_MULTI_PRIVATE}/delete/${safeOldName}?cb=${cb}`;
 
                 playerName = newName; localStorage.setItem('michiPlayerName', playerName); displayPlayerName.innerText = playerName;
                 submitScoreToServer();
@@ -1572,7 +1589,9 @@
             
             const cb = Date.now();
             new Image().src = `https://dreamlo.com/lb/${DREAMLO_SCORE_PRIVATE}/delete/${playerName.replace(/[^a-zA-Z0-9_-]/g, '_')}?cb=${cb}`;
-            
+            new Image().src = `https://dreamlo.com/lb/${DREAMLO_RANK_PRIVATE}/delete/${playerName.replace(/[^a-zA-Z0-9_-]/g, '_')}?cb=${cb}`;
+            new Image().src = `https://dreamlo.com/lb/${DREAMLO_MULTI_PRIVATE}/delete/${playerName.replace(/[^a-zA-Z0-9_-]/g, '_')}?cb=${cb}`;
+
             saveGame(true); closeOverlay('overlay-levelup'); closeOverlay('overlay-shop');
         }
 
@@ -1602,9 +1621,9 @@
         // --- START & LOOPS ---
         initPlayer();
         setInterval(() => { if (packetsPerSecond > 0) { const a = packetsPerSecond / 10; score += a; money += a / 3; addXP(a * 0.05); addBPXP(a * 0.1); updateUI(); } }, 100);
-        setInterval(fetchLeaderboard, 60000); // Entspanntes Limit: Alle 60s Leaderboard laden
+        setInterval(fetchLeaderboard, 60000); 
         setInterval(() => { if (packetsPerSecond > 0 && Math.random() < Math.min(packetsPerSecond / 50, 5)) triggerPassiveCookie(); }, 500);
-        setInterval(() => saveGame(false), 30000); // Speichern alle 30s über sauberen Image-Beacon
+        setInterval(() => saveGame(false), 30000); 
     </script>
 </body>
 
