@@ -195,9 +195,17 @@
         }
 
         @keyframes blink {
-            0% { opacity: 1; }
-            50% { opacity: 0.3; }
-            100% { opacity: 1; }
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+
+            100% {
+                opacity: 1;
+            }
         }
 
         /* --- MITTE (Klicker & Save-System) --- */
@@ -329,9 +337,17 @@
         }
 
         @keyframes pulseGlow {
-            0% { box-shadow: 0 0 10px rgba(161, 140, 209, 0.5); }
-            50% { box-shadow: 0 0 25px rgba(161, 140, 209, 0.8); }
-            100% { box-shadow: 0 0 10px rgba(161, 140, 209, 0.5); }
+            0% {
+                box-shadow: 0 0 10px rgba(161, 140, 209, 0.5);
+            }
+
+            50% {
+                box-shadow: 0 0 25px rgba(161, 140, 209, 0.8);
+            }
+
+            100% {
+                box-shadow: 0 0 10px rgba(161, 140, 209, 0.5);
+            }
         }
 
         #save-indicator {
@@ -438,8 +454,15 @@
         }
 
         @keyframes floatUpAndFade {
-            0% { opacity: 1; transform: translateY(0) scale(1); }
-            100% { opacity: 0; transform: translateY(-100px) scale(1.6); }
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) scale(1.6);
+            }
         }
 
         .flying-passive-cookie {
@@ -454,9 +477,20 @@
         }
 
         @keyframes flyToScore {
-            0% { opacity: 0; transform: translate(0, 0) scale(0.2) rotate(0deg); }
-            10% { opacity: 1; transform: translate(0, -20px) scale(1) rotate(45deg); }
-            100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.5) rotate(360deg); }
+            0% {
+                opacity: 0;
+                transform: translate(0, 0) scale(0.2) rotate(0deg);
+            }
+
+            10% {
+                opacity: 1;
+                transform: translate(0, -20px) scale(1) rotate(45deg);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(var(--dx), var(--dy)) scale(0.5) rotate(360deg);
+            }
         }
 
         /* --- RECHTE SEITE (Upgrades) --- */
@@ -603,9 +637,19 @@
             flex-direction: column;
         }
 
-        .overlay-card::-webkit-scrollbar { width: 8px; }
-        .overlay-card::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 5px; }
-        .overlay-card::-webkit-scrollbar-thumb { background: var(--primary, #063c8c); border-radius: 5px; }
+        .overlay-card::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .overlay-card::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+        }
+
+        .overlay-card::-webkit-scrollbar-thumb {
+            background: var(--primary, #063c8c);
+            border-radius: 5px;
+        }
 
         .level-up-title {
             font-size: 4rem;
@@ -660,9 +704,19 @@
             margin: 0 auto 10px;
         }
 
-        .skin-item.owned { border-color: var(--success); }
-        .skin-item.equipped { border-color: var(--secondary); background: rgba(251, 205, 55, 0.2); transform: scale(1.05); }
-        .skin-item.locked { opacity: 0.6; }
+        .skin-item.owned {
+            border-color: var(--success);
+        }
+
+        .skin-item.equipped {
+            border-color: var(--secondary);
+            background: rgba(251, 205, 55, 0.2);
+            transform: scale(1.05);
+        }
+
+        .skin-item.locked {
+            opacity: 0.6;
+        }
 
         .btn-buy-skin {
             padding: 8px;
@@ -677,10 +731,23 @@
             transition: background 0.2s;
         }
 
-        .btn-buy-skin:hover { background: #ddd; }
-        .btn-buy-skin.can-afford { background: var(--success); color: white; }
-        .btn-buy-skin.can-afford:hover { background: #219653; }
-        .btn-buy-skin.equip { background: var(--primary); color: white; }
+        .btn-buy-skin:hover {
+            background: #ddd;
+        }
+
+        .btn-buy-skin.can-afford {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-buy-skin.can-afford:hover {
+            background: #219653;
+        }
+
+        .btn-buy-skin.equip {
+            background: var(--primary);
+            color: white;
+        }
 
         /* --- TABS --- */
         .shop-tabs {
@@ -709,7 +776,9 @@
             border-color: var(--primary, #063c8c);
         }
 
-        .shop-tab:hover:not(.active) { background: rgba(255, 255, 255, 0.2); }
+        .shop-tab:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.2);
+        }
 
         /* --- SOUND SKIN ITEMS --- */
         .sound-item {
@@ -725,9 +794,19 @@
             gap: 8px;
         }
 
-        .sound-item.owned { border-color: var(--success); }
-        .sound-item.equipped { border-color: var(--secondary); background: rgba(251, 205, 55, 0.2); transform: scale(1.05); }
-        .sound-item.locked { opacity: 0.6; }
+        .sound-item.owned {
+            border-color: var(--success);
+        }
+
+        .sound-item.equipped {
+            border-color: var(--secondary);
+            background: rgba(251, 205, 55, 0.2);
+            transform: scale(1.05);
+        }
+
+        .sound-item.locked {
+            opacity: 0.6;
+        }
 
         .sound-emoji {
             font-size: 2.5rem;
@@ -771,8 +850,15 @@
             transition: border-color 0.3s;
         }
 
-        .bp-tier.claimed { border-color: var(--success, #27ae60); background: rgba(39, 174, 96, 0.12); }
-        .bp-tier.current { border-color: var(--secondary, #fbcd37); background: rgba(251, 205, 55, 0.1); }
+        .bp-tier.claimed {
+            border-color: var(--success, #27ae60);
+            background: rgba(39, 174, 96, 0.12);
+        }
+
+        .bp-tier.current {
+            border-color: var(--secondary, #fbcd37);
+            background: rgba(251, 205, 55, 0.1);
+        }
 
         .bp-tier-num {
             font-size: 1.4rem;
@@ -832,10 +918,25 @@
         }
 
         @keyframes bpNotifFade {
-            0% { opacity: 0; transform: translate(-50%, -60%) scale(0.8); }
-            15% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-            75% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -60%) scale(0.8);
+            }
+
+            15% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+
+            75% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.95);
+            }
         }
     </style>
 </head>
@@ -1199,25 +1300,25 @@
                 const [resScore, resRank, resMulti] = await Promise.all([fetch(proxyScore), fetch(proxyRank), fetch(proxyMulti)]);
 
                 let scoreEntries = []; let rankEntries = []; let multiEntries = [];
-                
-                if (resScore.ok) { 
-                    const dataScore = await resScore.json(); 
-                    if (dataScore.dreamlo?.leaderboard?.entry) scoreEntries = Array.isArray(dataScore.dreamlo.leaderboard.entry) ? dataScore.dreamlo.leaderboard.entry : [dataScore.dreamlo.leaderboard.entry]; 
+
+                if (resScore.ok) {
+                    const dataScore = await resScore.json();
+                    if (dataScore.dreamlo?.leaderboard?.entry) scoreEntries = Array.isArray(dataScore.dreamlo.leaderboard.entry) ? dataScore.dreamlo.leaderboard.entry : [dataScore.dreamlo.leaderboard.entry];
                 }
-                if (resRank.ok) { 
-                    const dataRank = await resRank.json(); 
-                    if (dataRank.dreamlo?.leaderboard?.entry) rankEntries = Array.isArray(dataRank.dreamlo.leaderboard.entry) ? dataRank.dreamlo.leaderboard.entry : [dataRank.dreamlo.leaderboard.entry]; 
+                if (resRank.ok) {
+                    const dataRank = await resRank.json();
+                    if (dataRank.dreamlo?.leaderboard?.entry) rankEntries = Array.isArray(dataRank.dreamlo.leaderboard.entry) ? dataRank.dreamlo.leaderboard.entry : [dataRank.dreamlo.leaderboard.entry];
                 }
                 if (resMulti.ok) {
-                    const dataMulti = await resMulti.json(); 
-                    if (dataMulti.dreamlo?.leaderboard?.entry) multiEntries = Array.isArray(dataMulti.dreamlo.leaderboard.entry) ? dataMulti.dreamlo.leaderboard.entry : [dataMulti.dreamlo.leaderboard.entry]; 
+                    const dataMulti = await resMulti.json();
+                    if (dataMulti.dreamlo?.leaderboard?.entry) multiEntries = Array.isArray(dataMulti.dreamlo.leaderboard.entry) ? dataMulti.dreamlo.leaderboard.entry : [dataMulti.dreamlo.leaderboard.entry];
                 }
 
                 // Mappe die Zweit- und Dritt-Datenbanken an die Spielernamen
-                const rankMap = {}; 
+                const rankMap = {};
                 rankEntries.forEach(r => { rankMap[r.name] = parseInt(r.score) || 0; });
-                
-                const multiMap = {}; 
+
+                const multiMap = {};
                 multiEntries.forEach(m => { multiMap[m.name] = parseInt(m.score) || 0; });
 
                 globalLeaderboard = scoreEntries.map(player => {
@@ -1226,7 +1327,7 @@
 
                     let exponent = multiMap[player.name] || 0;
                     let baseScore = parseFloat(player.score) || 0;
-                    
+
                     // REKONSTRUKTION DES RIESIGEN SCORES:
                     // Wenn ein Exponent hinterlegt ist, multipliziere die Grundzahl wieder hoch.
                     let realScore = exponent > 0 ? baseScore * Math.pow(10, exponent - 6) : baseScore;
@@ -1242,8 +1343,8 @@
                     return b.rIndex - a.rIndex; // Bei Gleichstand entscheidet der Rang
                 });
 
-            } catch (error) { 
-                console.log("Leaderboard konnte nicht geladen werden."); 
+            } catch (error) {
+                console.log("Leaderboard konnte nicht geladen werden.");
             }
             renderLeaderboardUI();
         }
@@ -1287,27 +1388,6 @@
     // Kurz warten, dann das UI aktualisieren
     setTimeout(fetchLeaderboard, 1500);
 }
-
-    // Wir nutzen wieder corsproxy.io, damit alles 100% verlässlich ankommt
-    const urlScore = `https://corsproxy.io/?${encodeURIComponent(`http://dreamlo.com/lb/${DREAMLO_SCORE_PRIVATE}/add/${safeName}/${base}?cb=${cb}`)}`;
-    const urlRank = `https://corsproxy.io/?${encodeURIComponent(`http://dreamlo.com/lb/${DREAMLO_RANK_PRIVATE}/add/${safeName}/${currentRankIndex}?cb=${cb}`)}`;
-    const urlMulti = `https://corsproxy.io/?${encodeURIComponent(`http://dreamlo.com/lb/${DREAMLO_MULTI_PRIVATE}/add/${safeName}/${exp}?cb=${cb}`)}`;
-
-    try {
-        // Alle 3 Datenbanken gleichzeitig feuern
-        await Promise.all([
-            fetch(urlScore),
-            fetch(urlRank),
-            fetch(urlMulti)
-        ]);
-    } catch (e) {
-        console.error("Proxy hat kurz geschluckt, wird beim nächsten Autosave wiederholt.");
-    }
-
-    // Kurz warten, dann das UI aktualisieren
-    setTimeout(fetchLeaderboard, 1500);
-}
-
         async function initPlayer() {
             let savedName = localStorage.getItem('michiPlayerName');
             if (!savedName) {
@@ -1329,24 +1409,24 @@
         }
 
         function changeName() {
-    let newName = prompt("Wie möchtest du stattdessen heißen? (Keine Leerzeichen)", playerName);
-    if (newName && newName.trim() !== "") {
-        newName = newName.replace(/[^a-zA-Z0-9_-]/g, '_').substring(0, 15);
-        if (newName.toLowerCase() === playerName.toLowerCase()) return;
-        if (globalLeaderboard.some(p => p.name.toLowerCase() === newName.toLowerCase())) { alert("Name vergeben!"); return; }
+            let newName = prompt("Wie möchtest du stattdessen heißen? (Keine Leerzeichen)", playerName);
+            if (newName && newName.trim() !== "") {
+                newName = newName.replace(/[^a-zA-Z0-9_-]/g, '_').substring(0, 15);
+                if (newName.toLowerCase() === playerName.toLowerCase()) return;
+                if (globalLeaderboard.some(p => p.name.toLowerCase() === newName.toLowerCase())) { alert("Name vergeben!"); return; }
 
-        const safeOldName = playerName.replace(/[^a-zA-Z0-9_-]/g, '_'); 
-        const cb = Date.now();
-        
-        // Alten Namen in ALLEN 3 Datenbanken über Proxy löschen
-        fetch(`https://corsproxy.io/?${encodeURIComponent(`http://dreamlo.com/lb/${DREAMLO_SCORE_PRIVATE}/delete/${safeOldName}?cb=${cb}`)}`);
-        fetch(`https://corsproxy.io/?${encodeURIComponent(`http://dreamlo.com/lb/${DREAMLO_RANK_PRIVATE}/delete/${safeOldName}?cb=${cb}`)}`);
-        fetch(`https://corsproxy.io/?${encodeURIComponent(`http://dreamlo.com/lb/${DREAMLO_MULTI_PRIVATE}/delete/${safeOldName}?cb=${cb}`)}`);
+                const safeOldName = playerName.replace(/[^a-zA-Z0-9_-]/g, '_');
+                const cb = Date.now();
 
-        playerName = newName; localStorage.setItem('michiPlayerName', playerName); displayPlayerName.innerText = playerName;
-        submitScoreToServer();
-    }
-}
+                // Alten Namen in ALLEN 3 Datenbanken über Proxy löschen
+                fetch(`https://corsproxy.io/?${encodeURIComponent(`http://dreamlo.com/lb/${DREAMLO_SCORE_PRIVATE}/delete/${safeOldName}?cb=${cb}`)}`);
+                fetch(`https://corsproxy.io/?${encodeURIComponent(`http://dreamlo.com/lb/${DREAMLO_RANK_PRIVATE}/delete/${safeOldName}?cb=${cb}`)}`);
+                fetch(`https://corsproxy.io/?${encodeURIComponent(`http://dreamlo.com/lb/${DREAMLO_MULTI_PRIVATE}/delete/${safeOldName}?cb=${cb}`)}`);
+
+                playerName = newName; localStorage.setItem('michiPlayerName', playerName); displayPlayerName.innerText = playerName;
+                submitScoreToServer();
+            }
+        }
 
         function saveGame(manual = false) {
             const saveState = {
@@ -1355,9 +1435,9 @@
                 ownedSkins: ownedSkins, currentSkin: currentSkin, rankIndex: currentRankIndex,
                 ownedSoundSkins: ownedSoundSkins, currentSoundSkin: currentSoundSkin,
                 battlePassXP: battlePassXP, claimedBPTiers: claimedBPTiers, bpClickBonus: bpClickBonus,
-                hideEffects: hideEffects 
+                hideEffects: hideEffects
             };
-            localStorage.setItem('michiSave', JSON.stringify(saveState)); 
+            localStorage.setItem('michiSave', JSON.stringify(saveState));
             submitScoreToServer();
             if (manual && saveIndicator) { saveIndicator.innerText = "Gespeichert!"; setTimeout(() => saveIndicator.innerText = "", 2000); }
         }
@@ -1558,14 +1638,14 @@
         if (document.querySelector('.michi-target-container') && uiMichiBtn) { document.querySelector('.michi-target-container').addEventListener('contextmenu', (e) => { e.preventDefault(); uiMichiBtn.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, clientX: e.clientX, clientY: e.clientY })); }); }
 
         function createFloatingText(e, text) {
-            if (hideEffects) return; 
+            if (hideEffects) return;
             const f = document.createElement('div'); f.classList.add('floating-text'); f.innerText = text;
             f.style.left = `${e.clientX + (Math.random() - 0.5) * 60}px`; f.style.top = `${e.clientY - 30}px`;
             document.body.appendChild(f); setTimeout(() => f.remove(), 1200);
         }
 
         function triggerPassiveCookie() {
-            if (hideEffects || packetsPerSecond === 0 || !uiMichiBtn || !uiScoreText) return; 
+            if (hideEffects || packetsPerSecond === 0 || !uiMichiBtn || !uiScoreText) return;
             const c = document.createElement('img'); c.src = getCurrentSkinImage(); c.classList.add('flying-passive-cookie');
             const mPos = uiMichiBtn.getBoundingClientRect(); const sPos = uiScoreText.getBoundingClientRect();
             c.style.left = `${mPos.left + mPos.width / 2 - 20}px`; c.style.top = `${mPos.top + mPos.height / 2 - 20}px`;
@@ -1614,24 +1694,24 @@
         function closeOverlay(id) { document.getElementById(id).classList.remove('active'); }
 
         async function executeRankUpProcess() {
-    currentRankIndex++; score = 0; level = 1; currentXP = 0; packetsPerSecond = 0; upgradesConfig.forEach(u => u.count = 0); xpRequired = getRequiredXP(level); clickPower = 1 + bpClickBonus;
-    if (uiLevel) uiLevel.innerText = level; if (playerRankDisplay) playerRankDisplay.innerHTML = getRankBadgeHTML(rankList[currentRankIndex].id);
-    updateXPBar(); recalculatePPS(); renderUpgrades(); updateUI();
-    
-    const cb = Date.now();
-    const safeOldName = playerName.replace(/[^a-zA-Z0-9_-]/g, '_');
-    
-    // Beim Reset auch alle 3 zurücksetzen
-    try {
-        await Promise.all([
-            fetch(`https://corsproxy.io/?${encodeURIComponent(`http://dreamlo.com/lb/${DREAMLO_SCORE_PRIVATE}/delete/${safeOldName}?cb=${cb}`)}`),
-            fetch(`https://corsproxy.io/?${encodeURIComponent(`http://dreamlo.com/lb/${DREAMLO_RANK_PRIVATE}/delete/${safeOldName}?cb=${cb}`)}`),
-            fetch(`https://corsproxy.io/?${encodeURIComponent(`http://dreamlo.com/lb/${DREAMLO_MULTI_PRIVATE}/delete/${safeOldName}?cb=${cb}`)}`)
-        ]);
-    } catch(e) {}
+            currentRankIndex++; score = 0; level = 1; currentXP = 0; packetsPerSecond = 0; upgradesConfig.forEach(u => u.count = 0); xpRequired = getRequiredXP(level); clickPower = 1 + bpClickBonus;
+            if (uiLevel) uiLevel.innerText = level; if (playerRankDisplay) playerRankDisplay.innerHTML = getRankBadgeHTML(rankList[currentRankIndex].id);
+            updateXPBar(); recalculatePPS(); renderUpgrades(); updateUI();
 
-    saveGame(true); closeOverlay('overlay-levelup'); closeOverlay('overlay-shop');
-}
+            const cb = Date.now();
+            const safeOldName = playerName.replace(/[^a-zA-Z0-9_-]/g, '_');
+
+            // Beim Reset auch alle 3 zurücksetzen
+            try {
+                await Promise.all([
+                    fetch(`https://corsproxy.io/?${encodeURIComponent(`http://dreamlo.com/lb/${DREAMLO_SCORE_PRIVATE}/delete/${safeOldName}?cb=${cb}`)}`),
+                    fetch(`https://corsproxy.io/?${encodeURIComponent(`http://dreamlo.com/lb/${DREAMLO_RANK_PRIVATE}/delete/${safeOldName}?cb=${cb}`)}`),
+                    fetch(`https://corsproxy.io/?${encodeURIComponent(`http://dreamlo.com/lb/${DREAMLO_MULTI_PRIVATE}/delete/${safeOldName}?cb=${cb}`)}`)
+                ]);
+            } catch (e) { }
+
+            saveGame(true); closeOverlay('overlay-levelup'); closeOverlay('overlay-shop');
+        }
 
         function doRankUp() {
             if (level < 20 || upgradesConfig[19].count === 0) return;
@@ -1659,7 +1739,7 @@
         // --- START & LOOPS ---
         initPlayer();
         setInterval(() => { if (packetsPerSecond > 0) { const a = packetsPerSecond / 10; score += a; money += a / 3; addXP(a * 0.05); addBPXP(a * 0.1); updateUI(); } }, 100);
-        setInterval(fetchLeaderboard, 60000); 
+        setInterval(fetchLeaderboard, 60000);
         setInterval(() => { if (packetsPerSecond > 0 && Math.random() < Math.min(packetsPerSecond / 50, 5)) triggerPassiveCookie(); }, 500);
         setInterval(() => saveGame(false), 30000); 
     </script>
