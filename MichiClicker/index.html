@@ -1324,7 +1324,30 @@
             renderLeaderboardUI();
         }
 
+        function submitScoreToServer() {
+            let safeName = playerName.replace(/[^a-zA-Z0-9_-]/g, '_');
+            if (!safeName) safeName = "Spieler";
 
+            const cb = Date.now();
+
+            // Wir kappen den "offiziellen" Score bei 2.1 Milliarden, damit Dreamlo nicht abstürzt
+            let dummyScore = Math.min(2147000000, Math.floor(score));
+
+            // Wir wandeln deinen echten, gigantischen Score in Text um
+            let realScoreText = score.toString();
+
+            // Dreamlo Format: /add/{Name}/{Score}/{Sekunden}/{Text}
+            // Wir senden: Name / 2.1 Milliarden / 0 Sekunden / Echter Score
+            const urlScore = `https://dreamlo.com/lb/${DREAMLO_SCORE_PRIVATE}/add/${safeName}/${dummyScore}/0/${realScoreText}?cb=${cb}`;
+            const urlRank = `https://dreamlo.com/lb/${DREAMLO_RANK_PRIVATE}/add/${safeName}/${currentRankIndex}?cb=${cb}`;
+
+            // Der verlässliche Image-Hack zum Senden
+            let imgScore = new Image();
+            imgScore.src = urlScore;
+
+            let imgRank = new Image();
+            imgRank.src = urlRank;
+        }
 
         async function initPlayer() {
             let savedName = localStorage.getItem('michiPlayerName');
@@ -1644,19 +1667,15 @@
             if (!leaderboardList) return;
             leaderboardList.innerHTML = globalLeaderboard.length === 0 ? '<li style="padding: 10px; color: #888;">Noch keine Einträge. Sei der Erste!</li>' : '';
 
-            globalLeaderboard.forEach((player, index) => {
-                const isMe = (player.name === playerName);
-                const li = document.createElement('li');
-                li.className = `leaderboard-item ${isMe ? 'is-me' : ''}`;
+            globalLeaderboard = scoreEntries.map(player => {
+                let rIndex = rankMap[player.name] !== undefined ? rankMap[player.name] : 0;
+                if (rIndex < 0 || rIndex >= rankList.length) rIndex = 0;
 
-                // Verbessert: Garantiert, dass bei dir sofort der echte, lokale Rang aus deinem Savegame angezeigt wird
-                const displayRank = isMe ? rankList[currentRankIndex].id : (player.rank || 'Z');
+                // NEU: Wir prüfen, ob im "text"-Feld ein Wert steht. 
+                // Wenn ja, nehmen wir den gigantischen Text-Score. Wenn nein, den alten normalen Score.
+                let realScore = player.text ? parseFloat(player.text) : parseFloat(player.score);
 
-                // Das >= anstelle von > behebt Synchronisationsfehler beim lokalen Aktualisieren
-                const displayScore = (isMe && score >= player.score) ? score : player.score;
-
-                li.innerHTML = `<span class="lb-rank-num">#${index + 1}</span>${getRankBadgeHTML(displayRank)}<span class="lb-name">${player.name}</span><span class="lb-score">${formatNumber(displayScore)}</span>`;
-                leaderboardList.appendChild(li);
+                return { name: player.name, score: realScore, rank: rankList[rIndex].id, rIndex: rIndex };
             });
         }
 
