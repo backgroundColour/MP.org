@@ -1304,23 +1304,30 @@
 
                 const rankMap = {}; rankEntries.forEach(r => { rankMap[r.name] = parseInt(r.score) || 0; });
 
+                // HIER passiert die Magie: Das Leaderboard wird zusammengestellt
                 globalLeaderboard = scoreEntries.map(player => {
                     let rIndex = rankMap[player.name] !== undefined ? rankMap[player.name] : 0;
                     if (rIndex < 0 || rIndex >= rankList.length) rIndex = 0;
 
-                    // WICHTIG: rIndex mit in das Objekt packen, damit wir danach sortieren können
-                    return { name: player.name, score: parseFloat(player.score), rank: rankList[rIndex].id, rIndex: rIndex };
+                    // Der Text-Hack für den gigantischen Score!
+                    let realScore = player.text ? parseFloat(player.text) : parseFloat(player.score);
+
+                    return { name: player.name, score: realScore, rank: rankList[rIndex].id, rIndex: rIndex };
                 });
 
-                // --- NEU: Lokale Sortierung (Zuerst nach Rang, dann nach Score) ---
+                // Lokale Sortierung: Zuerst nach Rang, dann nach Score
                 globalLeaderboard.sort((a, b) => {
                     if (b.rIndex !== a.rIndex) {
-                        return b.rIndex - a.rIndex; // Höherer Rang steht weiter oben
+                        return b.rIndex - a.rIndex;
                     }
-                    return b.score - a.score; // Bei gleichem Rang entscheidet der Score
+                    return b.score - a.score;
                 });
 
-            } catch (error) { console.log("Leaderboard konnte nicht geladen werden."); }
+            } catch (error) {
+                console.log("Leaderboard konnte nicht geladen werden.", error);
+            }
+
+            // UI aktualisieren, NACHDEM alles geladen und berechnet wurde
             renderLeaderboardUI();
         }
 
