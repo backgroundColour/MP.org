@@ -1235,8 +1235,6 @@
             if (confirm(`🌟 RANGAUFSTIEG! 🌟\n\nDu steigst auf in Rang: [ ${rankList[currentRankIndex + 1].id} ]\n\nDeine Pakete, Level und Upgrades werden zurückgesetzt.\nDein GELD und deine SKINS behältst du!\n\nAufsteigen?`)) { await executeRankUpProcess(); alert("Erfolgreich aufgestiegen!"); }
         }
        
-        window.addEventListener('keyup', (e) => { let key = e.key.toLowerCase(); if (keysPressed.hasOwnProperty(key)) keysPressed[key] = false; });
-
         function renderLeaderboardUI() {
             if (!leaderboardList) return; leaderboardList.innerHTML = globalLeaderboard.length === 0 ? '<li style="padding: 10px; color: #888;">Noch keine Einträge. Sei der Erste!</li>' : '';
             globalLeaderboard.forEach((player, index) => {
