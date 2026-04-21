@@ -1234,8 +1234,6 @@
             if (currentRankIndex >= rankList.length - 1) { alert("Maximaler Rang S+ bereits erreicht!"); return; }
             if (confirm(`🌟 RANGAUFSTIEG! 🌟\n\nDu steigst auf in Rang: [ ${rankList[currentRankIndex + 1].id} ]\n\nDeine Pakete, Level und Upgrades werden zurückgesetzt.\nDein GELD und deine SKINS behältst du!\n\nAufsteigen?`)) { await executeRankUpProcess(); alert("Erfolgreich aufgestiegen!"); }
         }
-
-        const keysPressed = { b: false, r: false, c: false };
        
         window.addEventListener('keyup', (e) => { let key = e.key.toLowerCase(); if (keysPressed.hasOwnProperty(key)) keysPressed[key] = false; });
 
