@@ -1303,11 +1303,23 @@
                 if (resRank.ok) { const dataRank = await resRank.json(); if (dataRank.dreamlo?.leaderboard?.entry) rankEntries = Array.isArray(dataRank.dreamlo.leaderboard.entry) ? dataRank.dreamlo.leaderboard.entry : [dataRank.dreamlo.leaderboard.entry]; }
 
                 const rankMap = {}; rankEntries.forEach(r => { rankMap[r.name] = parseInt(r.score) || 0; });
+
                 globalLeaderboard = scoreEntries.map(player => {
                     let rIndex = rankMap[player.name] !== undefined ? rankMap[player.name] : 0;
                     if (rIndex < 0 || rIndex >= rankList.length) rIndex = 0;
-                    return { name: player.name, score: parseFloat(player.score), rank: rankList[rIndex].id };
+
+                    // WICHTIG: rIndex mit in das Objekt packen, damit wir danach sortieren können
+                    return { name: player.name, score: parseFloat(player.score), rank: rankList[rIndex].id, rIndex: rIndex };
                 });
+
+                // --- NEU: Lokale Sortierung (Zuerst nach Rang, dann nach Score) ---
+                globalLeaderboard.sort((a, b) => {
+                    if (b.rIndex !== a.rIndex) {
+                        return b.rIndex - a.rIndex; // Höherer Rang steht weiter oben
+                    }
+                    return b.score - a.score; // Bei gleichem Rang entscheidet der Score
+                });
+
             } catch (error) { console.log("Leaderboard konnte nicht geladen werden."); }
             renderLeaderboardUI();
         }
@@ -1638,10 +1650,21 @@
         }
 
         function renderLeaderboardUI() {
-            if (!leaderboardList) return; leaderboardList.innerHTML = globalLeaderboard.length === 0 ? '<li style="padding: 10px; color: #888;">Noch keine Einträge. Sei der Erste!</li>' : '';
+            if (!leaderboardList) return;
+            leaderboardList.innerHTML = globalLeaderboard.length === 0 ? '<li style="padding: 10px; color: #888;">Noch keine Einträge. Sei der Erste!</li>' : '';
+
             globalLeaderboard.forEach((player, index) => {
-                const isMe = (player.name === playerName); const li = document.createElement('li'); li.className = `leaderboard-item ${isMe ? 'is-me' : ''}`;
-                li.innerHTML = `<span class="lb-rank-num">#${index + 1}</span>${getRankBadgeHTML((isMe && score > player.score) ? rankList[currentRankIndex].id : (player.rank || 'Z'))}<span class="lb-name">${player.name}</span><span class="lb-score">${formatNumber((isMe && score > player.score) ? score : player.score)}</span>`;
+                const isMe = (player.name === playerName);
+                const li = document.createElement('li');
+                li.className = `leaderboard-item ${isMe ? 'is-me' : ''}`;
+
+                // Verbessert: Garantiert, dass bei dir sofort der echte, lokale Rang aus deinem Savegame angezeigt wird
+                const displayRank = isMe ? rankList[currentRankIndex].id : (player.rank || 'Z');
+
+                // Das >= anstelle von > behebt Synchronisationsfehler beim lokalen Aktualisieren
+                const displayScore = (isMe && score >= player.score) ? score : player.score;
+
+                li.innerHTML = `<span class="lb-rank-num">#${index + 1}</span>${getRankBadgeHTML(displayRank)}<span class="lb-name">${player.name}</span><span class="lb-score">${formatNumber(displayScore)}</span>`;
                 leaderboardList.appendChild(li);
             });
         }
