@@ -195,17 +195,9 @@
         }
 
         @keyframes blink {
-            0% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.3;
-            }
-
-            100% {
-                opacity: 1;
-            }
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
         }
 
         /* --- MITTE (Klicker & Save-System) --- */
@@ -337,17 +329,9 @@
         }
 
         @keyframes pulseGlow {
-            0% {
-                box-shadow: 0 0 10px rgba(161, 140, 209, 0.5);
-            }
-
-            50% {
-                box-shadow: 0 0 25px rgba(161, 140, 209, 0.8);
-            }
-
-            100% {
-                box-shadow: 0 0 10px rgba(161, 140, 209, 0.5);
-            }
+            0% { box-shadow: 0 0 10px rgba(161, 140, 209, 0.5); }
+            50% { box-shadow: 0 0 25px rgba(161, 140, 209, 0.8); }
+            100% { box-shadow: 0 0 10px rgba(161, 140, 209, 0.5); }
         }
 
         #save-indicator {
@@ -454,15 +438,8 @@
         }
 
         @keyframes floatUpAndFade {
-            0% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-
-            100% {
-                opacity: 0;
-                transform: translateY(-100px) scale(1.6);
-            }
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-100px) scale(1.6); }
         }
 
         .flying-passive-cookie {
@@ -477,20 +454,9 @@
         }
 
         @keyframes flyToScore {
-            0% {
-                opacity: 0;
-                transform: translate(0, 0) scale(0.2) rotate(0deg);
-            }
-
-            10% {
-                opacity: 1;
-                transform: translate(0, -20px) scale(1) rotate(45deg);
-            }
-
-            100% {
-                opacity: 0;
-                transform: translate(var(--dx), var(--dy)) scale(0.5) rotate(360deg);
-            }
+            0% { opacity: 0; transform: translate(0, 0) scale(0.2) rotate(0deg); }
+            10% { opacity: 1; transform: translate(0, -20px) scale(1) rotate(45deg); }
+            100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.5) rotate(360deg); }
         }
 
         /* --- RECHTE SEITE (Upgrades) --- */
@@ -637,19 +603,9 @@
             flex-direction: column;
         }
 
-        .overlay-card::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .overlay-card::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 5px;
-        }
-
-        .overlay-card::-webkit-scrollbar-thumb {
-            background: var(--primary, #063c8c);
-            border-radius: 5px;
-        }
+        .overlay-card::-webkit-scrollbar { width: 8px; }
+        .overlay-card::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 5px; }
+        .overlay-card::-webkit-scrollbar-thumb { background: var(--primary, #063c8c); border-radius: 5px; }
 
         .level-up-title {
             font-size: 4rem;
@@ -704,19 +660,9 @@
             margin: 0 auto 10px;
         }
 
-        .skin-item.owned {
-            border-color: var(--success);
-        }
-
-        .skin-item.equipped {
-            border-color: var(--secondary);
-            background: rgba(251, 205, 55, 0.2);
-            transform: scale(1.05);
-        }
-
-        .skin-item.locked {
-            opacity: 0.6;
-        }
+        .skin-item.owned { border-color: var(--success); }
+        .skin-item.equipped { border-color: var(--secondary); background: rgba(251, 205, 55, 0.2); transform: scale(1.05); }
+        .skin-item.locked { opacity: 0.6; }
 
         .btn-buy-skin {
             padding: 8px;
@@ -731,23 +677,10 @@
             transition: background 0.2s;
         }
 
-        .btn-buy-skin:hover {
-            background: #ddd;
-        }
-
-        .btn-buy-skin.can-afford {
-            background: var(--success);
-            color: white;
-        }
-
-        .btn-buy-skin.can-afford:hover {
-            background: #219653;
-        }
-
-        .btn-buy-skin.equip {
-            background: var(--primary);
-            color: white;
-        }
+        .btn-buy-skin:hover { background: #ddd; }
+        .btn-buy-skin.can-afford { background: var(--success); color: white; }
+        .btn-buy-skin.can-afford:hover { background: #219653; }
+        .btn-buy-skin.equip { background: var(--primary); color: white; }
 
         /* --- TABS --- */
         .shop-tabs {
@@ -776,9 +709,7 @@
             border-color: var(--primary, #063c8c);
         }
 
-        .shop-tab:hover:not(.active) {
-            background: rgba(255, 255, 255, 0.2);
-        }
+        .shop-tab:hover:not(.active) { background: rgba(255, 255, 255, 0.2); }
 
         /* --- SOUND SKIN ITEMS --- */
         .sound-item {
@@ -794,19 +725,9 @@
             gap: 8px;
         }
 
-        .sound-item.owned {
-            border-color: var(--success);
-        }
-
-        .sound-item.equipped {
-            border-color: var(--secondary);
-            background: rgba(251, 205, 55, 0.2);
-            transform: scale(1.05);
-        }
-
-        .sound-item.locked {
-            opacity: 0.6;
-        }
+        .sound-item.owned { border-color: var(--success); }
+        .sound-item.equipped { border-color: var(--secondary); background: rgba(251, 205, 55, 0.2); transform: scale(1.05); }
+        .sound-item.locked { opacity: 0.6; }
 
         .sound-emoji {
             font-size: 2.5rem;
@@ -850,15 +771,8 @@
             transition: border-color 0.3s;
         }
 
-        .bp-tier.claimed {
-            border-color: var(--success, #27ae60);
-            background: rgba(39, 174, 96, 0.12);
-        }
-
-        .bp-tier.current {
-            border-color: var(--secondary, #fbcd37);
-            background: rgba(251, 205, 55, 0.1);
-        }
+        .bp-tier.claimed { border-color: var(--success, #27ae60); background: rgba(39, 174, 96, 0.12); }
+        .bp-tier.current { border-color: var(--secondary, #fbcd37); background: rgba(251, 205, 55, 0.1); }
 
         .bp-tier-num {
             font-size: 1.4rem;
@@ -918,25 +832,10 @@
         }
 
         @keyframes bpNotifFade {
-            0% {
-                opacity: 0;
-                transform: translate(-50%, -60%) scale(0.8);
-            }
-
-            15% {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1);
-            }
-
-            75% {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1);
-            }
-
-            100% {
-                opacity: 0;
-                transform: translate(-50%, -50%) scale(0.95);
-            }
+            0% { opacity: 0; transform: translate(-50%, -60%) scale(0.8); }
+            15% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            75% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
         }
     </style>
 </head>
@@ -1131,15 +1030,11 @@
 
         function getRankBadgeHTML(rankId) {
             let r = rankList.find(x => x.id === rankId) || rankList[0];
-
             if (rankId == "MAX") {
                 return `<div class="max-rank-badge" style="background-color: ${r.bg}; border-color: ${r.border};"><span class="rank-badge-text">${r.id}</span></div>`;
-
             } else {
                 return `<div class="rank-badge" style="background-color: ${r.bg}; border-color: ${r.border};"><span class="rank-badge-text">${r.id}</span></div>`;
-
             }
-
         }
 
         // --- UPGRADES CONFIG ---
@@ -1211,7 +1106,7 @@
                     { id: 16, displayTier: 6, xpRequired: 8500000, description: 'Taschengeld!', reward: { type: 'money', value: 50000000, label: '50M Bit' } },
                     { id: 17, displayTier: 7, xpRequired: 10000000, description: 'Power Up!', reward: { type: 'click', value: 300, label: '+300 Klickkraft' } },
                     { id: 18, displayTier: 8, xpRequired: 11500000, description: 'Bald geschafft!', reward: { type: 'money', value: 100000000, label: '100M Bit' } },
-                    { id: 19, displayTier: 9, xpRequired: 13000000, description: 'Endspurt Pass 2!', reward: { type: 'click', value: 500, label: '+500 Klickkraft' } },
+                    { id: 19, displayTier: 9, xpRequired: 130000000, description: 'Endspurt Pass 2!', reward: { type: 'click', value: 500, label: '+500 Klickkraft' } },
                     { id: 20, displayTier: 10, xpRequired: 15000000, description: 'Pass 2 Abgeschlossen!', reward: { type: 'money', value: 250000000, label: '250M Bit' } }
                 ]
             },
@@ -1270,7 +1165,7 @@
         let playerName = "Gast";
         let globalLeaderboard = [];
 
-        let hideEffects = false; // "Boss Mode" Toggle Variable
+        let hideEffects = false;
 
         function getRequiredXP(lvl) { return Math.floor(100 * Math.pow(2.6, lvl - 1)); }
         let xpRequired = getRequiredXP(level);
@@ -1299,40 +1194,71 @@
                 const [resScore, resRank] = await Promise.all([fetch(proxyScore), fetch(proxyRank)]);
 
                 let scoreEntries = []; let rankEntries = [];
-                if (resScore.ok) { const dataScore = await resScore.json(); if (dataScore.dreamlo?.leaderboard?.entry) scoreEntries = Array.isArray(dataScore.dreamlo.leaderboard.entry) ? dataScore.dreamlo.leaderboard.entry : [dataScore.dreamlo.leaderboard.entry]; }
-                if (resRank.ok) { const dataRank = await resRank.json(); if (dataRank.dreamlo?.leaderboard?.entry) rankEntries = Array.isArray(dataRank.dreamlo.leaderboard.entry) ? dataRank.dreamlo.leaderboard.entry : [dataRank.dreamlo.leaderboard.entry]; }
+                if (resScore.ok) { 
+                    const dataScore = await resScore.json(); 
+                    if (dataScore.dreamlo?.leaderboard?.entry) {
+                        scoreEntries = Array.isArray(dataScore.dreamlo.leaderboard.entry) ? dataScore.dreamlo.leaderboard.entry : [dataScore.dreamlo.leaderboard.entry]; 
+                    }
+                }
+                if (resRank.ok) { 
+                    const dataRank = await resRank.json(); 
+                    if (dataRank.dreamlo?.leaderboard?.entry) {
+                        rankEntries = Array.isArray(dataRank.dreamlo.leaderboard.entry) ? dataRank.dreamlo.leaderboard.entry : [dataRank.dreamlo.leaderboard.entry]; 
+                    }
+                }
 
-                const rankMap = {}; rankEntries.forEach(r => { rankMap[r.name] = parseInt(r.score) || 0; });
+                const rankMap = {}; 
+                rankEntries.forEach(r => { rankMap[r.name] = parseInt(r.score) || 0; });
 
                 globalLeaderboard = scoreEntries.map(player => {
                     let rIndex = rankMap[player.name] !== undefined ? rankMap[player.name] : 0;
                     if (rIndex < 0 || rIndex >= rankList.length) rIndex = 0;
 
-                    // WICHTIG: rIndex mit in das Objekt packen, damit wir danach sortieren können
-                    return { name: player.name, score: parseFloat(player.score), rank: rankList[rIndex].id, rIndex: rIndex };
+                    // Text-Hack: Wenn Text existiert, nimm den riesigen Score, sonst den normalen
+                    let realScore = player.text ? parseFloat(player.text) : parseFloat(player.score);
+                    if (isNaN(realScore)) realScore = parseFloat(player.score) || 0;
+
+                    return { name: player.name, score: realScore, rank: rankList[rIndex].id, rIndex: rIndex };
                 });
 
-                // --- NEU: Lokale Sortierung (Zuerst nach Rang, dann nach Score) ---
+                // Sortierung: Rang > Score
                 globalLeaderboard.sort((a, b) => {
                     if (b.rIndex !== a.rIndex) {
-                        return b.rIndex - a.rIndex; // Höherer Rang steht weiter oben
+                        return b.rIndex - a.rIndex; 
                     }
-                    return b.score - a.score; // Bei gleichem Rang entscheidet der Score
+                    return b.score - a.score; 
                 });
 
-            } catch (error) { console.log("Leaderboard konnte nicht geladen werden."); }
+            } catch (error) { 
+                console.log("Leaderboard konnte nicht geladen werden.", error); 
+            }
             renderLeaderboardUI();
         }
 
-        async function submitScoreToServer() {
-            try {
-                let safeName = playerName.replace(/[^a-zA-Z0-9_-]/g, '_'); if (!safeName) safeName = "Spieler";
-                const cb = Date.now();
-                const proxyScore = `https://corsproxy.io/?${encodeURIComponent(`http://dreamlo.com/lb/${DREAMLO_SCORE_PRIVATE}/add/${safeName}/${Math.floor(score)}?cb=${cb}`)}`;
-                const proxyRank = `https://corsproxy.io/?${encodeURIComponent(`http://dreamlo.com/lb/${DREAMLO_RANK_PRIVATE}/add/${safeName}/${currentRankIndex}?cb=${cb}`)}`;
-                await Promise.all([fetch(proxyScore), fetch(proxyRank)]);
-                setTimeout(fetchLeaderboard, 1000);
-            } catch (error) { console.error("Fehler beim Speichern auf Dreamlo:", error); }
+        function submitScoreToServer() {
+            let safeName = playerName.replace(/[^a-zA-Z0-9_-]/g, '_'); 
+            if (!safeName) safeName = "Spieler";
+            
+            const cb = Date.now(); 
+
+            // Kappen bei 2.14 Milliarden für den offiziellen (Dummy) Dreamlo Score Parameter
+            let dummyScore = Math.min(2147000000, Math.floor(score));
+            
+            // Echter Score wird als Text verschickt!
+            let realScoreText = Math.floor(score).toString();
+
+            const urlScore = `https://dreamlo.com/lb/${DREAMLO_SCORE_PRIVATE}/add/${safeName}/${dummyScore}/0/${realScoreText}?cb=${cb}`;
+            const urlRank = `https://dreamlo.com/lb/${DREAMLO_RANK_PRIVATE}/add/${safeName}/${currentRankIndex}?cb=${cb}`;
+
+            // Image-Beacon Hack zur sauberen CORS-Umgehung
+            let imgScore = new Image();
+            imgScore.src = urlScore;
+
+            let imgRank = new Image();
+            imgRank.src = urlRank;
+
+            // UI Update mit kurzer Verzögerung
+            setTimeout(fetchLeaderboard, 1500);
         }
 
         async function initPlayer() {
@@ -1362,9 +1288,12 @@
                 if (newName.toLowerCase() === playerName.toLowerCase()) return;
                 if (globalLeaderboard.some(p => p.name.toLowerCase() === newName.toLowerCase())) { alert("Name vergeben!"); return; }
 
-                const safeOldName = playerName.replace(/[^a-zA-Z0-9_-]/g, '_'); const cb = Date.now();
-                fetch(`https://corsproxy.io/?${encodeURIComponent(`http://dreamlo.com/lb/${DREAMLO_SCORE_PRIVATE}/delete/${safeOldName}?cb=${cb}`)}`);
-                fetch(`https://corsproxy.io/?${encodeURIComponent(`http://dreamlo.com/lb/${DREAMLO_RANK_PRIVATE}/delete/${safeOldName}?cb=${cb}`)}`);
+                const safeOldName = playerName.replace(/[^a-zA-Z0-9_-]/g, '_'); 
+                const cb = Date.now();
+                
+                // Alten Namen löschen via Image Hack
+                new Image().src = `https://dreamlo.com/lb/${DREAMLO_SCORE_PRIVATE}/delete/${safeOldName}?cb=${cb}`;
+                new Image().src = `https://dreamlo.com/lb/${DREAMLO_RANK_PRIVATE}/delete/${safeOldName}?cb=${cb}`;
 
                 playerName = newName; localStorage.setItem('michiPlayerName', playerName); displayPlayerName.innerText = playerName;
                 submitScoreToServer();
@@ -1378,9 +1307,10 @@
                 ownedSkins: ownedSkins, currentSkin: currentSkin, rankIndex: currentRankIndex,
                 ownedSoundSkins: ownedSoundSkins, currentSoundSkin: currentSoundSkin,
                 battlePassXP: battlePassXP, claimedBPTiers: claimedBPTiers, bpClickBonus: bpClickBonus,
-                hideEffects: hideEffects // Speichere den Boss-Mode Status
+                hideEffects: hideEffects 
             };
-            localStorage.setItem('michiSave', JSON.stringify(saveState)); submitScoreToServer();
+            localStorage.setItem('michiSave', JSON.stringify(saveState)); 
+            submitScoreToServer();
             if (manual && saveIndicator) { saveIndicator.innerText = "Gespeichert!"; setTimeout(() => saveIndicator.innerText = "", 2000); }
         }
 
@@ -1580,14 +1510,14 @@
         if (document.querySelector('.michi-target-container') && uiMichiBtn) { document.querySelector('.michi-target-container').addEventListener('contextmenu', (e) => { e.preventDefault(); uiMichiBtn.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, clientX: e.clientX, clientY: e.clientY })); }); }
 
         function createFloatingText(e, text) {
-            if (hideEffects) return; // Boss mode check
+            if (hideEffects) return; 
             const f = document.createElement('div'); f.classList.add('floating-text'); f.innerText = text;
             f.style.left = `${e.clientX + (Math.random() - 0.5) * 60}px`; f.style.top = `${e.clientY - 30}px`;
             document.body.appendChild(f); setTimeout(() => f.remove(), 1200);
         }
 
         function triggerPassiveCookie() {
-            if (hideEffects || packetsPerSecond === 0 || !uiMichiBtn || !uiScoreText) return; // Boss mode check
+            if (hideEffects || packetsPerSecond === 0 || !uiMichiBtn || !uiScoreText) return; 
             const c = document.createElement('img'); c.src = getCurrentSkinImage(); c.classList.add('flying-passive-cookie');
             const mPos = uiMichiBtn.getBoundingClientRect(); const sPos = uiScoreText.getBoundingClientRect();
             c.style.left = `${mPos.left + mPos.width / 2 - 20}px`; c.style.top = `${mPos.top + mPos.height / 2 - 20}px`;
@@ -1639,14 +1569,17 @@
             currentRankIndex++; score = 0; level = 1; currentXP = 0; packetsPerSecond = 0; upgradesConfig.forEach(u => u.count = 0); xpRequired = getRequiredXP(level); clickPower = 1 + bpClickBonus;
             if (uiLevel) uiLevel.innerText = level; if (playerRankDisplay) playerRankDisplay.innerHTML = getRankBadgeHTML(rankList[currentRankIndex].id);
             updateXPBar(); recalculatePPS(); renderUpgrades(); updateUI();
-            try { await fetch(`https://corsproxy.io/?${encodeURIComponent(`http://dreamlo.com/lb/${DREAMLO_SCORE_PRIVATE}/delete/${playerName.replace(/[^a-zA-Z0-9_-]/g, '_')}?cb=${Date.now()}`)}`); } catch (e) { }
+            
+            const cb = Date.now();
+            new Image().src = `https://dreamlo.com/lb/${DREAMLO_SCORE_PRIVATE}/delete/${playerName.replace(/[^a-zA-Z0-9_-]/g, '_')}?cb=${cb}`;
+            
             saveGame(true); closeOverlay('overlay-levelup'); closeOverlay('overlay-shop');
         }
 
-        async function doRankUp() {
+        function doRankUp() {
             if (level < 20 || upgradesConfig[19].count === 0) return;
             if (currentRankIndex >= rankList.length - 1) { alert("Maximaler Rang S+ bereits erreicht!"); return; }
-            if (confirm(`🌟 RANGAUFSTIEG! 🌟\n\nDu steigst auf in Rang: [ ${rankList[currentRankIndex + 1].id} ]\n\nDeine Pakete, Level und Upgrades werden zurückgesetzt.\nDein GELD und deine SKINS behältst du!\n\nAufsteigen?`)) { await executeRankUpProcess(); alert("Erfolgreich aufgestiegen!"); }
+            if (confirm(`🌟 RANGAUFSTIEG! 🌟\n\nDu steigst auf in Rang: [ ${rankList[currentRankIndex + 1].id} ]\n\nDeine Pakete, Level und Upgrades werden zurückgesetzt.\nDein GELD und deine SKINS behältst du!\n\nAufsteigen?`)) { executeRankUpProcess(); alert("Erfolgreich aufgestiegen!"); }
         }
 
         function renderLeaderboardUI() {
@@ -1658,10 +1591,7 @@
                 const li = document.createElement('li');
                 li.className = `leaderboard-item ${isMe ? 'is-me' : ''}`;
 
-                // Verbessert: Garantiert, dass bei dir sofort der echte, lokale Rang aus deinem Savegame angezeigt wird
                 const displayRank = isMe ? rankList[currentRankIndex].id : (player.rank || 'Z');
-
-                // Das >= anstelle von > behebt Synchronisationsfehler beim lokalen Aktualisieren
                 const displayScore = (isMe && score >= player.score) ? score : player.score;
 
                 li.innerHTML = `<span class="lb-rank-num">#${index + 1}</span>${getRankBadgeHTML(displayRank)}<span class="lb-name">${player.name}</span><span class="lb-score">${formatNumber(displayScore)}</span>`;
@@ -1672,9 +1602,9 @@
         // --- START & LOOPS ---
         initPlayer();
         setInterval(() => { if (packetsPerSecond > 0) { const a = packetsPerSecond / 10; score += a; money += a / 3; addXP(a * 0.05); addBPXP(a * 0.1); updateUI(); } }, 100);
-        setInterval(fetchLeaderboard, 10000);
+        setInterval(fetchLeaderboard, 60000); // Entspanntes Limit: Alle 60s Leaderboard laden
         setInterval(() => { if (packetsPerSecond > 0 && Math.random() < Math.min(packetsPerSecond / 50, 5)) triggerPassiveCookie(); }, 500);
-        setInterval(() => saveGame(false), 15000);
+        setInterval(() => saveGame(false), 30000); // Speichern alle 30s über sauberen Image-Beacon
     </script>
 </body>
 
