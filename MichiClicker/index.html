@@ -1132,8 +1132,7 @@
         function getRankBadgeHTML(rankId) {
             let r = rankList.find(x => x.id === rankId) || rankList[0];
 
-            console.log(rankId,rankList.length)
-            if (rankId == rankList.length) {
+            if (rankId == "MAX") {
                 return `<div class="max-rank-badge" style="background-color: ${r.bg}; border-color: ${r.border};"><span class="rank-badge-text">${r.id}</span></div>`;
 
             } else {
