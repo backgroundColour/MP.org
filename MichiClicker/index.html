@@ -1265,6 +1265,29 @@
         base = Math.floor(score / Math.pow(10, exp - 6));
     }
 
+    // 1. URLs zum LÖSCHEN des alten Scores (umgeht die Highscore-Blockade!)
+    const delScore = `https://corsproxy.io/?${encodeURIComponent(`http://dreamlo.com/lb/${DREAMLO_SCORE_PRIVATE}/delete/${safeName}?cb=${cb}`)}`;
+    const delMulti = `https://corsproxy.io/?${encodeURIComponent(`http://dreamlo.com/lb/${DREAMLO_MULTI_PRIVATE}/delete/${safeName}?cb=${cb}`)}`;
+
+    // 2. URLs zum HINZUFÜGEN des neuen Scores
+    const addScore = `https://corsproxy.io/?${encodeURIComponent(`http://dreamlo.com/lb/${DREAMLO_SCORE_PRIVATE}/add/${safeName}/${base}?cb=${cb}`)}`;
+    const addMulti = `https://corsproxy.io/?${encodeURIComponent(`http://dreamlo.com/lb/${DREAMLO_MULTI_PRIVATE}/add/${safeName}/${exp}?cb=${cb}`)}`;
+    const addRank = `https://corsproxy.io/?${encodeURIComponent(`http://dreamlo.com/lb/${DREAMLO_RANK_PRIVATE}/add/${safeName}/${currentRankIndex}?cb=${cb}`)}`;
+
+    try {
+        // Erst den blockierenden alten Wert zerstören...
+        await Promise.all([fetch(delScore), fetch(delMulti)]);
+        
+        // ...dann sofort den neuen, korrekten Wert eintragen
+        await Promise.all([fetch(addScore), fetch(addMulti), fetch(addRank)]);
+    } catch (e) {
+        console.error("Proxy hat kurz geschluckt, wird beim nächsten Autosave wiederholt.");
+    }
+
+    // Kurz warten, dann das UI aktualisieren
+    setTimeout(fetchLeaderboard, 1500);
+}
+
     // Wir nutzen wieder corsproxy.io, damit alles 100% verlässlich ankommt
     const urlScore = `https://corsproxy.io/?${encodeURIComponent(`http://dreamlo.com/lb/${DREAMLO_SCORE_PRIVATE}/add/${safeName}/${base}?cb=${cb}`)}`;
     const urlRank = `https://corsproxy.io/?${encodeURIComponent(`http://dreamlo.com/lb/${DREAMLO_RANK_PRIVATE}/add/${safeName}/${currentRankIndex}?cb=${cb}`)}`;
