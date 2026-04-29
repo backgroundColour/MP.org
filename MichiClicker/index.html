@@ -1401,7 +1401,8 @@
                     if (globalLeaderboard.some(p => p.name.toLowerCase() === inputName.toLowerCase())) alert("Name schon vergeben!");
                     else validName = true;
                 }
-                playerName = inputName; localStorage.setItem('michiPlayerName', playerName);
+                playerName = inputName; const saveData = JSON.stringify({ score, level, money });
+                localStorage.setItem('myGameSave', btoa(saveData));
             } else { playerName = savedName; fetchLeaderboard(); }
 
             if (displayPlayerName) displayPlayerName.innerText = playerName;
@@ -1423,7 +1424,8 @@
                 fetch(`https://corsproxy.io/?${encodeURIComponent(`http://dreamlo.com/lb/${DREAMLO_RANK_PRIVATE}/delete/${safeOldName}?cb=${cb}`)}`);
                 fetch(`https://corsproxy.io/?${encodeURIComponent(`http://dreamlo.com/lb/${DREAMLO_MULTI_PRIVATE}/delete/${safeOldName}?cb=${cb}`)}`);
 
-                playerName = newName; localStorage.setItem('michiPlayerName', playerName); displayPlayerName.innerText = playerName;
+                playerName = newName; const saveData = JSON.stringify({ score, level, money });
+                localStorage.setItem('myGameSave', btoa(saveData)); displayPlayerName.innerText = playerName;
                 submitScoreToServer();
             }
         }
@@ -1437,13 +1439,20 @@
                 battlePassXP: battlePassXP, claimedBPTiers: claimedBPTiers, bpClickBonus: bpClickBonus,
                 hideEffects: hideEffects
             };
-            localStorage.setItem('michiSave', JSON.stringify(saveState));
+            const saveData = JSON.stringify({ score, level, money });
+            localStorage.setItem('myGameSave', btoa(saveData));
             submitScoreToServer();
             if (manual && saveIndicator) { saveIndicator.innerText = "Gespeichert!"; setTimeout(() => saveIndicator.innerText = "", 2000); }
         }
 
         function loadGame() {
-            const saved = localStorage.getItem('michiSave');
+            const encodedData = localStorage.getItem('myGameSave');
+            if (encodedData) {
+                const saveData = JSON.parse(atob(encodedData));
+                score = saveData.score;
+                level = saveData.level;
+                money = saveData.money;
+            }
             if (saved) {
                 const saveState = JSON.parse(saved);
                 score = saveState.score || 0; money = saveState.money || 0; level = saveState.level || 1; currentXP = saveState.currentXP || 0;
